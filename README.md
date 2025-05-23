@@ -1,2 +1,0 @@
-# Shervinuri.github.io
-☬SHΞN™ 
