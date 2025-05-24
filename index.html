@@ -3,139 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ساعت دیجیتال ریسپانسیو با افکت فلیپ</title>
+    <title>ساعت دیجیتال Fliqlo تمام‌صفحه</title>
+    <link href="https://fonts.googleapis.com/css2?family=B612+Mono&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
             background-color: #000;
-            font-family: 'Arial', sans-serif;
+            font-family: 'B612 Mono', monospace;
             overflow: hidden;
             direction: ltr;
         }
         .clock {
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #fff;
-            text-align: center;
+        }
+        .square {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+        }
+        .section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 90%;
+            height: 90%;
         }
         .digit {
-            display: inline-block;
             position: relative;
-            width: 1.2em;
-            height: 1.5em;
-            overflow: hidden;
+            width: 45%;
+            height: 90%;
+            perspective: 1000px;
+            margin: 0 2%;
         }
-        .digit span {
+        .flip-card {
             position: absolute;
             width: 100%;
-            text-align: center;
-            transition: transform 0.5s ease-in-out;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease-in-out;
         }
-        .digit span.next {
-            transform: translateY(-100%);
+        .flip-card.flipping {
+            transform: rotateX(180deg);
         }
-        .digit span.current {
-            transform: translateY(0);
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #333; /* خاکستری تیره */
+            border: 1px solid #444;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+            border-radius: 6px;
+            color: #fff;
+        }
+        .card-back {
+            transform: rotateX(180deg);
         }
         .colon {
-            display: inline-block;
-            width: 0.5em;
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 10%;
+            color: #fff;
         }
         /* افقی (landscape) */
         @media screen and (orientation: landscape) {
             .clock {
                 flex-direction: row;
-                font-size: 12vw;
+            }
+            .square {
+                width: 50%;
             }
             .section {
-                display: flex;
-                align-items: center;
+                font-size: 18vw;
             }
             .colon {
-                font-size: 12vw;
-                line-height: 1.5em;
+                font-size: 18vw;
             }
         }
         /* عمودی (portrait) */
         @media screen and (orientation: portrait) {
             .clock {
                 flex-direction: column;
-                font-size: 15vw;
+            }
+            .square {
+                height: 50%;
             }
             .section {
-                display: flex;
-                align-items: center;
-                margin: 1vh 0;
+                font-size: 22vw;
             }
             .colon {
-                font-size: 15vw;
-                line-height: 1.5em;
+                font-size: 22vw;
             }
         }
     </style>
 </head>
 <body>
     <div class="clock">
-        <div class="section" id="hours">
-            <div class="digit" id="hour1"><span class="current">0</span><span class="next"></span></div>
-            <div class="digit" id="hour2"><span class="current">0</span><span class="next"></span></div>
+        <div class="square">
+            <div class="section" id="hours">
+                <div class="digit" id="hour1">
+                    <div class="flip-card">
+                        <div class="card-front">0</div>
+                        <div class="card-back"></div>
+                    </div>
+                </div>
+                <div class="digit" id="hour2">
+                    <div class="flip-card">
+                        <div class="card-front">0</div>
+                        <div class="card-back"></div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="colon">:</div>
-        <div class="section" id="minutes">
-            <div class="digit" id="minute1"><span class="current">0</span><span class="next"></span></div>
-            <div class="digit" id="minute2"><span class="current">0</span><span class="next"></span></div>
-        </div>
-        <div class="colon">:</div>
-        <div class="section" id="seconds">
-            <div class="digit" id="second1"><span class="current">0</span><span class="next"></span></div>
-            <div class="digit" id="second2"><span class="current">0</span><span class="next"></span></div>
+        <div class="square">
+            <div class="section" id="minutes">
+                <div class="digit" id="minute1">
+                    <div class="flip-card">
+                        <div class="card-front">0</div>
+                        <div class="card-back"></div>
+                    </div>
+                </div>
+                <div class="digit" id="minute2">
+                    <div class="flip-card">
+                        <div class="card-front">0</div>
+                        <div class="card-back"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script>
         function updateClock() {
-            const now = new Date().toLocaleTimeString('en-US', { 
-                timeZone: 'Asia/Tehran', 
-                hour12: false, 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit' 
+            const now = new Date().toLocaleTimeString('en-US', {
+                timeZone: 'Asia/Tehran',
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit'
             });
-            const [hours, minutes, seconds] = now.split(':');
-            
+            const [hours, minutes] = now.split(':');
+
             updateDigit('hour1', hours[0]);
             updateDigit('hour2', hours[1]);
             updateDigit('minute1', minutes[0]);
             updateDigit('minute2', minutes[1]);
-            updateDigit('second1', seconds[0]);
-            updateDigit('second2', seconds[1]);
         }
 
         function updateDigit(id, newValue) {
             const digit = document.getElementById(id);
-            const current = digit.querySelector('.current');
-            const next = digit.querySelector('.next');
-            
-            if (current.textContent !== newValue) {
-                next.textContent = newValue;
-                next.classList.add('current');
-                current.classList.remove('current');
-                current.classList.add('next');
-                
-                setTimeout(() => {
-                    current.textContent = newValue;
-                    current.classList.add('current');
-                    current.classList.remove('next');
-                    next.classList.remove('current');
-                }, 500);
-            }
+            if (!digit) return; // جلوگیری از خطای null
+
+            const flipCard = digit.querySelector('.flip-card');
+            const front = flipCard.querySelector('.card-front');
+            const back = flipCard.querySelector('.card-back');
+
+            if (!front || !back || front.textContent === newValue) return; // جلوگیری از خطا و به‌روزرسانی غیرضروری
+
+            back.textContent = newValue;
+            flipCard.classList.add('flipping');
+
+            setTimeout(() => {
+                front.textContent = newValue;
+                flipCard.classList.remove('flipping');
+                back.textContent = '';
+            }, 600); // همگام با مدت زمان انیمیشن (0.6s)
         }
 
+        // اجرای اولیه
         updateClock();
         setInterval(updateClock, 1000);
     </script>
