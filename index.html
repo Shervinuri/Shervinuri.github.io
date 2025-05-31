@@ -1,104 +1,335 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>بررسی حساب‌های خالی سولانا</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cyber Neon Navigator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
   <style>
+    :root {
+      --neon-green: #00ff99;
+      --neon-dark: #009944;
+      --bg-dark: #1a1a1a;
+      --bg-light: #333333;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
     body {
-      font-family: sans-serif;
-      max-width: 600px;
-      margin: 2rem auto;
-      text-align: center;
-      direction: rtl;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, var(--bg-dark), var(--bg-light));
+      margin: 0;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+      touch-action: manipulation;
     }
-    input,
-    button {
-      padding: 0.5rem;
-      font-size: 1rem;
-      margin-top: 1rem;
+
+    /* Main container */
+    #main-button-container {
+      position: relative;
+      width: clamp(120px, 25vw, 200px);
+      height: clamp(120px, 25vw, 200px);
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    /* Main button */
+    #main-button {
       width: 100%;
+      height: 100%;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, var(--neon-green), var(--neon-dark));
+      box-shadow:
+        0 0 20px var(--neon-green),
+        0 0 40px var(--neon-green),
+        inset 0 0 15px var(--neon-dark);
+      color: #000;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeInScale 1s ease-out forwards;
+      will-change: transform, box-shadow;
     }
-    .result {
-      margin-top: 2rem;
-      font-weight: bold;
+
+    @keyframes fadeInScale {
+      0% { opacity: 0; transform: scale(0.5); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    #main-button:active {
+      transform: scale(0.95);
+      box-shadow:
+        0 0 30px var(--neon-green),
+        0 0 60px var(--neon-green),
+        inset 0 0 20px var(--neon-dark);
+    }
+
+    #main-button:focus-visible {
+      outline: 2px solid var(--neon-green);
+      outline-offset: 4px;
+    }
+
+    /* Direction indicator */
+    #direction-indicator {
+      position: absolute;
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0.3rem;
+      height: 1rem;
+      background: var(--neon-green);
+      border-radius: 0.15rem;
+      box-shadow: 0 0 8px var(--neon-green);
+      pointer-events: none;
+      transition: transform 0.3s ease;
+      z-index: 10;
+    }
+
+    /* Small buttons */
+    .small-btn {
+      position: absolute;
+      width: clamp(40px, 7vw, 60px);
+      height: clamp(40px, 7vw, 60px);
+      border-radius: 9999px;
+      background: linear-gradient(135deg, var(--neon-green), var(--neon-dark));
+      box-shadow:
+        0 0 10px var(--neon-green),
+        inset 0 0 8px var(--neon-dark);
+      color: #000;
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      will-change: transform, opacity;
+    }
+
+    .small-btn.show {
+      opacity: 1;
+      pointer-events: auto;
     }
   </style>
 </head>
 <body>
-  <h1>بررسی حساب‌های خالی سولانا</h1>
-  <input id="wallet" placeholder="آدرس کیف پول سولانا را وارد کنید" />
-  <button onclick="checkAccounts()">بررسی</button>
-  <div class="result" id="result"></div>
+  <div id="main-button-container" role="region" aria-label="Cyber Neon Navigator" tabindex="0">
+    <div id="direction-indicator" aria-hidden="true"></div>
+    <button id="main-button" type="button" aria-label="Main navigation control" aria-pressed="false">☬</button>
+    <button class="small-btn" id="btn-lock" title="Security Lock" aria-label="Security Lock"><i class="fas fa-lock"></i></button>
+    <button class="small-btn" id="btn-shield" title="User Shield" aria-label="User Shield"><i class="fas fa-shield-alt"></i></button>
+    <button class="small-btn" id="btn-server" title="Server Security" aria-label="Server Security"><i class="fas fa-server"></i></button>
+    <button class="small-btn" id="btn-firewall" title="Firewall" aria-label="Firewall"><i class="fas fa-fire"></i></button>
+    <button class="small-btn" id="btn-user" title="User Account" aria-label="User Account"><i class="fas fa-user"></i></button>
+    <button class="small-btn" id="btn-settings" title="Settings" aria-label="Settings"><i class="fas fa-cogs"></i></button>
+  </div>
+
   <script>
-    const RPC_URL = "https://rpc.helius.xyz/?api-key=helius_default";
+    (() => {
+      const mainBtn = document.getElementById('main-button');
+      const container = document.getElementById('main-button-container');
+      const directionIndicator = document.getElementById('direction-indicator');
+      const smallButtons = [
+        document.getElementById('btn-lock'),
+        document.getElementById('btn-shield'),
+        document.getElementById('btn-server'),
+        document.getElementById('btn-firewall'),
+        document.getElementById('btn-user'),
+        document.getElementById('btn-settings'),
+      ];
 
-    async function getTokenAccounts(address) {
-      const body = {
-        jsonrpc: "2.0",
-        id: 1,
-        method: "getTokenAccountsByOwner",
-        params: [
-          address,
-          { programId: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" },
-          { encoding: "jsonParsed" },
-        ],
-      };
-      const res = await fetch(RPC_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      const data = await res.json();
-      return data.result.value;
-    }
+      const btnCount = smallButtons.length;
+      let currentRotation = 0;
+      let expanded = false;
+      let isDragging = false;
+      let startAngle = 0;
+      let startRotation = 0;
+      let lastMoveTime = 0;
+      const throttleDelay = 16; // ~60fps
 
-    async function getLamports(pubkey) {
-      const body = {
-        jsonrpc: "2.0",
-        id: 1,
-        method: "getAccountInfo",
-        params: [pubkey, { encoding: "base64" }],
-      };
-      const res = await fetch(RPC_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      const data = await res.json();
-      return data.result?.value?.lamports || 0;
-    }
-
-    async function checkAccounts() {
-      const address = document.getElementById("wallet").value.trim();
-      if (!address) return alert("آدرس وارد نشده");
-
-      document.getElementById("result").textContent = "⏳ در حال بررسی...";
-
-      try {
-        const accounts = await getTokenAccounts(address);
-        let emptyCount = 0;
-        let totalLamports = 0;
-
-        for (const acc of accounts) {
-          const amount = parseInt(acc.account.data.parsed.info.tokenAmount.amount);
-          if (amount === 0) {
-            emptyCount++;
-            const lamports = await getLamports(acc.pubkey);
-            totalLamports += lamports;
-          }
-        }
-
-        const sol = totalLamports / 1_000_000_000;
-        document.getElementById("result").innerHTML = `
-          🔢 تعداد کل Token Accounts: ${accounts.length}<br/>
-          🧹 قابل حذف (خالی): ${emptyCount}<br/>
-          💰 قابل بازیابی: ${sol.toFixed(6)} SOL
-        `;
-      } catch (err) {
-        document.getElementById("result").textContent = "❌ خطا در دریافت اطلاعات";
-        console.error(err);
+      function getRadius() {
+        const containerRect = container.getBoundingClientRect();
+        const btnRect = smallButtons[0].getBoundingClientRect();
+        return containerRect.width / 2 + btnRect.width / 2 + containerRect.width * 0.15;
       }
-    }
+
+      function positionButtons(angleOffset = 0) {
+        const radius = getRadius();
+        const centerX = container.clientWidth / 2;
+        const centerY = container.clientHeight / 2;
+
+        smallButtons.forEach((btn, i) => {
+          const angleDeg = (360 / btnCount) * i + angleOffset;
+          const angleRad = (angleDeg * Math.PI) / 180;
+          const x = centerX + radius * Math.sin(angleRad);
+          const y = centerY - radius * Math.cos(angleRad);
+          btn.style.transform = `translate(${x - btn.clientWidth / 2}px, ${y - btn.clientHeight / 2}px)`;
+        });
+      }
+
+      function showButtons() {
+        smallButtons.forEach((btn, i) => {
+          btn.style.transition = `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s`;
+          btn.classList.add('show');
+        });
+      }
+
+      function hideButtons() {
+        smallButtons.forEach((btn) => {
+          btn.classList.remove('show');
+          const centerX = container.clientWidth / 2 - btn.clientWidth / 2;
+          const centerY = container.clientHeight / 2 - btn.clientHeight / 2;
+          btn.style.transform = `translate(${centerX}px, ${centerY}px)`;
+        });
+      }
+
+      function rotateMainButton(deg) {
+        mainBtn.style.transform = `rotate(${deg}deg)`;
+        directionIndicator.style.transform = `translateX(-50%) rotate(${deg}deg)`;
+      }
+
+      function clampAngle(angle) {
+        return ((angle % 360) + 360) % 360;
+      }
+
+      function getSelectedButtonIndex() {
+        const selectedAngle = clampAngle(360 - currentRotation);
+        const sectorSize = 360 / btnCount;
+        return Math.round(selectedAngle / sectorSize) % btnCount;
+      }
+
+      mainBtn.addEventListener('click', () => {
+        if (!expanded) {
+          expanded = true;
+          mainBtn.setAttribute('aria-pressed', 'true');
+          showButtons();
+        positionButtons(currentRotation);
+          rotateMainButton(currentRotation);
+        } else {
+          const selectedIndex = getSelectedButtonIndex();
+          smallButtons[selectedIndex].click();
+        }
+      });
+
+      container.addEventListener('click', (e) => {
+        if (expanded && e.target !== mainBtn && !smallButtons.includes(e.target)) {
+          collapse();
+        }
+      });
+
+      function collapse() {
+        expanded = false;
+        mainBtn.setAttribute('aria-pressed', 'false');
+        hideButtons();
+        rotateMainButton(0);
+        currentRotation = 0;
+      }
+
+      function getAngle(x, y) {
+        const rect = container.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        let angle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI) + 90;
+        return angle < 0 ? angle + 360 : angle;
+      }
+
+      mainBtn.addEventListener('pointerdown', (e) => {
+        if (!expanded) return;
+        e.preventDefault();
+        isDragging = true;
+        startAngle = getAngle(e.clientX, e.clientY);
+        startRotation = currentRotation;
+        mainBtn.setPointerCapture(e.pointerId);
+      });
+
+      mainBtn.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const now = Date.now();
+        if (now - lastMoveTime < throttleDelay) return;
+        lastMoveTime = now;
+
+        const currentAngle = getAngle(e.clientX, e.clientY);
+        let delta = currentAngle - startAngle;
+        if (delta < -180) delta += 360;
+        if (delta > 180) delta -= 360;
+        currentRotation = clampAngle(startRotation + delta);
+        rotateMainButton(currentRotation);
+        positionButtons(currentRotation);
+      });
+
+      mainBtn.addEventListener('pointerup', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        isDragging = false;
+        mainBtn.releasePointerCapture(e.pointerId);
+      });
+
+      mainBtn.addEventListener('pointercancel', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        isDragging = false;
+        mainBtn.releasePointerCapture(e.pointerId);
+      });
+
+      smallButtons[0].addEventListener('click', (e) => {
+        e.stopPropagation();
+        alert('Navigating to /security-lock');
+      });
+      smallButtons[1].addEventListener('click', (e) => {
+        e.stopPropagation();
+        alert('Navigating to /user-shield');
+      });
+      smallButtons[2].addEventListener('click', (e) => {
+        e.stopPropagation();
+        alert('Navigating to /server-security');
+      });
+      smallButtons[3].addEventListener('click', (e) => {
+        e.stopPropagation();
+        alert('Navigating to /firewall');
+      });
+      smallButtons[4].addEventListener('click', (e) => {
+        e.stopPropagation();
+        alert('Navigating to /user-account');
+      });
+      smallButtons[5].addEventListener('click', (e) => {
+        e.stopPropagation();
+        alert('Navigating to /settings');
+      });
+
+      function init() {
+        smallButtons.forEach((btn) => {
+          const centerX = container.clientWidth / 2 - btn.clientWidth / 2;
+          const centerY = container.clientHeight / 2 - btn.clientHeight / 2;
+          btn.style.transform = `translate(${centerX}px, ${centerY}px)`;
+          btn.classList.remove('show');
+        });
+        rotateMainButton(0);
+      }
+
+      window.addEventListener('resize', () => {
+        if (expanded) {
+          positionButtons(currentRotation);
+        } else {
+          init();
+        }
+      });
+
+      window.addEventListener('load', init);
+    })();
   </script>
 </body>
 </html>
