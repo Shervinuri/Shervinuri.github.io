@@ -1,335 +1,198 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cyber Neon Navigator</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <title>Navigator Knob</title>
   <style>
     :root {
-      --neon-green: #00ff99;
-      --neon-dark: #009944;
-      --bg-dark: #1a1a1a;
-      --bg-light: #333333;
+      --neon-green: #39ff14;
+      --neon-dark: #008f4c;
+      --neon-glow: rgba(57, 255, 20, 0.4);
+      --bg-dark: #0a0a0a;
+      --bg-light: #1f1f1f;
     }
-
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
     body {
       font-family: 'Orbitron', sans-serif;
-      background: linear-gradient(135deg, var(--bg-dark), var(--bg-light));
       margin: 0;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background: radial-gradient(circle at 30% 30%, var(--bg-dark), var(--bg-light));
       height: 100vh;
-      width: 100vw;
-      touch-action: manipulation;
-    }
-
-    /* Main container */
-    #main-button-container {
-      position: relative;
-      width: clamp(120px, 25vw, 200px);
-      height: clamp(120px, 25vw, 200px);
-      user-select: none;
-      flex-shrink: 0;
-    }
-
-    /* Main button */
-    #main-button {
-      width: 100%;
-      height: 100%;
-      border-radius: 9999px;
-      background: linear-gradient(135deg, var(--neon-green), var(--neon-dark));
-      box-shadow:
-        0 0 20px var(--neon-green),
-        0 0 40px var(--neon-green),
-        inset 0 0 15px var(--neon-dark);
-      color: #000;
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 700;
       display: flex;
       justify-content: center;
       align-items: center;
-      cursor: pointer;
-      border: none;
-      outline: none;
+      overflow: hidden;
+    }
+
+    .container {
       position: relative;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      animation: fadeInScale 1s ease-out forwards;
-      will-change: transform, box-shadow;
+      width: 300px;
+      height: 300px;
     }
 
-    @keyframes fadeInScale {
-      0% { opacity: 0; transform: scale(0.5); }
-      100% { opacity: 1; transform: scale(1); }
-    }
-
-    #main-button:active {
-      transform: scale(0.95);
-      box-shadow:
-        0 0 30px var(--neon-green),
-        0 0 60px var(--neon-green),
-        inset 0 0 20px var(--neon-dark);
-    }
-
-    #main-button:focus-visible {
-      outline: 2px solid var(--neon-green);
-      outline-offset: 4px;
-    }
-
-    /* Direction indicator */
-    #direction-indicator {
+    .main-button {
       position: absolute;
-      top: 5%;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--neon-dark), #000);
+      border: 2px solid var(--neon-green);
+      box-shadow: 0 0 20px var(--neon-green), inset 0 0 10px var(--neon-green);
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
-      width: 0.3rem;
-      height: 1rem;
-      background: var(--neon-green);
-      border-radius: 0.15rem;
-      box-shadow: 0 0 8px var(--neon-green);
-      pointer-events: none;
-      transition: transform 0.3s ease;
-      z-index: 10;
+      transform: translate(-50%, -50%) rotate(0deg);
+      z-index: 2;
+      cursor: grab;
+      touch-action: none;
     }
 
-    /* Small buttons */
-    .small-btn {
+    .small-button {
       position: absolute;
-      width: clamp(40px, 7vw, 60px);
-      height: clamp(40px, 7vw, 60px);
-      border-radius: 9999px;
-      background: linear-gradient(135deg, var(--neon-green), var(--neon-dark));
-      box-shadow:
-        0 0 10px var(--neon-green),
-        inset 0 0 8px var(--neon-dark);
-      color: #000;
-      font-size: clamp(1rem, 2vw, 1.5rem);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #1e1e1e;
+      border: 2px solid var(--neon-green);
+      box-shadow: 0 0 10px var(--neon-green);
+      color: var(--neon-green);
       display: flex;
-      align-items: center;
       justify-content: center;
-      cursor: pointer;
+      align-items: center;
       opacity: 0;
+      transition: all 0.4s ease;
       pointer-events: none;
-      transition: opacity 0.5s ease, transform 0.5s ease;
-      will-change: transform, opacity;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
     }
 
-    .small-btn.show {
+    .small-button.show {
       opacity: 1;
       pointer-events: auto;
+    }
+
+    .small-button.active {
+      background: var(--neon-green);
+      color: #000;
     }
   </style>
 </head>
 <body>
-  <div id="main-button-container" role="region" aria-label="Cyber Neon Navigator" tabindex="0">
-    <div id="direction-indicator" aria-hidden="true"></div>
-    <button id="main-button" type="button" aria-label="Main navigation control" aria-pressed="false">☬</button>
-    <button class="small-btn" id="btn-lock" title="Security Lock" aria-label="Security Lock"><i class="fas fa-lock"></i></button>
-    <button class="small-btn" id="btn-shield" title="User Shield" aria-label="User Shield"><i class="fas fa-shield-alt"></i></button>
-    <button class="small-btn" id="btn-server" title="Server Security" aria-label="Server Security"><i class="fas fa-server"></i></button>
-    <button class="small-btn" id="btn-firewall" title="Firewall" aria-label="Firewall"><i class="fas fa-fire"></i></button>
-    <button class="small-btn" id="btn-user" title="User Account" aria-label="User Account"><i class="fas fa-user"></i></button>
-    <button class="small-btn" id="btn-settings" title="Settings" aria-label="Settings"><i class="fas fa-cogs"></i></button>
+  <div class="container">
+    <div class="main-button" id="knob"></div>
+    <div class="small-button" data-index="0">A</div>
+    <div class="small-button" data-index="1">B</div>
+    <div class="small-button" data-index="2">C</div>
+    <div class="small-button" data-index="3">D</div>
+    <div class="small-button" data-index="4">E</div>
+    <div class="small-button" data-index="5">F</div>
   </div>
 
   <script>
-    (() => {
-      const mainBtn = document.getElementById('main-button');
-      const container = document.getElementById('main-button-container');
-      const directionIndicator = document.getElementById('direction-indicator');
-      const smallButtons = [
-        document.getElementById('btn-lock'),
-        document.getElementById('btn-shield'),
-        document.getElementById('btn-server'),
-        document.getElementById('btn-firewall'),
-        document.getElementById('btn-user'),
-        document.getElementById('btn-settings'),
-      ];
+    const knob = document.getElementById('knob');
+    const buttons = document.querySelectorAll('.small-button');
+    let isDragging = false;
+    let startAngle = 0;
+    let currentAngle = 0;
+    let menuOpen = false;
+    let selected = 0;
 
-      const btnCount = smallButtons.length;
-      let currentRotation = 0;
-      let expanded = false;
-      let isDragging = false;
-      let startAngle = 0;
-      let startRotation = 0;
-      let lastMoveTime = 0;
-      const throttleDelay = 16; // ~60fps
+    const center = { x: 150, y: 150 };
+    const radius = 100;
 
-      function getRadius() {
-        const containerRect = container.getBoundingClientRect();
-        const btnRect = smallButtons[0].getBoundingClientRect();
-        return containerRect.width / 2 + btnRect.width / 2 + containerRect.width * 0.15;
+    function getAngle(cx, cy, ex, ey) {
+      const dy = ey - cy;
+      const dx = ex - cx;
+      return Math.atan2(dy, dx);
+    }
+
+    function rotateKnobTo(angle) {
+      knob.style.transform = `translate(-50%, -50%) rotate(${angle}rad)`;
+    }
+
+    function updateSelection() {
+      const anglePerItem = (2 * Math.PI) / buttons.length;
+      selected = Math.round((currentAngle % (2 * Math.PI)) / anglePerItem) % buttons.length;
+      if (selected < 0) selected += buttons.length;
+      highlightSelected();
+    }
+
+    function highlightSelected() {
+      buttons.forEach((btn, i) => {
+        btn.classList.toggle('active', i === selected);
+      });
+    }
+
+    function openMenu() {
+      const step = (2 * Math.PI) / buttons.length;
+      buttons.forEach((btn, i) => {
+        const angle = step * i - Math.PI / 2;
+        const x = center.x + radius * Math.cos(angle);
+        const y = center.y + radius * Math.sin(angle);
+        btn.style.left = `${x}px`;
+        btn.style.top = `${y}px`;
+        btn.classList.add('show');
+      });
+      highlightSelected();
+      menuOpen = true;
+    }
+
+    function closeMenu() {
+      buttons.forEach(btn => btn.classList.remove('show'));
+      menuOpen = false;
+    }
+
+    function triggerFunction(index) {
+      const label = buttons[index].innerText;
+      alert(`گزینه ${label} انتخاب شد`);
+    }
+
+    knob.addEventListener('mousedown', startDrag);
+    knob.addEventListener('touchstart', startDrag, { passive: false });
+
+    function startDrag(e) {
+      e.preventDefault();
+      isDragging = true;
+      const pos = getPos(e);
+      startAngle = getAngle(center.x, center.y, pos.x, pos.y) - currentAngle;
+      document.addEventListener('mousemove', onDrag);
+      document.addEventListener('mouseup', endDrag);
+      document.addEventListener('touchmove', onDrag, { passive: false });
+      document.addEventListener('touchend', endDrag);
+    }
+
+    function onDrag(e) {
+      if (!isDragging) return;
+      const pos = getPos(e);
+      const angle = getAngle(center.x, center.y, pos.x, pos.y);
+      currentAngle = angle - startAngle;
+      rotateKnobTo(currentAngle);
+      updateSelection();
+    }
+
+    function endDrag() {
+      isDragging = false;
+      document.removeEventListener('mousemove', onDrag);
+      document.removeEventListener('mouseup', endDrag);
+      document.removeEventListener('touchmove', onDrag);
+      document.removeEventListener('touchend', endDrag);
+    }
+
+    knob.addEventListener('click', () => {
+      if (!menuOpen) {
+        openMenu();
+      } else {
+        triggerFunction(selected);
+        closeMenu();
       }
+    });
 
-      function positionButtons(angleOffset = 0) {
-        const radius = getRadius();
-        const centerX = container.clientWidth / 2;
-        const centerY = container.clientHeight / 2;
-
-        smallButtons.forEach((btn, i) => {
-          const angleDeg = (360 / btnCount) * i + angleOffset;
-          const angleRad = (angleDeg * Math.PI) / 180;
-          const x = centerX + radius * Math.sin(angleRad);
-          const y = centerY - radius * Math.cos(angleRad);
-          btn.style.transform = `translate(${x - btn.clientWidth / 2}px, ${y - btn.clientHeight / 2}px)`;
-        });
+    function getPos(e) {
+      if (e.touches && e.touches.length) {
+        return { x: e.touches[0].clientX - knob.getBoundingClientRect().left + 60, y: e.touches[0].clientY - knob.getBoundingClientRect().top + 60 };
+      } else {
+        return { x: e.clientX - knob.getBoundingClientRect().left + 60, y: e.clientY - knob.getBoundingClientRect().top + 60 };
       }
-
-      function showButtons() {
-        smallButtons.forEach((btn, i) => {
-          btn.style.transition = `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s`;
-          btn.classList.add('show');
-        });
-      }
-
-      function hideButtons() {
-        smallButtons.forEach((btn) => {
-          btn.classList.remove('show');
-          const centerX = container.clientWidth / 2 - btn.clientWidth / 2;
-          const centerY = container.clientHeight / 2 - btn.clientHeight / 2;
-          btn.style.transform = `translate(${centerX}px, ${centerY}px)`;
-        });
-      }
-
-      function rotateMainButton(deg) {
-        mainBtn.style.transform = `rotate(${deg}deg)`;
-        directionIndicator.style.transform = `translateX(-50%) rotate(${deg}deg)`;
-      }
-
-      function clampAngle(angle) {
-        return ((angle % 360) + 360) % 360;
-      }
-
-      function getSelectedButtonIndex() {
-        const selectedAngle = clampAngle(360 - currentRotation);
-        const sectorSize = 360 / btnCount;
-        return Math.round(selectedAngle / sectorSize) % btnCount;
-      }
-
-      mainBtn.addEventListener('click', () => {
-        if (!expanded) {
-          expanded = true;
-          mainBtn.setAttribute('aria-pressed', 'true');
-          showButtons();
-        positionButtons(currentRotation);
-          rotateMainButton(currentRotation);
-        } else {
-          const selectedIndex = getSelectedButtonIndex();
-          smallButtons[selectedIndex].click();
-        }
-      });
-
-      container.addEventListener('click', (e) => {
-        if (expanded && e.target !== mainBtn && !smallButtons.includes(e.target)) {
-          collapse();
-        }
-      });
-
-      function collapse() {
-        expanded = false;
-        mainBtn.setAttribute('aria-pressed', 'false');
-        hideButtons();
-        rotateMainButton(0);
-        currentRotation = 0;
-      }
-
-      function getAngle(x, y) {
-        const rect = container.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        let angle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI) + 90;
-        return angle < 0 ? angle + 360 : angle;
-      }
-
-      mainBtn.addEventListener('pointerdown', (e) => {
-        if (!expanded) return;
-        e.preventDefault();
-        isDragging = true;
-        startAngle = getAngle(e.clientX, e.clientY);
-        startRotation = currentRotation;
-        mainBtn.setPointerCapture(e.pointerId);
-      });
-
-      mainBtn.addEventListener('pointermove', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        const now = Date.now();
-        if (now - lastMoveTime < throttleDelay) return;
-        lastMoveTime = now;
-
-        const currentAngle = getAngle(e.clientX, e.clientY);
-        let delta = currentAngle - startAngle;
-        if (delta < -180) delta += 360;
-        if (delta > 180) delta -= 360;
-        currentRotation = clampAngle(startRotation + delta);
-        rotateMainButton(currentRotation);
-        positionButtons(currentRotation);
-      });
-
-      mainBtn.addEventListener('pointerup', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        isDragging = false;
-        mainBtn.releasePointerCapture(e.pointerId);
-      });
-
-      mainBtn.addEventListener('pointercancel', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        isDragging = false;
-        mainBtn.releasePointerCapture(e.pointerId);
-      });
-
-      smallButtons[0].addEventListener('click', (e) => {
-        e.stopPropagation();
-        alert('Navigating to /security-lock');
-      });
-      smallButtons[1].addEventListener('click', (e) => {
-        e.stopPropagation();
-        alert('Navigating to /user-shield');
-      });
-      smallButtons[2].addEventListener('click', (e) => {
-        e.stopPropagation();
-        alert('Navigating to /server-security');
-      });
-      smallButtons[3].addEventListener('click', (e) => {
-        e.stopPropagation();
-        alert('Navigating to /firewall');
-      });
-      smallButtons[4].addEventListener('click', (e) => {
-        e.stopPropagation();
-        alert('Navigating to /user-account');
-      });
-      smallButtons[5].addEventListener('click', (e) => {
-        e.stopPropagation();
-        alert('Navigating to /settings');
-      });
-
-      function init() {
-        smallButtons.forEach((btn) => {
-          const centerX = container.clientWidth / 2 - btn.clientWidth / 2;
-          const centerY = container.clientHeight / 2 - btn.clientHeight / 2;
-          btn.style.transform = `translate(${centerX}px, ${centerY}px)`;
-          btn.classList.remove('show');
-        });
-        rotateMainButton(0);
-      }
-
-      window.addEventListener('resize', () => {
-        if (expanded) {
-          positionButtons(currentRotation);
-        } else {
-          init();
-        }
-      });
-
-      window.addEventListener('load', init);
-    })();
+    }
   </script>
 </body>
 </html>
