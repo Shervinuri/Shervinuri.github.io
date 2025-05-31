@@ -1,198 +1,185 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
-  <meta charset="UTF-8" />
-  <title>Navigator Knob</title>
-  <style>
-    :root {
-      --neon-green: #39ff14;
-      --neon-dark: #008f4c;
-      --neon-glow: rgba(57, 255, 20, 0.4);
-      --bg-dark: #0a0a0a;
-      --bg-light: #1f1f1f;
-    }
-
-    body {
-      font-family: 'Orbitron', sans-serif;
-      margin: 0;
-      background: radial-gradient(circle at 30% 30%, var(--bg-dark), var(--bg-light));
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    .container {
-      position: relative;
-      width: 300px;
-      height: 300px;
-    }
-
-    .main-button {
-      position: absolute;
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: radial-gradient(circle, var(--neon-dark), #000);
-      border: 2px solid var(--neon-green);
-      box-shadow: 0 0 20px var(--neon-green), inset 0 0 10px var(--neon-green);
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(0deg);
-      z-index: 2;
-      cursor: grab;
-      touch-action: none;
-    }
-
-    .small-button {
-      position: absolute;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: #1e1e1e;
-      border: 2px solid var(--neon-green);
-      box-shadow: 0 0 10px var(--neon-green);
-      color: var(--neon-green);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      transition: all 0.4s ease;
-      pointer-events: none;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    .small-button.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .small-button.active {
-      background: var(--neon-green);
-      color: #000;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مایع طلایی اکلیلی</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000; /* رنگ پس زمینه در صورت عدم پوشش کامل کانواس */
+            cursor: pointer;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="main-button" id="knob"></div>
-    <div class="small-button" data-index="0">A</div>
-    <div class="small-button" data-index="1">B</div>
-    <div class="small-button" data-index="2">C</div>
-    <div class="small-button" data-index="3">D</div>
-    <div class="small-button" data-index="4">E</div>
-    <div class="small-button" data-index="5">F</div>
-  </div>
+    <canvas id="liquidCanvas"></canvas>
 
-  <script>
-    const knob = document.getElementById('knob');
-    const buttons = document.querySelectorAll('.small-button');
-    let isDragging = false;
-    let startAngle = 0;
-    let currentAngle = 0;
-    let menuOpen = false;
-    let selected = 0;
+    <script>
+        const canvas = document.getElementById('liquidCanvas');
+        const ctx = canvas.getContext('2d');
 
-    const center = { x: 150, y: 150 };
-    const radius = 100;
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
 
-    function getAngle(cx, cy, ex, ey) {
-      const dy = ey - cy;
-      const dx = ex - cx;
-      return Math.atan2(dy, dx);
-    }
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
 
-    function rotateKnobTo(angle) {
-      knob.style.transform = `translate(-50%, -50%) rotate(${angle}rad)`;
-    }
+        // تنظیمات مایع و اکلیل
+        const liquidColor = 'rgba(218, 165, 32, 0.1)'; // رنگ طلایی پایه با شفافیت کم برای لایه‌بندی
+        const rippleConfig = {
+            maxRipples: 10,
+            baseRadius: 15,
+            spreadSpeed: 3, // سرعت گسترش موج - کمتر برای حس غلظت بیشتر
+            lineWidthStart: 15, // ضخامت اولیه خط موج
+            lineWidthEnd: 1,
+            fadeOutSpeed: 0.01, // سرعت محو شدن موج
+            color: 'rgba(255, 215, 0, 0.7)', // رنگ موج - طلایی روشن‌تر
+        };
 
-    function updateSelection() {
-      const anglePerItem = (2 * Math.PI) / buttons.length;
-      selected = Math.round((currentAngle % (2 * Math.PI)) / anglePerItem) % buttons.length;
-      if (selected < 0) selected += buttons.length;
-      highlightSelected();
-    }
+        const glitterConfig = {
+            count: 300, // تعداد ذرات اکلیل
+            minSize: 0.5,
+            maxSize: 2,
+            minSpeed: 0.1,
+            maxSpeed: 0.5,
+            colors: ['#FFD700', '#FAFAD2', '#EEE8AA', '#F0E68C', '#BDB76B'] // طیف رنگی اکلیل
+        };
 
-    function highlightSelected() {
-      buttons.forEach((btn, i) => {
-        btn.classList.toggle('active', i === selected);
-      });
-    }
+        let ripples = [];
+        let glitterParticles = [];
 
-    function openMenu() {
-      const step = (2 * Math.PI) / buttons.length;
-      buttons.forEach((btn, i) => {
-        const angle = step * i - Math.PI / 2;
-        const x = center.x + radius * Math.cos(angle);
-        const y = center.y + radius * Math.sin(angle);
-        btn.style.left = `${x}px`;
-        btn.style.top = `${y}px`;
-        btn.classList.add('show');
-      });
-      highlightSelected();
-      menuOpen = true;
-    }
+        // ایجاد ذرات اکلیل
+        function initGlitter() {
+            glitterParticles = [];
+            for (let i = 0; i < glitterConfig.count; i++) {
+                glitterParticles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * (glitterConfig.maxSize - glitterConfig.minSize) + glitterConfig.minSize,
+                    color: glitterConfig.colors[Math.floor(Math.random() * glitterConfig.colors.length)],
+                    vx: (Math.random() - 0.5) * glitterConfig.maxSpeed,
+                    vy: (Math.random() - 0.5) * glitterConfig.maxSpeed,
+                    opacity: Math.random() * 0.5 + 0.5 // شفافیت متغیر برای درخشش
+                });
+            }
+        }
 
-    function closeMenu() {
-      buttons.forEach(btn => btn.classList.remove('show'));
-      menuOpen = false;
-    }
+        // ایجاد موج جدید
+        function createRipple(x, y) {
+            if (ripples.length < rippleConfig.maxRipples) {
+                ripples.push({
+                    x: x,
+                    y: y,
+                    currentRadius: rippleConfig.baseRadius,
+                    opacity: 1,
+                    lineWidth: rippleConfig.lineWidthStart
+                });
+            }
+        }
 
-    function triggerFunction(index) {
-      const label = buttons[index].innerText;
-      alert(`گزینه ${label} انتخاب شد`);
-    }
+        // به‌روزرسانی و رسم امواج
+        function updateAndDrawRipples() {
+            for (let i = ripples.length - 1; i >= 0; i--) {
+                let ripple = ripples[i];
+                ripple.currentRadius += rippleConfig.spreadSpeed;
+                ripple.opacity -= rippleConfig.fadeOutSpeed;
+                ripple.lineWidth = Math.max(rippleConfig.lineWidthEnd, ripple.lineWidth - 0.15); // کاهش تدریجی ضخامت
 
-    knob.addEventListener('mousedown', startDrag);
-    knob.addEventListener('touchstart', startDrag, { passive: false });
+                if (ripple.opacity <= 0) {
+                    ripples.splice(i, 1);
+                    continue;
+                }
 
-    function startDrag(e) {
-      e.preventDefault();
-      isDragging = true;
-      const pos = getPos(e);
-      startAngle = getAngle(center.x, center.y, pos.x, pos.y) - currentAngle;
-      document.addEventListener('mousemove', onDrag);
-      document.addEventListener('mouseup', endDrag);
-      document.addEventListener('touchmove', onDrag, { passive: false });
-      document.addEventListener('touchend', endDrag);
-    }
+                ctx.beginPath();
+                ctx.arc(ripple.x, ripple.y, ripple.currentRadius, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(${hexToRgb(rippleConfig.color).r}, ${hexToRgb(rippleConfig.color).g}, ${hexToRgb(rippleConfig.color).b}, ${ripple.opacity})`;
+                ctx.lineWidth = ripple.lineWidth;
+                ctx.stroke();
+            }
+        }
+        
+        // تابع کمکی تبدیل هگز به RGB برای استفاده از شفافیت
+        function hexToRgb(hex) {
+            let r = 0, g = 0, b = 0;
+            if (hex.length == 4) { // #RGB
+                r = "0x" + hex[1] + hex[1];
+                g = "0x" + hex[2] + hex[2];
+                b = "0x" + hex[3] + hex[3];
+            } else if (hex.length == 7) { // #RRGGBB
+                r = "0x" + hex[1] + hex[2];
+                g = "0x" + hex[3] + hex[4];
+                b = "0x" + hex[5] + hex[6];
+            }
+            return { r: +r, g: +g, b: +b };
+        }
 
-    function onDrag(e) {
-      if (!isDragging) return;
-      const pos = getPos(e);
-      const angle = getAngle(center.x, center.y, pos.x, pos.y);
-      currentAngle = angle - startAngle;
-      rotateKnobTo(currentAngle);
-      updateSelection();
-    }
 
-    function endDrag() {
-      isDragging = false;
-      document.removeEventListener('mousemove', onDrag);
-      document.removeEventListener('mouseup', endDrag);
-      document.removeEventListener('touchmove', onDrag);
-      document.removeEventListener('touchend', endDrag);
-    }
+        // به‌روزرسانی و رسم اکلیل
+        function updateAndDrawGlitter() {
+            glitterParticles.forEach(p => {
+                // حرکت آرام ذرات
+                p.x += p.vx;
+                p.y += p.vy;
 
-    knob.addEventListener('click', () => {
-      if (!menuOpen) {
-        openMenu();
-      } else {
-        triggerFunction(selected);
-        closeMenu();
-      }
-    });
+                // بازگرداندن ذرات به داخل صفحه
+                if (p.x > width + p.size) p.x = -p.size;
+                if (p.x < -p.size) p.x = width + p.size;
+                if (p.y > height + p.size) p.y = -p.size;
+                if (p.y < -p.size) p.y = height + p.size;
 
-    function getPos(e) {
-      if (e.touches && e.touches.length) {
-        return { x: e.touches[0].clientX - knob.getBoundingClientRect().left + 60, y: e.touches[0].clientY - knob.getBoundingClientRect().top + 60 };
-      } else {
-        return { x: e.clientX - knob.getBoundingClientRect().left + 60, y: e.clientY - knob.getBoundingClientRect().top + 60 };
-      }
-    }
-  </script>
+                // ایجاد حالت چشمک‌زن با تغییر شفافیت
+                if (Math.random() > 0.98) {
+                     p.opacity = Math.random() * 0.5 + 0.5;
+                }
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = p.color.startsWith('rgba') ? p.color : `rgba(${hexToRgb(p.color).r}, ${hexToRgb(p.color).g}, ${hexToRgb(p.color).b}, ${p.opacity})`;
+                ctx.fill();
+            });
+        }
+
+
+        // حلقه انیمیشن اصلی
+        function animate() {
+            // رسم پس‌زمینه مایع پایه (لایه‌ای و شفاف برای ایجاد عمق)
+            ctx.fillStyle = liquidColor;
+            ctx.fillRect(0, 0, width, height);
+            
+            // اضافه کردن یک لایه تیره‌تر از طلایی برای حس بیشتر مایع بودن
+            ctx.fillStyle = 'rgba(139, 101, 8, 0.02)'; // قهوه‌ای طلایی خیلی شفاف
+            ctx.fillRect(0,0,width,height);
+
+
+            updateAndDrawGlitter();
+            updateAndDrawRipples();
+
+            requestAnimationFrame(animate);
+        }
+
+        // Event Listeners
+        canvas.addEventListener('click', (event) => {
+            createRipple(event.clientX, event.clientY);
+        });
+        canvas.addEventListener('touchstart', (event) => {
+            event.preventDefault(); // جلوگیری از رفتارهای پیش‌فرض لمس مانند اسکرول
+            for(let i=0; i< event.touches.length; i++){
+                 createRipple(event.touches[i].clientX, event.touches[i].clientY);
+            }
+        }, { passive: false });
+
+
+        // شروع
+        initGlitter();
+        animate();
+
+    </script>
 </body>
 </html>
