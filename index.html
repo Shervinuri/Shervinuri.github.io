@@ -1,27 +1,5 @@
 <html lang="en" dir="ltr">
 <head>
-  <head>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow-x: hidden;
-        }
-        .container {
-            position: relative;
-            top: 0;
-            left: 0;
-            width: 100%;
-        }
-    </style>
-</head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Trade Position</title>
@@ -29,29 +7,39 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
     html, body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      background-color: #0f0f0f;
-      font-family: 'Inter', sans-serif;
-      color: white;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        background-color: #0f0f0f;
+        font-family: 'Inter', sans-serif;
+        color: white;
+        overflow-x: hidden;
     }
+
     .container {
-      width: 600px;
-      height: 337px;
-      background: transparent;
-      padding: 20px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      user-select: none;
+        width: 600px;
+        position: relative;
+        top: 0;
+        left: 0;
+        margin: 0 auto;
+        background: transparent;
+        padding: 20px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        user-select: none;
     }
+
     @media (max-width: 640px) {
       .container {
         width: 90vw;
@@ -59,26 +47,44 @@
         padding: 16px;
       }
     }
+
     @keyframes neonGlowFade {
-      0%, 100% { text-shadow: 0 0 2px #1dbfa1, 0 0 4px #1dbfa1, 0 0 6px #1dbfa1; opacity: 1; color: #6ee7b7; }
-      50% { text-shadow: 0 0 3px #1dbfa1, 0 0 6px #1dbfa1, 0 0 9px #1dbfa1; opacity: 0.8; color: #065f46; }
+      0%, 100% { text-shadow: 0 0 4px #1dbfa1, 0 0 3px #1dbfa1, 0 0 12px #1dbfa1, 0 0 16px #1dbfa1; opacity: 1; color: #6ee7b7; }
+      50% { text-shadow: 0 0 6px #1dbfa1, 0 0 6px #1dbfa1, 0 0 18px #1dbfa1, 0 0 24px #1dbfa1; opacity: 0.95; color: #10b981; }
     }
+
     @keyframes neonGlowFadeRed {
-      0%, 100% { text-shadow: 0 0 2px #e84c5a, 0 0 4px #e84c5a, 0 0 6px #e84c5a; opacity: 1; color: #f87171; }
-      50% { text-shadow: 0 0 3px #e84c5a, 0 0 6px #e84c5a, 0 0 9px #e84c5a; opacity: 0.8; color: #7f1d1d; }
+      0%, 100% { text-shadow: 0 0 4px #e84c5a, 0 0 8px #e84c5a, 0 0 12px #e84c5a, 0 0 16px #e84c5a; opacity: 1; color: #f87171; }
+      50% { text-shadow: 0 0 6px #e84c5a, 0 0 12px #e84c5a, 0 0 18px #e84c5a, 0 0 24px #e84c5a; opacity: 0.95; color: #dc2626; }
     }
+
     @keyframes neonGlowFadeYellow {
-      0%, 100% { text-shadow: 0 0 2px #facc15, 0 0 4px #facc15, 0 0 6px #facc15; opacity: 1; color: #fde68a; }
-      50% { text-shadow: 0 0 3px #facc15, 0 0 6px #facc15, 0 0 9px #facc15; opacity: 0.8; color: #78350f; }
+      0%, 100% { text-shadow: 0 0 4px #facc15, 0 0 6px #facc15, 0 0 12px #facc15, 0 0 16px #facc15; opacity: 1; color: #fde68a; }
+      50% { text-shadow: 0 0 6px #facc15, 0 0 12px #facc15, 0 0 18px #facc15, 0 0 24px #facc15; opacity: 0.95; color: #eab308; }
     }
+
     @keyframes whiteGlowFade {
-      0%, 100% { text-shadow: 0 0 1px #ffffff, 0 0 2px #ffffff, 0 0 3px #ffffff; opacity: 1; color: #ffffff; }
-      50% { text-shadow: 0 0 1.5px #ffffff, 0 0 3px #ffffff, 0 0 4.5px #ffffff; opacity: 0.9; color: #e0e0e0; }
+      0%, 100% { 
+        text-shadow: 0 0 2px #ffffff, 0 0 1px #ffffff, 0 0 6px #ffffff, 0 0 1px #ffffff; 
+        -webkit-text-stroke: 0.5px #333; 
+        opacity: 1; 
+        color: #ffffff; 
+      }
+      50% { 
+        text-shadow: 0 0 5px #ffffff, 0 0 6px #ffffff, 0 0 8px #ffffff, 0 0 10px #ffffff; 
+        -webkit-text-stroke: 0.5px #333; 
+        opacity: 0.95; 
+        color: #f8f8f8; 
+      }
     }
+
     .neon-green-fast { animation: neonGlowFade 1.2s ease-in-out infinite; }
-    .neon-red-fast { animation: neonGlowFadeRed 1.2s ease-in-out infinite; }
-    .neon-yellow-fast { animation: neonGlowFadeYellow 1.2s ease-in-out infinite; }
-    .white-glow { animation: whiteGlowFade 0.5s ease-in-out infinite; }
+    .neon-red-fast { animation: neonGlowFadeRed 0.2s ease-in-out infinite; }
+    .neon-yellow-fast { animation: neonGlowFadeYellow 0.2s ease-in-out infinite; }
+    .white-glow { 
+      animation: whiteGlowFade 0.5s ease-in-out infinite; 
+      -webkit-text-stroke: 0.5px #333; 
+    }
     .btn-glow { transition: box-shadow 0.3s ease; }
     .btn-glow:hover { box-shadow: 0 0 8px #1dbfa1, 0 0 16px #1dbfa1, 0 0 24px #1dbfa1; }
     .btn-glow-red:hover { box-shadow: 0 0 8px #e84c5a, 0 0 16px #e84c5a, 0 0 24px #e84c5a; }
@@ -113,7 +119,8 @@
     }
     .btn-row button {
       flex: 1;
-      padding: 12px 0;
+      padding: 8px 0;
+      line-height: 1.2;
       font-weight: 800;
       font-size: 16px;
       border-radius: 6px;
