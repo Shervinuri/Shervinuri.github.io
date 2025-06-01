@@ -1,185 +1,225 @@
-<!DOCTYPE html>
-<html lang="fa">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مایع طلایی اکلیلی</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            background-color: #000; /* رنگ پس زمینه در صورت عدم پوشش کامل کانواس */
-            cursor: pointer;
-        }
-        canvas {
-            display: block;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Trade Position</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background-color: #0f0f0f;
+      font-family: 'Inter', sans-serif;
+      color: white;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      width: 600px;
+      height: 337px;
+      background: transparent;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      user-select: none;
+    }
+    @media (max-width: 640px) {
+      .container {
+        width: 90vw;
+        height: calc(90vw * 9 / 16);
+        padding: 16px;
+      }
+    }
+    @keyframes neonGlowFade {
+      0%, 100% { text-shadow: 0 0 2px #1dbfa1, 0 0 4px #1dbfa1, 0 0 6px #1dbfa1; opacity: 1; color: #6ee7b7; }
+      50% { text-shadow: 0 0 3px #1dbfa1, 0 0 6px #1dbfa1, 0 0 9px #1dbfa1; opacity: 0.8; color: #065f46; }
+    }
+    @keyframes neonGlowFadeRed {
+      0%, 100% { text-shadow: 0 0 2px #e84c5a, 0 0 4px #e84c5a, 0 0 6px #e84c5a; opacity: 1; color: #f87171; }
+      50% { text-shadow: 0 0 3px #e84c5a, 0 0 6px #e84c5a, 0 0 9px #e84c5a; opacity: 0.8; color: #7f1d1d; }
+    }
+    @keyframes neonGlowFadeYellow {
+      0%, 100% { text-shadow: 0 0 2px #facc15, 0 0 4px #facc15, 0 0 6px #facc15; opacity: 1; color: #fde68a; }
+      50% { text-shadow: 0 0 3px #facc15, 0 0 6px #facc15, 0 0 9px #facc15; opacity: 0.8; color: #78350f; }
+    }
+    @keyframes whiteGlowFade {
+      0%, 100% { text-shadow: 0 0 1px #ffffff, 0 0 2px #ffffff, 0 0 3px #ffffff; opacity: 1; color: #ffffff; }
+      50% { text-shadow: 0 0 1.5px #ffffff, 0 0 3px #ffffff, 0 0 4.5px #ffffff; opacity: 0.9; color: #e0e0e0; }
+    }
+    .neon-green-fast { animation: neonGlowFade 1.2s ease-in-out infinite; }
+    .neon-red-fast { animation: neonGlowFadeRed 1.2s ease-in-out infinite; }
+    .neon-yellow-fast { animation: neonGlowFadeYellow 1.2s ease-in-out infinite; }
+    .white-glow { animation: whiteGlowFade 0.5s ease-in-out infinite; }
+    .btn-glow { transition: box-shadow 0.3s ease; }
+    .btn-glow:hover { box-shadow: 0 0 8px #1dbfa1, 0 0 16px #1dbfa1, 0 0 24px #1dbfa1; }
+    .btn-glow-red:hover { box-shadow: 0 0 8px #e84c5a, 0 0 16px #e84c5a, 0 0 24px #e84c5a; }
+    .bars-container { display: flex; gap: 2px; align-items: center; }
+    .bar {
+      width: 4px;
+      height: 16px;
+      border-radius: 2px;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+      animation-direction: alternate;
+    }
+    .bar-green { background-color: #1dbfa1; animation: neonGlowFade 1.2s infinite; }
+    .bar-yellow { background-color: #facc15; animation: neonGlowFadeYellow 1.2s infinite; animation-delay: 0.4s; }
+    .bar-red { background-color: #e84c5a; animation: neonGlowFadeRed 1.2s infinite; animation-delay: 0.8s; }
+    .cross-box {
+      background-color: #0f3c34;
+      color: #1dbfa1;
+      font-weight: 600;
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 6px;
+      line-height: 1;
+      text-align: center;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+    }
+    .btn-row button {
+      flex: 1;
+      padding: 12px 0;
+      font-weight: 800;
+      font-size: 16px;
+      border-radius: 6px;
+      background-color: #222222;
+      color: white;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.6), inset 0 -3px 6px rgba(255,255,255,0.1);
+      transition: box-shadow 0.3s ease, transform 0.15s ease;
+      user-select: none;
+      cursor: pointer;
+      text-align: center;
+    }
+    .btn-row button:hover {
+      box-shadow: 0 0 12px #1dbfa1, 0 0 24px #1dbfa1, inset 0 -3px 6px rgba(255,255,255,0.3);
+      transform: translateY(-2px);
+    }
+    .btn-row button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.8), inset 0 3px 6px rgba(0,0,0,0.4);
+    }
+    .btn-row button.reverse {
+      background-color: #222222;
+      color: white;
+    }
+    .btn-row button.reverse:hover {
+      box-shadow: 0 0 12px #e84c5a, 0 0 24px #e84c5a, inset 0 -3px 6px rgba(255,255,255,0.3);
+    }
+    .text-xs { font-size: 12px; }
+    .text-sm { font-size: 14px; }
+    .text-lg { font-size: 18px; }
+    .font-extrabold { font-weight: 800; }
+    .grid-cols-3-fixed {
+      display: grid;
+      grid-template-columns: 80px 100px 80px;
+      gap: 12px;
+      justify-content: space-between;
+    }
+    .grid-cols-3-fixed .center { text-align: center; }
+    .grid-cols-3-fixed .right { text-align: right; }
+    .grid-cols-2-fixed {
+      display: grid;
+      grid-template-columns: 80px 80px;
+      gap: 12px;
+      justify-content: space-between;
+    }
+    .grid-cols-2-fixed .center { text-align: center; }
+    .border-dashed-b {
+      border-bottom: 1px dashed #4b5563;
+      padding-bottom: 4px;
+    }
+    footer, .updated-text {
+      font-size: 10px;
+      color: #6b7280;
+      text-align: center;
+      user-select: none;
+      margin-top: 4px;
+    }
+  </style>
 </head>
 <body>
-    <canvas id="liquidCanvas"></canvas>
+  <div class="container" role="main" aria-label="Trade Position">
+    <header class="flex items-center justify-between mb-4">
+      <div class="flex items-center space-x-2">
+        <span class="text-white font-extrabold text-lg">Long</span>
+        <span class="text-white font-extrabold text-lg">SOLUSDT</span>
+        <span class="cross-box">Cross 4x</span>
+        <div class="bars-container" aria-hidden="true">
+          <span class="bar bar-green"></span>
+          <span class="bar bar-yellow"></span>
+          <span class="bar bar-green"></span>
+          <span class="bar bar-red"></span>
+        </div>
+      </div>
+      <button aria-label="Maximize" class="text-gray-400 hover:text-[#1dbfa1] transition-colors duration-300 text-lg">
+        <i class="fas fa-expand"></i>
+      </button>
+    </header>
 
-    <script>
-        const canvas = document.getElementById('liquidCanvas');
-        const ctx = canvas.getContext('2d');
+    <section class="flex justify-between text-gray-500 text-xs font-normal mb-1">
+      <div class="border-dashed-b">PNL(USDT)</div>
+      <div class="border-dashed-b text-right">ROI</div>
+    </section>
+    <section class="flex justify-between mb-6">
+      <span class="text-[#1dbfa1] font-extrabold text-lg neon-green-fast">+1.72</span>
+      <span class="text-[#1dbfa1] font-extrabold text-lg neon-green-fast text-right">+46.12%</span>
+    </section>
 
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
+    <section class="grid-cols-3-fixed text-gray-400 text-xs font-normal mb-1">
+      <div>Total(SOL)</div>
+      <div class="center">Margin(USDT)</div>
+      <div class="right">Margin rate</div>
+    </section>
+    <section class="grid-cols-3-fixed text-white font-extrabold text-lg mb-6">
+      <div class="white-glow">1</div>
+      <div class="center white-glow">5.76</div>
+      <div class="right white-glow">15.83%</div>
+    </section>
 
-        window.addEventListener('resize', () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        });
+    <section class="grid-cols-3-fixed text-gray-400 text-xs font-normal mb-1">
+      <div>Entry Price</div>
+      <div class="center">Mark Price</div>
+      <div class="right">Liq. Price</div>
+    </section>
+    <section class="grid-cols-3-fixed text-white font-extrabold text-lg mb-2">
+      <div class="white-glow">152.44</div>
+      <div class="center white-glow">154.16</div>
+      <div class="right white-glow">147.9</div>
+    </section>
 
-        // تنظیمات مایع و اکلیل
-        const liquidColor = 'rgba(218, 165, 32, 0.1)'; // رنگ طلایی پایه با شفافیت کم برای لایه‌بندی
-        const rippleConfig = {
-            maxRipples: 10,
-            baseRadius: 15,
-            spreadSpeed: 3, // سرعت گسترش موج - کمتر برای حس غلظت بیشتر
-            lineWidthStart: 15, // ضخامت اولیه خط موج
-            lineWidthEnd: 1,
-            fadeOutSpeed: 0.01, // سرعت محو شدن موج
-            color: 'rgba(255, 215, 0, 0.7)', // رنگ موج - طلایی روشن‌تر
-        };
+    <section class="grid-cols-2-fixed text-gray-400 text-xs font-normal mb-1">
+      <div>TP</div>
+      <div class="center">SL</div>
+    </section>
+    <section class="grid-cols-2-fixed text-white font-extrabold text-lg mb-6">
+      <div class="white-glow">156 USDT</div>
+      <div class="center white-glow">150 USDT</div>
+    </section>
 
-        const glitterConfig = {
-            count: 300, // تعداد ذرات اکلیل
-            minSize: 0.5,
-            maxSize: 2,
-            minSpeed: 0.1,
-            maxSpeed: 0.5,
-            colors: ['#FFD700', '#FAFAD2', '#EEE8AA', '#F0E68C', '#BDB76B'] // طیف رنگی اکلیل
-        };
+    <nav class="btn-row" role="navigation" aria-label="Trade action buttons">
+      <button onclick="alert('⚠️ ابله این یه مدل نمایشیه فقط!\nچکار داری میکنی؟ ناموسا زدی دکمه رو چی بشه؟\nلابد سودم میخوای بدم بهت؟\nبزن به چاک تا اسکریپت اینجکت نکردم تو دارو ندارت...☝🏻')" class="btn-glow" type="button">TP/SL</button>
+      <button onclick="alert('⚠️ ابله این یه مدل نمایشیه فقط!\nچکار داری میکنی؟ ناموسا زدی دکمه رو چی بشه؟\nلابد سودم میخوای بدم بهت؟\nبزن به چاک تا اسکریپت اینجکت نکردم تو دارو ندارت...☝🏻')" class="btn-glow" type="button">Close</button>
+      <button onclick="alert('⚠️ ابله این یه مدل نمایشیه فقط!\nچکار داری میکنی؟ ناموسا زدی دکمه رو چی بشه؟\nلابد سودم میخوای بدم بهت؟\nبزن به چاک تا اسکریپت اینجکت نکردم تو دارو ندارت...☝🏻')" class="btn-glow" type="button">Instant Close</button>
+      <button onclick="alert('⚠️ ابله این یه مدل نمایشیه فقط!\nچکار داری میکنی؟ ناموسا زدی دکمه رو چی بشه؟\nلابد سودم میخوای بدم بهت؟\nبزن به چاک تا اسکریپت اینجکت نکردم تو دارو ندارت...☝🏻')" class="btn-glow btn-glow-red reverse" type="button">Reverse</button>
+    </nav>
 
-        let ripples = [];
-        let glitterParticles = [];
-
-        // ایجاد ذرات اکلیل
-        function initGlitter() {
-            glitterParticles = [];
-            for (let i = 0; i < glitterConfig.count; i++) {
-                glitterParticles.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    size: Math.random() * (glitterConfig.maxSize - glitterConfig.minSize) + glitterConfig.minSize,
-                    color: glitterConfig.colors[Math.floor(Math.random() * glitterConfig.colors.length)],
-                    vx: (Math.random() - 0.5) * glitterConfig.maxSpeed,
-                    vy: (Math.random() - 0.5) * glitterConfig.maxSpeed,
-                    opacity: Math.random() * 0.5 + 0.5 // شفافیت متغیر برای درخشش
-                });
-            }
-        }
-
-        // ایجاد موج جدید
-        function createRipple(x, y) {
-            if (ripples.length < rippleConfig.maxRipples) {
-                ripples.push({
-                    x: x,
-                    y: y,
-                    currentRadius: rippleConfig.baseRadius,
-                    opacity: 1,
-                    lineWidth: rippleConfig.lineWidthStart
-                });
-            }
-        }
-
-        // به‌روزرسانی و رسم امواج
-        function updateAndDrawRipples() {
-            for (let i = ripples.length - 1; i >= 0; i--) {
-                let ripple = ripples[i];
-                ripple.currentRadius += rippleConfig.spreadSpeed;
-                ripple.opacity -= rippleConfig.fadeOutSpeed;
-                ripple.lineWidth = Math.max(rippleConfig.lineWidthEnd, ripple.lineWidth - 0.15); // کاهش تدریجی ضخامت
-
-                if (ripple.opacity <= 0) {
-                    ripples.splice(i, 1);
-                    continue;
-                }
-
-                ctx.beginPath();
-                ctx.arc(ripple.x, ripple.y, ripple.currentRadius, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(${hexToRgb(rippleConfig.color).r}, ${hexToRgb(rippleConfig.color).g}, ${hexToRgb(rippleConfig.color).b}, ${ripple.opacity})`;
-                ctx.lineWidth = ripple.lineWidth;
-                ctx.stroke();
-            }
-        }
-        
-        // تابع کمکی تبدیل هگز به RGB برای استفاده از شفافیت
-        function hexToRgb(hex) {
-            let r = 0, g = 0, b = 0;
-            if (hex.length == 4) { // #RGB
-                r = "0x" + hex[1] + hex[1];
-                g = "0x" + hex[2] + hex[2];
-                b = "0x" + hex[3] + hex[3];
-            } else if (hex.length == 7) { // #RRGGBB
-                r = "0x" + hex[1] + hex[2];
-                g = "0x" + hex[3] + hex[4];
-                b = "0x" + hex[5] + hex[6];
-            }
-            return { r: +r, g: +g, b: +b };
-        }
-
-
-        // به‌روزرسانی و رسم اکلیل
-        function updateAndDrawGlitter() {
-            glitterParticles.forEach(p => {
-                // حرکت آرام ذرات
-                p.x += p.vx;
-                p.y += p.vy;
-
-                // بازگرداندن ذرات به داخل صفحه
-                if (p.x > width + p.size) p.x = -p.size;
-                if (p.x < -p.size) p.x = width + p.size;
-                if (p.y > height + p.size) p.y = -p.size;
-                if (p.y < -p.size) p.y = height + p.size;
-
-                // ایجاد حالت چشمک‌زن با تغییر شفافیت
-                if (Math.random() > 0.98) {
-                     p.opacity = Math.random() * 0.5 + 0.5;
-                }
-
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fillStyle = p.color.startsWith('rgba') ? p.color : `rgba(${hexToRgb(p.color).r}, ${hexToRgb(p.color).g}, ${hexToRgb(p.color).b}, ${p.opacity})`;
-                ctx.fill();
-            });
-        }
-
-
-        // حلقه انیمیشن اصلی
-        function animate() {
-            // رسم پس‌زمینه مایع پایه (لایه‌ای و شفاف برای ایجاد عمق)
-            ctx.fillStyle = liquidColor;
-            ctx.fillRect(0, 0, width, height);
-            
-            // اضافه کردن یک لایه تیره‌تر از طلایی برای حس بیشتر مایع بودن
-            ctx.fillStyle = 'rgba(139, 101, 8, 0.02)'; // قهوه‌ای طلایی خیلی شفاف
-            ctx.fillRect(0,0,width,height);
-
-
-            updateAndDrawGlitter();
-            updateAndDrawRipples();
-
-            requestAnimationFrame(animate);
-        }
-
-        // Event Listeners
-        canvas.addEventListener('click', (event) => {
-            createRipple(event.clientX, event.clientY);
-        });
-        canvas.addEventListener('touchstart', (event) => {
-            event.preventDefault(); // جلوگیری از رفتارهای پیش‌فرض لمس مانند اسکرول
-            for(let i=0; i< event.touches.length; i++){
-                 createRipple(event.touches[i].clientX, event.touches[i].clientY);
-            }
-        }, { passive: false });
-
-
-        // شروع
-        initGlitter();
-        animate();
-
-    </script>
+    <footer class="mt-2"></footer>
+    <div class="updated-text">
+      Updated: last update by : ☬SHΞN™ June 01, 2025
+    </div>
+  </div>
 </body>
 </html>
