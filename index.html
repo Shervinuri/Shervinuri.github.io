@@ -1,254 +1,407 @@
-<html lang="en" dir="ltr">
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Trade Position</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>چت بات صوتی Gemini</title>
+    <style>
+        body {
+            font-family: 'Tahoma', 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f7f6;
+            padding: 20px;
+            box-sizing: border-box;
+            color: #333;
+        }
+        #chatContainer {
+            width: 100%;
+            max-width: 700px;
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        #chatLog {
+            height: 350px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        .message {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 18px;
+            line-height: 1.5;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        .user-message {
+            background-color: #dcf8c6;
+            text-align: left;
+            margin-left: auto; /* Align to right for LTR, but since it's RTL, this pushes it right */
+            align-self: flex-start; /* For RTL, flex-start is right */
+        }
+        .bot-message {
+            background-color: #e5e5ea;
+            text-align: right; /* Align to left for LTR, but since it's RTL, this pushes it left */
+            align-self: flex-end; /* For RTL, flex-end is left */
+        }
+        .user-message-container, .bot-message-container {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .user-message-container {
+            justify-content: flex-end; /* For RTL, this is left */
+        }
+        .bot-message-container {
+            justify-content: flex-start; /* For RTL, this is right */
+        }
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        width: 100%;
-        background-color: #0f0f0f;
-        font-family: 'Inter', sans-serif;
-        color: white;
-        overflow-x: hidden;
-    }
-
-    .container {
-        width: 600px;
-        position: relative;
-        top: 0;
-        left: 0;
-        margin: 0 auto;
-        background: transparent;
-        padding: 20px;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        user-select: none;
-    }
-
-    @media (max-width: 640px) {
-      .container {
-        width: 90vw;
-        height: calc(90vw * 9 / 16);
-        padding: 16px;
-      }
-    }
-
-    @keyframes neonGlowFade {
-      0%, 100% { text-shadow: 0 0 4px #1dbfa1, 0 0 3px #1dbfa1, 0 0 12px #1dbfa1, 0 0 16px #1dbfa1; opacity: 1; color: #6ee7b7; }
-      50% { text-shadow: 0 0 6px #1dbfa1, 0 0 6px #1dbfa1, 0 0 18px #1dbfa1, 0 0 24px #1dbfa1; opacity: 0.95; color: #10b981; }
-    }
-
-    @keyframes neonGlowFadeRed {
-      0%, 100% { text-shadow: 0 0 4px #e84c5a, 0 0 8px #e84c5a, 0 0 12px #e84c5a, 0 0 16px #e84c5a; opacity: 1; color: #f87171; }
-      50% { text-shadow: 0 0 6px #e84c5a, 0 0 12px #e84c5a, 0 0 18px #e84c5a, 0 0 24px #e84c5a; opacity: 0.95; color: #dc2626; }
-    }
-
-    @keyframes neonGlowFadeYellow {
-      0%, 100% { text-shadow: 0 0 4px #facc15, 0 0 6px #facc15, 0 0 12px #facc15, 0 0 16px #facc15; opacity: 1; color: #fde68a; }
-      50% { text-shadow: 0 0 6px #facc15, 0 0 12px #facc15, 0 0 18px #facc15, 0 0 24px #facc15; opacity: 0.95; color: #eab308; }
-    }
-
-    @keyframes whiteGlowFade {
-      0%, 100% { 
-        text-shadow: 0 0 2px #ffffff, 0 0 1px #ffffff, 0 0 6px #ffffff, 0 0 1px #ffffff; 
-        -webkit-text-stroke: 0.5px #333; 
-        opacity: 1; 
-        color: #ffffff; 
-      }
-      50% { 
-        text-shadow: 0 0 5px #ffffff, 0 0 6px #ffffff, 0 0 8px #ffffff, 0 0 10px #ffffff; 
-        -webkit-text-stroke: 0.5px #333; 
-        opacity: 0.95; 
-        color: #f8f8f8; 
-      }
-    }
-
-    .neon-green-fast { animation: neonGlowFade 1.2s ease-in-out infinite; }
-    .neon-red-fast { animation: neonGlowFadeRed 0.2s ease-in-out infinite; }
-    .neon-yellow-fast { animation: neonGlowFadeYellow 0.2s ease-in-out infinite; }
-    .white-glow { 
-      animation: whiteGlowFade 0.5s ease-in-out infinite; 
-      -webkit-text-stroke: 0.5px #333; 
-    }
-    .btn-glow { transition: box-shadow 0.3s ease; }
-    .btn-glow:hover { box-shadow: 0 0 8px #1dbfa1, 0 0 16px #1dbfa1, 0 0 24px #1dbfa1; }
-    .btn-glow-red:hover { box-shadow: 0 0 8px #e84c5a, 0 0 16px #e84c5a, 0 0 24px #e84c5a; }
-    .bars-container { display: flex; gap: 2px; align-items: center; }
-    .bar {
-      width: 4px;
-      height: 16px;
-      border-radius: 2px;
-      animation-iteration-count: infinite;
-      animation-timing-function: ease-in-out;
-      animation-direction: alternate;
-    }
-    .bar-green { background-color: #1dbfa1; animation: neonGlowFade 1.2s infinite; }
-    .bar-yellow { background-color: #facc15; animation: neonGlowFadeYellow 1.2s infinite; animation-delay: 0.4s; }
-    .bar-red { background-color: #e84c5a; animation: neonGlowFadeRed 1.2s infinite; animation-delay: 0.8s; }
-    .cross-box {
-      background-color: #0f3c34;
-      color: #1dbfa1;
-      font-weight: 600;
-      font-size: 12px;
-      padding: 4px 12px;
-      border-radius: 6px;
-      line-height: 1;
-      text-align: center;
-      user-select: none;
-      white-space: nowrap;
-    }
-    .btn-row {
-      display: flex;
-      gap: 12px;
-      justify-content: space-between;
-    }
-    .btn-row button {
-      flex: 1;
-      padding: 8px 0;
-      line-height: 1.2;
-      font-weight: 800;
-      font-size: 16px;
-      border-radius: 6px;
-      background-color: #222222;
-      color: white;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.6), inset 0 -3px 6px rgba(255,255,255,0.1);
-      transition: box-shadow 0.3s ease, transform 0.15s ease;
-      user-select: none;
-      cursor: pointer;
-      text-align: center;
-    }
-    .btn-row button:hover {
-      box-shadow: 0 0 12px #1dbfa1, 0 0 24px #1dbfa1, inset 0 -3px 6px rgba(255,255,255,0.3);
-      transform: translateY(-2px);
-    }
-    .btn-row button:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.8), inset 0 3px 6px rgba(0,0,0,0.4);
-    }
-    .btn-row button.reverse {
-      background-color: #222222;
-      color: white;
-    }
-    .btn-row button.reverse:hover {
-      box-shadow: 0 0 12px #e84c5a, 0 0 24px #e84c5a, inset 0 -3px 6px rgba(255,255,255,0.3);
-    }
-    .text-xs { font-size: 12px; }
-    .text-sm { font-size: 14px; }
-    .text-lg { font-size: 18px; }
-    .font-extrabold { font-weight: 800; }
-    .grid-cols-3-fixed {
-      display: grid;
-      grid-template-columns: 80px 100px 80px;
-      gap: 12px;
-      justify-content: space-between;
-    }
-    .grid-cols-3-fixed .center { text-align: center; }
-    .grid-cols-3-fixed .right { text-align: right; }
-    .grid-cols-2-fixed {
-      display: grid;
-      grid-template-columns: 80px 80px;
-      gap: 12px;
-      justify-content: space-between;
-    }
-    .grid-cols-2-fixed .center { text-align: center; }
-    .border-dashed-b {
-      border-bottom: 1px dashed #4b5563;
-      padding-bottom: 4px;
-    }
-    footer, .updated-text {
-      font-size: 10px;
-      color: #6b7280;
-      text-align: center;
-      user-select: none;
-      margin-top: 4px;
-    }
-  </style>
+        #controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #startButton {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 15px;
+        }
+        #startButton:hover {
+            background-color: #0056b3;
+        }
+        #startButton.listening {
+            background-color: #dc3545;
+        }
+        #startButton.listening:hover {
+            background-color: #c82333;
+        }
+        #status {
+            font-size: 14px;
+            color: #666;
+            min-height: 20px;
+        }
+        #instructionArea {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        #instructionInput {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 60px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container" role="main" aria-label="Trade Position">
-    <header class="flex items-center justify-between mb-4">
-      <div class="flex items-center space-x-2">
-        <span class="text-white font-extrabold text-lg">Long</span>
-        <span class="text-white font-extrabold text-lg">SOLUSDT</span>
-        <span class="cross-box">Cross 4x</span>
-        <div class="bars-container" aria-hidden="true">
-          <span class="bar bar-green"></span>
-          <span class="bar bar-yellow"></span>
-          <span class="bar bar-green"></span>
-          <span class="bar bar-red"></span>
+    <div id="chatContainer">
+        <div id="instructionArea">
+            <label for="instructionInput">دستورالعمل اولیه برای بات (اختیاری - مثلا: "تو یک دستیار مفید هستی که به فارسی روان صحبت می‌کنی"):</label>
+            <textarea id="instructionInput" placeholder="اینجا دستورالعمل خود را وارد کنید..."></textarea>
         </div>
-      </div>
-      <button aria-label="Maximize" class="text-gray-400 hover:text-[#1dbfa1] transition-colors duration-300 text-lg">
-        <i class="fas fa-expand"></i>
-      </button>
-    </header>
 
-    <section class="flex justify-between text-gray-500 text-xs font-normal mb-1">
-      <div class="border-dashed-b">PNL(USDT)</div>
-      <div class="border-dashed-b text-right">ROI</div>
-    </section>
-    <section class="flex justify-between mb-6">
-      <span class="text-[#1dbfa1] font-extrabold text-lg neon-green-fast">+1.72</span>
-      <span class="text-[#1dbfa1] font-extrabold text-lg neon-green-fast text-right">+46.12%</span>
-    </section>
-
-    <section class="grid-cols-3-fixed text-gray-400 text-xs font-normal mb-1">
-      <div>Total(SOL)</div>
-      <div class="center">Margin(USDT)</div>
-      <div class="right">Margin rate</div>
-    </section>
-    <section class="grid-cols-3-fixed text-white font-extrabold text-lg mb-6">
-      <div class="white-glow">1</div>
-      <div class="center white-glow">5.76</div>
-      <div class="right white-glow">15.83%</div>
-    </section>
-
-    <section class="grid-cols-3-fixed text-gray-400 text-xs font-normal mb-1">
-      <div>Entry Price</div>
-      <div class="center">Mark Price</div>
-      <div class="right">Liq. Price</div>
-    </section>
-    <section class="grid-cols-3-fixed text-white font-extrabold text-lg mb-2">
-      <div class="white-glow">152.44</div>
-      <div class="center white-glow">154.16</div>
-      <div class="right white-glow">147.9</div>
-    </section>
-
-    <section class="grid-cols-2-fixed text-gray-400 text-xs font-normal mb-1">
-      <div>TP</div>
-      <div class="center">SL</div>
-    </section>
-    <section class="grid-cols-2-fixed text-white font-extrabold text-lg mb-6">
-      <div class="white-glow">156 USDT</div>
-      <div class="center white-glow">150 USDT</div>
-    </section>
-
-    <nav class="btn-row" role="navigation" aria-label="Trade action buttons">
-      <button onclick="alert('⚠️ ابله این یه مدل نمایشیه فقط!\nچکار داری میکنی؟ ناموسا زدی دکمه رو چی بشه؟\nلابد سودم میخوای بدم بهت؟\nبزن به چاک تا اسکریپت اینجکت نکردم تو دارو ندارت...☝🏻')" class="btn-glow" type="button">TP/SL</button>
-      <button onclick="alert('⚠️ ابله این یه مدل نمایشیه فقط!\nچکار داری میکنی؟ ناموسا زدی دکمه رو چی بشه؟\nلابد سودم میخوای بدم بهت؟\nبزن به چاک تا اسکریپت اینجکت نکردم تو دارو ندارت...☝🏻')" class="btn-glow" type="button">Close</button>
-      <button onclick="alert('⚠️ ابله این یه مدل نمایشیه فقط!\nچکار داری میکنی؟ ناموسا زدی دکمه رو چی بشه؟\nلابد سودم میخوای بدم بهت؟\nبزن به چاک تا اسکریپت اینجکت نکردم تو دارو ندارت...☝🏻')" class="btn-glow" type="button">Instant Close</button>
-      <button onclick="alert('⚠️ ابله این یه مدل نمایشیه فقط!\nچکار داری میکنی؟ ناموسا زدی دکمه رو چی بشه؟\nلابد سودم میخوای بدم بهت؟\nبزن به چاک تا اسکریپت اینجکت نکردم تو دارو ندارت...☝🏻')" class="btn-glow btn-glow-red reverse" type="button">Reverse</button>
-    </nav>
-
-    <footer class="mt-2"></footer>
-    <div class="updated-text">
-      Updated: last update by : ☬SHΞN™ June 01, 2025
+        <div id="chatLog"></div>
+        <div id="controls">
+            <button id="startButton">شروع مکالمه صوتی</button>
+            <div id="status">برای شروع دکمه را فشار دهید.</div>
+        </div>
     </div>
-  </div>
+
+    <script>
+        // --- هشدار امنیتی بسیار مهم ---
+        // قرار دادن API Key مستقیماً در کد جاوااسکریپت سمت کاربر بسیار ناامن است.
+        // هر کسی می‌تواند آن را ببیند. این کد فقط برای نمونه و تست است.
+        // در یک محیط واقعی، باید از یک سرور واسط استفاده کنید.
+        // لطفاً محدودیت‌های مصرف API Key خود را در Google Cloud Console تنظیم کنید.
+        const API_KEY = 'AIzaSyA8BrHGxf1MSNIXrrTSFhgwp9GjIPaEKtg'; // !!! API Key خودتان را اینجا قرار دهید !!!
+        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
+
+        const startButton = document.getElementById('startButton');
+        const statusDiv = document.getElementById('status');
+        const chatLog = document.getElementById('chatLog');
+        const instructionInput = document.getElementById('instructionInput');
+
+        let recognition;
+        let conversationHistory = [];
+        let isListening = false;
+
+        // بررسی پشتیبانی مرورگر از Web Speech API
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false; // پس از یکبار صحبت متوقف شود
+            recognition.lang = 'fa-IR';    // زبان فارسی
+            recognition.interimResults = false; // فقط نتایج نهایی
+
+            recognition.onstart = () => {
+                isListening = true;
+                startButton.textContent = 'در حال گوش دادن...';
+                startButton.classList.add('listening');
+                statusDiv.textContent = 'دارم گوش میدم، صحبت کنید...';
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                addMessageToLog(transcript, 'user');
+                sendToGemini(transcript);
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                statusDiv.textContent = `خطا در تشخیص گفتار: ${event.error}`;
+                if (event.error === 'no-speech') {
+                    statusDiv.textContent = 'صدایی تشخیص داده نشد. دوباره امتحان کنید.';
+                } else if (event.error === 'audio-capture') {
+                    statusDiv.textContent = 'مشکلی در دریافت صدا از میکروفون وجود دارد. دسترسی میکروفون را بررسی کنید.';
+                } else if (event.error === 'not-allowed') {
+                    statusDiv.textContent = 'دسترسی به میکروفون مجاز نیست. لطفاً اجازه دهید.';
+                }
+                stopListening();
+            };
+
+            recognition.onend = () => {
+                // اگر به صورت خودکار متوقف شده و ما هنوز می‌خواهیم گوش کنیم، این کار را نمی‌کنیم
+                // stopListening() به صورت دستی صدا زده می‌شود وقتی که باید واقعا متوقف شود
+                if (isListening) { // اگر هنوز باید گوش کند (مثلا بعد از تشخیص گفتار)
+                   // isListening = false;
+                   // startButton.textContent = 'شروع مکالمه صوتی';
+                   // startButton.classList.remove('listening');
+                   // statusDiv.textContent = 'برای ادامه دکمه را فشار دهید.';
+                }
+            };
+
+        } else {
+            statusDiv.textContent = 'متاسفانه مرورگر شما از تشخیص گفتار پشتیبانی نمی‌کند.';
+            startButton.disabled = true;
+        }
+
+        // بررسی پشتیبانی مرورگر از Web Speech Synthesis API
+        if (!('speechSynthesis' in window)) {
+            alert('متاسفانه مرورگر شما از تبدیل متن به گفتار پشتیبانی نمی‌کند.');
+            // می‌توان عملکرد صوتی را غیرفعال کرد و فقط متنی کار کرد
+        }
+
+        startButton.addEventListener('click', () => {
+            if (!recognition) return;
+
+            if (isListening) {
+                stopListening();
+            } else {
+                // دریافت اجازه میکروفون اگر قبلا داده نشده
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(() => {
+                        if (conversationHistory.length === 0 && instructionInput.value.trim() !== '') {
+                            // اضافه کردن دستورالعمل اولیه به عنوان اولین پیام سیستمی اگر وجود دارد
+                            // این به جمنای کمک می‌کند شخصیت یا رفتار اولیه داشته باشد
+                            // این یک پیام "system" نیست، بلکه اولین پیام "user" یا "model" (بسته به طراحی)
+                            // برای سادگی، اینجا آن را به عنوان پیام اول کاربر در نظر می‌گیریم که Gemini باید به آن پاسخ دهد
+                            // یا می‌توانیم آن را در هر درخواست به عنوان بخش context بفرستیم
+                            // فعلا برای سادگی آن را به تاریخچه اضافه نمیکنیم، بلکه در پرامپت اولیه می‌فرستیم
+                        }
+                        recognition.start();
+                    })
+                    .catch(err => {
+                        console.error("Error accessing microphone:", err);
+                        statusDiv.textContent = "خطا در دسترسی به میکروفون. لطفاً دسترسی را بررسی کنید.";
+                        if (err.name === "NotAllowedError") {
+                             statusDiv.textContent = "شما دسترسی به میکروفون را رد کردید.";
+                        }
+                    });
+            }
+        });
+
+        function stopListening() {
+            if (recognition && isListening) {
+                recognition.stop();
+            }
+            isListening = false;
+            startButton.textContent = 'شروع مکالمه صوتی';
+            startButton.classList.remove('listening');
+            statusDiv.textContent = 'برای شروع دکمه را فشار دهید.';
+        }
+
+
+        function addMessageToLog(text, sender) {
+            const messageContainer = document.createElement('div');
+            messageContainer.classList.add(sender === 'user' ? 'user-message-container' : 'bot-message-container');
+
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
+            messageDiv.textContent = text;
+
+            messageContainer.appendChild(messageDiv);
+            chatLog.appendChild(messageContainer);
+            chatLog.scrollTop = chatLog.scrollHeight; // Scroll to bottom
+        }
+
+        function speak(text) {
+            if (!('speechSynthesis' in window)) {
+                console.warn("Speech synthesis not supported.");
+                return;
+            }
+            // برای جلوگیری از قطع شدن گفتار قبلی
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'fa-IR'; // زبان فارسی برای خروجی صوتی
+            // می‌توانید صداهای مختلف را هم انتخاب کنید اگر مرورگر پشتیبانی کند
+            // const voices = window.speechSynthesis.getVoices();
+            // utterance.voice = voices.find(voice => voice.lang === 'fa-IR');
+
+            utterance.onend = () => {
+                // بعد از اتمام صحبت بات، می‌توان دوباره به کاربر اجازه صحبت داد
+                // یا اینکه کاربر باید دوباره دکمه را بزند
+                // در این پیاده‌سازی، کاربر باید دوباره دکمه را بزند
+                stopListening(); // اطمینان از اینکه بعد از صحبت بات، دکمه به حالت اولیه برمی‌گردد
+                statusDiv.textContent = 'بات صحبتش تمام شد. برای ادامه دکمه را فشار دهید.';
+            };
+            utterance.onerror = (event) => {
+                console.error('Speech synthesis error:', event.error);
+                addMessageToLog(`خطا در پخش صدا: ${event.error}`, 'bot');
+                stopListening();
+            };
+            window.speechSynthesis.speak(utterance);
+        }
+
+        async function sendToGemini(userText) {
+            statusDiv.textContent = 'در حال پردازش توسط Gemini...';
+            let initialPromptText = instructionInput.value.trim();
+
+            // ساختار تاریخچه برای Gemini
+            // Gemini از یک توالی از {role: "user", parts: [{text: "..."}]}, {role: "model", parts: [{text: "..."}]} استفاده می‌کند
+            let historyForGemini = [];
+
+            if (initialPromptText) {
+                 // می‌توانیم دستورالعمل اولیه را به عنوان اولین پیام کاربر در نظر بگیریم
+                 // یا به عنوان یک "system instruction" اگر API آن را مستقیماً پشتیبانی کند
+                 // در Gemini API (REST)، "system instruction" به صورت مستقیم در generateContent نیست
+                 // اما می‌توان آن را به عنوان اولین بخش از contents ارائه داد.
+                 // برای مثال، اولین "user" پیام می‌تواند دستورالعمل باشد و انتظار پاسخ از "model"
+                 // یا اینکه آن را به عنوان بخشی از زمینه هر پیام کاربر ارسال کنیم.
+                 // یک راه ساده‌تر: دستورالعمل را به ابتدای *هر* پیام کاربر اضافه کنیم (اما این تاریخچه را خراب می‌کند)
+                 // راه بهتر: آن را به عنوان اولین پیام در تاریخچه نگه داریم.
+                 // اینجا ما آن را به عنوان اولین "user" پیام در نظر می‌گیریم.
+                 //  historyForGemini.push({ role: "user", parts: [{ text: initialPromptText }] });
+                 //  historyForGemini.push({ role: "model", parts: [{ text: "متوجه شدم. چگونه می‌توانم کمک کنم؟" }] }); // یک پاسخ فرضی از مدل
+                 // یا اینکه آن را به ابتدای پیام فعلی کاربر اضافه کنیم:
+                 // userText = initialPromptText + "\n\n" + userText;
+                 // فعلا فقط یک بار در اولین درخواست از دستورالعمل استفاده میکنیم و آن را در تاریخچه هم میگذاریم
+                 if (conversationHistory.length === 0) {
+                     conversationHistory.push({ role: "user", parts: [{ text: initialPromptText }] });
+                     // یک پاسخ فرضی از مدل به دستورالعمل اولیه، تا تاریخچه role ها را رعایت کند
+                     conversationHistory.push({ role: "model", parts: [{ text: "باشه، متوجه شدم. آماده‌ام." }] });
+                 }
+            }
+
+
+            // اضافه کردن پیام فعلی کاربر به تاریخچه
+            conversationHistory.push({ role: "user", parts: [{ text: userText }] });
+
+            // محدود کردن طول تاریخچه برای جلوگیری از پر شدن توکن‌ها (اختیاری)
+            const MAX_HISTORY_ITEMS = 10; // هر آیتم یک پیام کاربر یا بات است
+            if (conversationHistory.length > MAX_HISTORY_ITEMS * 2) { // *2 چون هر تبادل دو آیتم است
+                conversationHistory = conversationHistory.slice(-MAX_HISTORY_ITEMS * 2);
+                // اگر دستورالعمل اولیه داشتیم و حذف شد، دوباره اضافه اش کنیم
+                if (initialPromptText && conversationHistory[0].parts[0].text !== initialPromptText) {
+                     // این بخش پیچیده تر میشه و باید با دقت مدیریت بشه که دستورالعمل اولیه همیشه باشه
+                     // فعلا ساده نگه میداریم
+                }
+            }
+
+
+            const payload = {
+                contents: conversationHistory,
+                // میتوانید پارامترهای generationConfig را هم اضافه کنید
+                // "generationConfig": {
+                //   "temperature": 0.7,
+                //   "topK": 40,
+                //   "topP": 0.95,
+                //   "maxOutputTokens": 1024,
+                //   "stopSequences": []
+                // },
+                // "safetySettings": [
+                //    { "category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE" },
+                //    ...
+                // ]
+            };
+
+            try {
+                const response = await fetch(GEMINI_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                if (!response.ok) {
+                    const errorBody = await response.json();
+                    console.error('Gemini API error:', errorBody);
+                    const errorMessage = errorBody.error ? errorBody.error.message : `HTTP error! status: ${response.status}`;
+                    addMessageToLog(`خطا از Gemini: ${errorMessage}`, 'bot');
+                    speak(`متاسفانه خطایی از سمت جمینای دریافت شد. ${errorMessage}`);
+                    stopListening();
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (data.candidates && data.candidates.length > 0 && data.candidates[0].content) {
+                    const botResponse = data.candidates[0].content.parts[0].text;
+                    addMessageToLog(botResponse, 'bot');
+                    speak(botResponse);
+                    // اضافه کردن پاسخ بات به تاریخچه
+                    conversationHistory.push({ role: "model", parts: [{ text: botResponse }] });
+                } else if (data.promptFeedback && data.promptFeedback.blockReason) {
+                    const blockReason = data.promptFeedback.blockReason;
+                    const safetyRatings = data.promptFeedback.safetyRatings.map(r => `${r.category}: ${r.probability}`).join(', ');
+                    let message = `پاسخ توسط Gemini به دلیل مسائل ایمنی بلاک شد: ${blockReason}.`;
+                    if (safetyRatings) message += ` امتیازات ایمنی: ${safetyRatings}`;
+
+                    console.warn('Gemini content blocked:', data.promptFeedback);
+                    addMessageToLog(message, 'bot');
+                    speak(message);
+                }
+                else {
+                    console.error('Invalid response structure from Gemini:', data);
+                    addMessageToLog('پاسخ نامعتبر از Gemini دریافت شد.', 'bot');
+                    speak('پاسخ نامعتبر از جمینای دریافت شد.');
+                }
+
+            } catch (error) {
+                console.error('Error sending to Gemini:', error);
+                addMessageToLog(`خطا در ارتباط با Gemini: ${error.message}`, 'bot');
+                speak(`متاسفانه مشکلی در ارتباط با جمینای پیش آمد. ${error.message}`);
+            } finally {
+                // در تابع speak، onend صدا زده می‌شود که stopListening را انجام می‌دهد
+                // اما اگر speak ناموفق باشد، باید اینجا هم stopListening را صدا بزنیم.
+                // stopListening(); //  این خط ممکن است باعث توقف زودهنگام شود اگر speak زمانبر باشد
+            }
+        }
+    </script>
 </body>
 </html>
