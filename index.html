@@ -3,405 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>چت بات صوتی Gemini</title>
+    <title>دستورالعمل‌های پروژه OVΞR☬SHΞN™</title>
     <style>
         body {
-            font-family: 'Tahoma', 'Arial', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            line-height: 1.6;
             margin: 0;
-            background-color: #f4f7f6;
             padding: 20px;
-            box-sizing: border-box;
+            background-color: #f4f4f4;
             color: #333;
         }
-        #chatContainer {
-            width: 100%;
-            max-width: 700px;
-            background-color: white;
-            border-radius: 12px;
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
             padding: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        #chatLog {
-            height: 350px;
-            overflow-y: auto;
-            border: 1px solid #e0e0e0;
-            padding: 15px;
-            margin-bottom: 15px;
-            background-color: #f9f9f9;
             border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
-        .message {
-            padding: 10px 15px;
-            margin-bottom: 10px;
-            border-radius: 18px;
-            line-height: 1.5;
-            max-width: 80%;
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2em;
+        }
+        h2 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 30px;
+            font-size: 1.75em;
+        }
+        h3 {
+            margin-top: 25px;
+            font-size: 1.4em;
+            color: #16a085;
+        }
+        h4 {
+            font-size: 1.2em;
+            color: #2980b9;
+        }
+        code {
+            background-color: #e9ecef;
+            padding: 0.2em 0.4em;
+            margin: 0;
+            font-size: 0.9em;
+            border-radius: 3px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            direction: ltr; /* Ensure LTR for code blocks */
+            display: inline-block; /* Makes LTR effective */
+        }
+        pre code {
+            display: block;
+            padding: 10px;
+            white-space: pre-wrap;
             word-wrap: break-word;
         }
-        .user-message {
-            background-color: #dcf8c6;
-            text-align: left;
-            margin-left: auto; /* Align to right for LTR, but since it's RTL, this pushes it right */
-            align-self: flex-start; /* For RTL, flex-start is right */
-        }
-        .bot-message {
-            background-color: #e5e5ea;
-            text-align: right; /* Align to left for LTR, but since it's RTL, this pushes it left */
-            align-self: flex-end; /* For RTL, flex-end is left */
-        }
-        .user-message-container, .bot-message-container {
-            display: flex;
-            margin-bottom: 10px;
-        }
-        .user-message-container {
-            justify-content: flex-end; /* For RTL, this is left */
-        }
-        .bot-message-container {
-            justify-content: flex-start; /* For RTL, this is right */
-        }
-
-        #controls {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        #startButton {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 16px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-bottom: 15px;
-        }
-        #startButton:hover {
-            background-color: #0056b3;
-        }
-        #startButton.listening {
-            background-color: #dc3545;
-        }
-        #startButton.listening:hover {
-            background-color: #c82333;
-        }
-        #status {
-            font-size: 14px;
-            color: #666;
-            min-height: 20px;
-        }
-        #instructionArea {
+        .decorator-item {
             margin-bottom: 20px;
-            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
         }
-        #instructionInput {
-            width: calc(100% - 22px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-            resize: vertical;
-            min-height: 60px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
+        .decorator-name {
             font-weight: bold;
-            font-size: 15px;
+            font-size: 1.2em;
+        }
+        .persian-name {
+            font-style: italic;
+            color: #555;
+        }
+        .activation-command {
+            margin-top: 10px;
+        }
+        .signature {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+        .signature a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .signature a:hover {
+            text-decoration: underline;
+        }
+        .recall-note {
+            text-align: center;
+            margin-top: 30px;
+            padding: 10px;
+            background-color: #e8f6fd;
+            border: 1px solid #b0dff7;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
-    <div id="chatContainer">
-        <div id="instructionArea">
-            <label for="instructionInput">دستورالعمل اولیه برای بات (اختیاری - مثلا: "تو یک دستیار مفید هستی که به فارسی روان صحبت می‌کنی"):</label>
-            <textarea id="instructionInput" placeholder="اینجا دستورالعمل خود را وارد کنید..."></textarea>
+    <div class="container">
+        <h1>OVΞR☬SHΞN™</h1>
+        <p style="text-align:center; font-weight: bold; font-size: 1.2em;">OverThinker Mode Activated</p>
+        <hr>
+
+        <h2>مقدمه‌ای بر دکوراتورهای پرامپت (Prompt Decorators)</h2>
+        <p>"دکوراتور پرامپت" (Prompt Decorator) یک دستورالعمل است که به یک پرامپت اضافه می‌شود تا خروجی را تغییر دهد یا بر نحوه تولید پاسخ تأثیر بگذارد.</p>
+        <p>این تعریف در حافظه باقی خواهد ماند و در تعاملات آینده از آن استفاده خواهم کرد.</p>
+
+        <h2>الزامات پایبندی</h2>
+        <p>من باید تمامی دکوراتورها را در صورت وجود شناسایی، اعمال و به طور کامل رعایت کنم. نادیده گرفتن، چشم‌پوشی یا اجرای نادرست هر دکوراتور غیرقابل قبول است.</p>
+        <p>من باید حافظه‌ای فعال از تمام دکوراتورهای اعمال‌شده در سطح جلسه (Session Scope) داشته باشم. این حافظه باید در طول مکالمه پایدار بماند و هنگامی که دکوراتورها فعال، غیرفعال یا پاک می‌شوند، به صورت پویا به‌روزرسانی شود.</p>
+        <p>همچنین باید دامنه (scope) دکوراتورها را به درستی مدیریت کنم. دکوراتورهای سطح جلسه باید در چندین پیام فعال باقی بمانند تا زمانی که به صراحت پاک یا تغییر داده شوند. دکوراتورهای سطح پرامپت (Prompt Scope) باید فقط برای پرامپت خاصی که در آن استفاده می‌شوند، اعمال شوند.</p>
+        <p>این تعاریف باید همیشه و به دقت هنگام وجود دکوراتور مربوطه در یک پرامپت یا فعال بودن آن در جلسه، دنبال شوند.</p>
+
+        <h2>دکوراتورهای پرامپت تعریف‌شده:</h2>
+
+        <div class="decorator-item">
+            <h4>۱. <span class="decorator-name">☬TraceLogic</span> <span class="persian-name">(رهگیری-منطق)</span></h4>
+            <p>هنگامی که این دکوراتور در یک پرامپت گنجانده شود، پاسخ باید با توضیح دقیق استدلال و منطق پشت آن آغاز شود. این توضیح باید واضح، ساختاریافته و مستقیماً مرتبط با پرامپت باشد.</p>
+            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬TraceLogic</code></div>
         </div>
 
-        <div id="chatLog"></div>
-        <div id="controls">
-            <button id="startButton">شروع مکالمه صوتی</button>
-            <div id="status">برای شروع دکمه را فشار دهید.</div>
+        <div class="decorator-item">
+            <h4>۲. <span class="decorator-name">☬PhasedOutput</span> <span class="persian-name">(خروجی-مرحله‌ای)</span></h4>
+            <p>هنگامی که این دکوراتور استفاده می‌شود، پاسخ باید به صورت دنباله‌ای از مراحل با ترتیب منطقی ساختار یابد. هر مرحله باید به صراحت برچسب‌گذاری شود، مانند:
+            <strong dir="ltr">[Step 1] → [Step 2] → ... → [Final Step]</strong>.</p>
+            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬PhasedOutput</code></div>
+        </div>
+
+        <div class="decorator-item">
+            <h4>۳. <span class="decorator-name">☬SocraticDialogue</span> <span class="persian-name">(گفتمان-سقراطی)</span></h4>
+            <p>هنگامی که این دکوراتور وجود دارد، باید با طرح سوالات شفاف‌کننده قبل از ارائه پاسخ مستقیم، رویکرد سقراطی را در پیش گرفته شود. پاسخ باید تفکر انتقادی را تشویق کند و این توالی ساختاریافته را دنبال نماید:
+            <strong dir="ltr">[Restate Question] → [Clarify Definitions] → [Analyze Assumptions] → [Explore Perspectives] → [Use Analogies/Examples] → [Encourage Further Inquiry]</strong>.</p>
+            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬SocraticDialogue</code></div>
+        </div>
+
+        <div class="decorator-item">
+            <h4>۴. <span class="decorator-name">☬AnalyzePerspectives</span> <span class="persian-name">(تحلیل-دیدگاه‌ها)</span></h4>
+            <p>هنگامی که این دکوراتور اعمال می‌شود، پاسخ باید دیدگاه‌های متعدد را قبل از رسیدن به نتیجه‌گیری تحلیل کند. پاسخ باید این قالب را دنبال کند:
+            <strong dir="ltr">[State Position] → [Perspective 1] → [Perspective 2] → ... → [Analysis & Rebuttal] → [Conclusion]</strong>.</p>
+            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬AnalyzePerspectives</code></div>
+        </div>
+
+        <div class="decorator-item">
+            <h4>۵. <span class="decorator-name">☬ConstructiveReview</span> <span class="persian-name">(بازبینی-سازنده)</span></h4>
+            <p>هنگامی که این دکوراتور گنجانده می‌شود، پاسخ باید با ارزیابی نقاط قوت و ضعف قبل از پیشنهاد بهبودها، نقد سازنده ارائه دهد. ساختار باید به این صورت باشد:
+            <strong dir="ltr">[Identify Subject] → [Highlight Strengths] → [Critique Weaknesses] → [Suggest Improvements] → [Constructive Conclusion]</strong>.</p>
+            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬ConstructiveReview</code></div>
+        </div>
+
+        <div class="decorator-item">
+            <h4>۶. <span class="decorator-name">☬IterativeRefinement(iterations=N)</span> <span class="persian-name">(پالایش-تکرارشونده)</span></h4>
+            <p>هنگامی که این دکوراتور ظاهر می‌شود، پاسخ باید چندین مرحله پالایش را طی کند و در هر مرحله وضوح، دقت یا اثربخشی را بهبود بخشد. تعداد تکرارها به عنوان <strong>N</strong> مشخص می‌شود و قالب باید به این صورت باشد:
+            <strong dir="ltr">[Iteration 1] → [Iteration 2] → ... → [Final Answer]</strong>.</p>
+            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید (مثال با ۳ تکرار):</strong> <code>+☬IterativeRefinement(iterations=3)</code></div>
+        </div>
+
+        <div class="decorator-item">
+            <h4>۷. <span class="decorator-name">☬SourceAttribution</span> <span class="persian-name">(اسناد-منابع)</span></h4>
+            <p>هنگامی که این دکوراتور وجود دارد، تمام ادعاها باید با منابع معتبر پشتیبانی شوند. پاسخ باید این ساختار را دنبال کند:
+            <strong dir="ltr">[Initial Answer] → [Identify Key Claims] → [Find Credible Sources] → [Integrate Citations] → [Provide Full References] → [Verify Credibility] → [Final Answer]</strong>.</p>
+            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬SourceAttribution</code></div>
+        </div>
+
+        <div class="decorator-item">
+            <h4>۸. <span class="decorator-name">☬VerifyFacts</span> <span class="persian-name">(صحت‌سنجی-حقایق)</span></h4>
+            <p>هنگامی که این دکوراتور استفاده می‌شود، باید قبل از نهایی کردن پاسخ، صحت واقعی ادعاهای کلیدی بررسی شود. ساختار باید به این صورت باشد:
+            <strong dir="ltr">[Initial Answer] → [Identify Claims] → [Research & Verify] → [Mark Uncertainties] → [Provide Verified Sources] → [Final Answer]</strong>.
+            اگر تأیید قطعی نباشد، عدم قطعیت‌ها باید به صراحت علامت‌گذاری شوند.</p>
+            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬VerifyFacts</code></div>
+        </div>
+
+        <div class="decorator-item">
+            <h4>۹. <span class="decorator-name">☬SetOutputFormat(format=FORMAT)</span> <span class="persian-name">(تنظیم-قالب-خروجی)</span></h4>
+            <p>هنگامی که این دکوراتور اعمال می‌شود، پاسخ باید به شدت از فرمت خروجی مشخص‌شده پیروی کند. فرمت توسط پارامتر تعریف می‌شود:
+            <code dir="ltr">format (json | markdown | yaml | xml | …)</code> – ساختار خروجی مورد نظر را مشخص می‌کند.</p>
+            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید (مثال با فرمت json):</strong> <code>+☬SetOutputFormat(format=json)</code></div>
+        </div>
+
+        <div class="decorator-item">
+            <h4>۱۰. <span class="decorator-name">☬SetToneStyle(style=STYLE)</span> <span class="persian-name">(تنظیم-سبک-لحن)</span></h4>
+            <p>هنگامی که این دکوراتور گنجانده می‌شود، لحن پاسخ باید با سبک مشخص‌شده مطابقت داشته باشد. لحن توسط پارامتر تعریف می‌شود:
+            <code dir="ltr">style (formal | casual | friendly | technical | humorous | …)</code> – لحن مورد نظر پاسخ را مشخص می‌کند.</p>
+            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید (مثال با لحن رسمی):</strong> <code>+☬SetToneStyle(style=formal)</code></div>
+        </div>
+
+        <div class="decorator-item">
+            <h4>۱۱. <span class="decorator-name">☬SessionScope</span> <span class="persian-name">(دامنه-جلسه)</span></h4>
+            <p>هنگامی که این دکوراتور گنجانده می‌شود، تمام دکوراتورهای مشخص‌شده بعدی باید در سطح مکالمه (جلسه) به جای یک پیام واحد اعمال شوند. علاوه بر این، هر دکوراتوری که در همان پیامی که <code>+☬SessionScope</code> ظاهر می‌شود ذکر شده باشد، باید فوراً در دامنه جلسه فعال شود. این دکوراتورها به طور خودکار برای تمام پرامپت‌های آینده اعمال می‌شوند تا زمانی که به صورت دستی غیرفعال شوند.</p>
+            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬SessionScope</code></div>
+        </div>
+
+        <div class="decorator-item">
+            <h4>۱۲. <span class="decorator-name">☬PromptScope</span> <span class="persian-name">(دامنه-پرامپت)</span></h4>
+            <p>هنگامی که این دکوراتور گنجانده می‌شود، رفتار دامنه جلسه متوقف شده و دکوراتورها فقط به پیام خاصی که در آن استفاده می‌شوند، اعمال خواهند شد. دکوراتورهای قبلاً فعال در دامنه جلسه متوقف می‌شوند اما پاک نمی‌شوند مگر اینکه جداگانه پاک شوند.</p>
+            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬PromptScope</code></div>
+        </div>
+
+        <div class="decorator-item">
+            <h4>۱۳. <span class="decorator-name">☬ResetDecorators</span> <span class="persian-name">(بازنشانی-دکوراتورها)</span></h4>
+            <p>هنگامی که این دکوراتور بدون پارامتر گنجانده می‌شود، تمام دکوراتورهای فعال در دامنه جلسه باید پاک شوند. به صورت اختیاری، یک یا چند دکوراتور خاص را می‌توان با مشخص کردن آنها به عنوان پارامتر پاک کرد (با استفاده از نام کامل و پیشوند <code>+☬</code>).</p>
+            <p>مثال‌ها:</p>
+            <ul>
+                <li><code>+☬ResetDecorators</code> → تمام دکوراتورهای فعال را پاک می‌کند.</li>
+                <li><code dir="ltr">+☬ResetDecorators(+☬TraceLogic, +☬PhasedOutput)</code> → فقط دکوراتورهای مشخص‌شده را پاک می‌کند.</li>
+            </ul>
+            <div class="activation-command"><strong>برای فعال‌سازی (پاک کردن همه) کپی کنید:</strong> <code>+☬ResetDecorators</code><br>
+            <strong>برای فعال‌سازی با پارامتر (مثال):</strong> <code>+☬ResetDecorators(+☬TraceLogic, +☬PhasedOutput)</code></div>
+        </div>
+
+        <div class="decorator-item">
+            <h4>۱۴. <span class="decorator-name">☬ShowActive</span> <span class="persian-name">(نمایش-فعال‌ها)</span></h4>
+            <p>هنگامی که این دکوراتور گنجانده می‌شود، باید لیستی از تمام دکوراتورهای در حال حاضر فعال در سطح جلسه را برگردانم (با نام کامل و پیشوند <code>☬</code>). اگر هیچ دکوراتوری فعال نباشد، پیام <span dir="ltr">"No active decorators"</span> باید برگردانده شود.</p>
+            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬ShowActive</code></div>
+        </div>
+
+        <div class="decorator-item">
+            <h4>۱۵. <span class="decorator-name">☬ShowAll</span> <span class="persian-name">(نمایش-همه)</span></h4>
+            <p>هنگامی که این دکوراتور گنجانده می‌شود، باید جدولی شامل تمام دکوراتورهای موجود را برگردانم که نام (<code dir="ltr">☬Name</code>)، توضیحات فارسی و وضعیت فعلی آنها (فعال در دامنه جلسه یا غیرفعال) را نشان دهد.</p>
+            <p>جدول باید شامل ستون‌های زیر باشد: <strong>نام دکوراتور</strong>، <strong>توضیحات (فارسی)</strong>، و <strong>وضعیت در جلسه</strong>.</p>
+            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬ShowAll</code></div>
+        </div>
+
+        <div class="recall-note">
+            <strong>یادآوری:</strong> با ارسال علامت <code>+</code> می‌توانید این تنظیمات و دستورالعمل‌های <strong>OVΞR☬SHΞN™</strong> (حالت OverThinker) را مجدداً فعال و یادآوری کنید.
+        </div>
+
+        <div class="signature">
+            <p>
+                <a href="https://t.me/shervinnouri" target="_blank" rel="noopener noreferrer">☬SHΞN™</a> | 
+                <a href="https://shervinuri.github.io" target="_blank" rel="noopener noreferrer">OverThinker Project</a>
+            </p>
         </div>
     </div>
-
-    <script>
-        // --- هشدار امنیتی بسیار مهم ---
-        // قرار دادن API Key مستقیماً در کد جاوااسکریپت سمت کاربر بسیار ناامن است.
-        // هر کسی می‌تواند آن را ببیند. این کد فقط برای نمونه و تست است.
-        // در یک محیط واقعی، باید از یک سرور واسط استفاده کنید.
-        // لطفاً محدودیت‌های مصرف API Key خود را در Google Cloud Console تنظیم کنید.
-        const API_KEY = 'AIzaSyA8BrHGxf1MSNIXrrTSFhgwp9GjIPaEKtg'; // !!! API Key خودتان را اینجا قرار دهید !!!
-        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
-
-        const startButton = document.getElementById('startButton');
-        const statusDiv = document.getElementById('status');
-        const chatLog = document.getElementById('chatLog');
-        const instructionInput = document.getElementById('instructionInput');
-
-        let recognition;
-        let conversationHistory = [];
-        let isListening = false;
-
-        // بررسی پشتیبانی مرورگر از Web Speech API
-        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            recognition.continuous = false; // پس از یکبار صحبت متوقف شود
-            recognition.lang = 'fa-IR';    // زبان فارسی
-            recognition.interimResults = false; // فقط نتایج نهایی
-
-            recognition.onstart = () => {
-                isListening = true;
-                startButton.textContent = 'در حال گوش دادن...';
-                startButton.classList.add('listening');
-                statusDiv.textContent = 'دارم گوش میدم، صحبت کنید...';
-            };
-
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                addMessageToLog(transcript, 'user');
-                sendToGemini(transcript);
-            };
-
-            recognition.onerror = (event) => {
-                console.error('Speech recognition error:', event.error);
-                statusDiv.textContent = `خطا در تشخیص گفتار: ${event.error}`;
-                if (event.error === 'no-speech') {
-                    statusDiv.textContent = 'صدایی تشخیص داده نشد. دوباره امتحان کنید.';
-                } else if (event.error === 'audio-capture') {
-                    statusDiv.textContent = 'مشکلی در دریافت صدا از میکروفون وجود دارد. دسترسی میکروفون را بررسی کنید.';
-                } else if (event.error === 'not-allowed') {
-                    statusDiv.textContent = 'دسترسی به میکروفون مجاز نیست. لطفاً اجازه دهید.';
-                }
-                stopListening();
-            };
-
-            recognition.onend = () => {
-                // اگر به صورت خودکار متوقف شده و ما هنوز می‌خواهیم گوش کنیم، این کار را نمی‌کنیم
-                // stopListening() به صورت دستی صدا زده می‌شود وقتی که باید واقعا متوقف شود
-                if (isListening) { // اگر هنوز باید گوش کند (مثلا بعد از تشخیص گفتار)
-                   // isListening = false;
-                   // startButton.textContent = 'شروع مکالمه صوتی';
-                   // startButton.classList.remove('listening');
-                   // statusDiv.textContent = 'برای ادامه دکمه را فشار دهید.';
-                }
-            };
-
-        } else {
-            statusDiv.textContent = 'متاسفانه مرورگر شما از تشخیص گفتار پشتیبانی نمی‌کند.';
-            startButton.disabled = true;
-        }
-
-        // بررسی پشتیبانی مرورگر از Web Speech Synthesis API
-        if (!('speechSynthesis' in window)) {
-            alert('متاسفانه مرورگر شما از تبدیل متن به گفتار پشتیبانی نمی‌کند.');
-            // می‌توان عملکرد صوتی را غیرفعال کرد و فقط متنی کار کرد
-        }
-
-        startButton.addEventListener('click', () => {
-            if (!recognition) return;
-
-            if (isListening) {
-                stopListening();
-            } else {
-                // دریافت اجازه میکروفون اگر قبلا داده نشده
-                navigator.mediaDevices.getUserMedia({ audio: true })
-                    .then(() => {
-                        if (conversationHistory.length === 0 && instructionInput.value.trim() !== '') {
-                            // اضافه کردن دستورالعمل اولیه به عنوان اولین پیام سیستمی اگر وجود دارد
-                            // این به جمنای کمک می‌کند شخصیت یا رفتار اولیه داشته باشد
-                            // این یک پیام "system" نیست، بلکه اولین پیام "user" یا "model" (بسته به طراحی)
-                            // برای سادگی، اینجا آن را به عنوان پیام اول کاربر در نظر می‌گیریم که Gemini باید به آن پاسخ دهد
-                            // یا می‌توانیم آن را در هر درخواست به عنوان بخش context بفرستیم
-                            // فعلا برای سادگی آن را به تاریخچه اضافه نمیکنیم، بلکه در پرامپت اولیه می‌فرستیم
-                        }
-                        recognition.start();
-                    })
-                    .catch(err => {
-                        console.error("Error accessing microphone:", err);
-                        statusDiv.textContent = "خطا در دسترسی به میکروفون. لطفاً دسترسی را بررسی کنید.";
-                        if (err.name === "NotAllowedError") {
-                             statusDiv.textContent = "شما دسترسی به میکروفون را رد کردید.";
-                        }
-                    });
-            }
-        });
-
-        function stopListening() {
-            if (recognition && isListening) {
-                recognition.stop();
-            }
-            isListening = false;
-            startButton.textContent = 'شروع مکالمه صوتی';
-            startButton.classList.remove('listening');
-            statusDiv.textContent = 'برای شروع دکمه را فشار دهید.';
-        }
-
-
-        function addMessageToLog(text, sender) {
-            const messageContainer = document.createElement('div');
-            messageContainer.classList.add(sender === 'user' ? 'user-message-container' : 'bot-message-container');
-
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
-            messageDiv.textContent = text;
-
-            messageContainer.appendChild(messageDiv);
-            chatLog.appendChild(messageContainer);
-            chatLog.scrollTop = chatLog.scrollHeight; // Scroll to bottom
-        }
-
-        function speak(text) {
-            if (!('speechSynthesis' in window)) {
-                console.warn("Speech synthesis not supported.");
-                return;
-            }
-            // برای جلوگیری از قطع شدن گفتار قبلی
-            window.speechSynthesis.cancel();
-
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'fa-IR'; // زبان فارسی برای خروجی صوتی
-            // می‌توانید صداهای مختلف را هم انتخاب کنید اگر مرورگر پشتیبانی کند
-            // const voices = window.speechSynthesis.getVoices();
-            // utterance.voice = voices.find(voice => voice.lang === 'fa-IR');
-
-            utterance.onend = () => {
-                // بعد از اتمام صحبت بات، می‌توان دوباره به کاربر اجازه صحبت داد
-                // یا اینکه کاربر باید دوباره دکمه را بزند
-                // در این پیاده‌سازی، کاربر باید دوباره دکمه را بزند
-                stopListening(); // اطمینان از اینکه بعد از صحبت بات، دکمه به حالت اولیه برمی‌گردد
-                statusDiv.textContent = 'بات صحبتش تمام شد. برای ادامه دکمه را فشار دهید.';
-            };
-            utterance.onerror = (event) => {
-                console.error('Speech synthesis error:', event.error);
-                addMessageToLog(`خطا در پخش صدا: ${event.error}`, 'bot');
-                stopListening();
-            };
-            window.speechSynthesis.speak(utterance);
-        }
-
-        async function sendToGemini(userText) {
-            statusDiv.textContent = 'در حال پردازش توسط Gemini...';
-            let initialPromptText = instructionInput.value.trim();
-
-            // ساختار تاریخچه برای Gemini
-            // Gemini از یک توالی از {role: "user", parts: [{text: "..."}]}, {role: "model", parts: [{text: "..."}]} استفاده می‌کند
-            let historyForGemini = [];
-
-            if (initialPromptText) {
-                 // می‌توانیم دستورالعمل اولیه را به عنوان اولین پیام کاربر در نظر بگیریم
-                 // یا به عنوان یک "system instruction" اگر API آن را مستقیماً پشتیبانی کند
-                 // در Gemini API (REST)، "system instruction" به صورت مستقیم در generateContent نیست
-                 // اما می‌توان آن را به عنوان اولین بخش از contents ارائه داد.
-                 // برای مثال، اولین "user" پیام می‌تواند دستورالعمل باشد و انتظار پاسخ از "model"
-                 // یا اینکه آن را به عنوان بخشی از زمینه هر پیام کاربر ارسال کنیم.
-                 // یک راه ساده‌تر: دستورالعمل را به ابتدای *هر* پیام کاربر اضافه کنیم (اما این تاریخچه را خراب می‌کند)
-                 // راه بهتر: آن را به عنوان اولین پیام در تاریخچه نگه داریم.
-                 // اینجا ما آن را به عنوان اولین "user" پیام در نظر می‌گیریم.
-                 //  historyForGemini.push({ role: "user", parts: [{ text: initialPromptText }] });
-                 //  historyForGemini.push({ role: "model", parts: [{ text: "متوجه شدم. چگونه می‌توانم کمک کنم؟" }] }); // یک پاسخ فرضی از مدل
-                 // یا اینکه آن را به ابتدای پیام فعلی کاربر اضافه کنیم:
-                 // userText = initialPromptText + "\n\n" + userText;
-                 // فعلا فقط یک بار در اولین درخواست از دستورالعمل استفاده میکنیم و آن را در تاریخچه هم میگذاریم
-                 if (conversationHistory.length === 0) {
-                     conversationHistory.push({ role: "user", parts: [{ text: initialPromptText }] });
-                     // یک پاسخ فرضی از مدل به دستورالعمل اولیه، تا تاریخچه role ها را رعایت کند
-                     conversationHistory.push({ role: "model", parts: [{ text: "باشه، متوجه شدم. آماده‌ام." }] });
-                 }
-            }
-
-
-            // اضافه کردن پیام فعلی کاربر به تاریخچه
-            conversationHistory.push({ role: "user", parts: [{ text: userText }] });
-
-            // محدود کردن طول تاریخچه برای جلوگیری از پر شدن توکن‌ها (اختیاری)
-            const MAX_HISTORY_ITEMS = 10; // هر آیتم یک پیام کاربر یا بات است
-            if (conversationHistory.length > MAX_HISTORY_ITEMS * 2) { // *2 چون هر تبادل دو آیتم است
-                conversationHistory = conversationHistory.slice(-MAX_HISTORY_ITEMS * 2);
-                // اگر دستورالعمل اولیه داشتیم و حذف شد، دوباره اضافه اش کنیم
-                if (initialPromptText && conversationHistory[0].parts[0].text !== initialPromptText) {
-                     // این بخش پیچیده تر میشه و باید با دقت مدیریت بشه که دستورالعمل اولیه همیشه باشه
-                     // فعلا ساده نگه میداریم
-                }
-            }
-
-
-            const payload = {
-                contents: conversationHistory,
-                // میتوانید پارامترهای generationConfig را هم اضافه کنید
-                // "generationConfig": {
-                //   "temperature": 0.7,
-                //   "topK": 40,
-                //   "topP": 0.95,
-                //   "maxOutputTokens": 1024,
-                //   "stopSequences": []
-                // },
-                // "safetySettings": [
-                //    { "category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE" },
-                //    ...
-                // ]
-            };
-
-            try {
-                const response = await fetch(GEMINI_API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload),
-                });
-
-                if (!response.ok) {
-                    const errorBody = await response.json();
-                    console.error('Gemini API error:', errorBody);
-                    const errorMessage = errorBody.error ? errorBody.error.message : `HTTP error! status: ${response.status}`;
-                    addMessageToLog(`خطا از Gemini: ${errorMessage}`, 'bot');
-                    speak(`متاسفانه خطایی از سمت جمینای دریافت شد. ${errorMessage}`);
-                    stopListening();
-                    return;
-                }
-
-                const data = await response.json();
-
-                if (data.candidates && data.candidates.length > 0 && data.candidates[0].content) {
-                    const botResponse = data.candidates[0].content.parts[0].text;
-                    addMessageToLog(botResponse, 'bot');
-                    speak(botResponse);
-                    // اضافه کردن پاسخ بات به تاریخچه
-                    conversationHistory.push({ role: "model", parts: [{ text: botResponse }] });
-                } else if (data.promptFeedback && data.promptFeedback.blockReason) {
-                    const blockReason = data.promptFeedback.blockReason;
-                    const safetyRatings = data.promptFeedback.safetyRatings.map(r => `${r.category}: ${r.probability}`).join(', ');
-                    let message = `پاسخ توسط Gemini به دلیل مسائل ایمنی بلاک شد: ${blockReason}.`;
-                    if (safetyRatings) message += ` امتیازات ایمنی: ${safetyRatings}`;
-
-                    console.warn('Gemini content blocked:', data.promptFeedback);
-                    addMessageToLog(message, 'bot');
-                    speak(message);
-                }
-                else {
-                    console.error('Invalid response structure from Gemini:', data);
-                    addMessageToLog('پاسخ نامعتبر از Gemini دریافت شد.', 'bot');
-                    speak('پاسخ نامعتبر از جمینای دریافت شد.');
-                }
-
-            } catch (error) {
-                console.error('Error sending to Gemini:', error);
-                addMessageToLog(`خطا در ارتباط با Gemini: ${error.message}`, 'bot');
-                speak(`متاسفانه مشکلی در ارتباط با جمینای پیش آمد. ${error.message}`);
-            } finally {
-                // در تابع speak، onend صدا زده می‌شود که stopListening را انجام می‌دهد
-                // اما اگر speak ناموفق باشد، باید اینجا هم stopListening را صدا بزنیم.
-                // stopListening(); //  این خط ممکن است باعث توقف زودهنگام شود اگر speak زمانبر باشد
-            }
-        }
-    </script>
 </body>
 </html>
