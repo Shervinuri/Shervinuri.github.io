@@ -3,238 +3,334 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دستورالعمل‌های پروژه OVΞR☬SHΞN™</title>
+    <title>OVΞR☬SHΞN™ - Copy Prompt</title>
     <style>
+        @keyframes gradientWave {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes flickerNeon {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                text-shadow:
+                    0 0 4px #fff,
+                    0 0 11px #fff,
+                    0 0 19px #fff,
+                    0 0 40px #00aeff, /* Electronic Blue */
+                    0 0 80px #00aeff,
+                    0 0 90px #00aeff,
+                    0 0 100px #00aeff,
+                    0 0 150px #00aeff;
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+                opacity: 0.3;
+            }
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-            line-height: 1.6;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-        h1, h2, h3, h4 {
-            color: #2c3e50;
-        }
-        h1 {
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(270deg, #1a1a1a, #333333, #101010, #2c2c2c);
+            background-size: 600% 600%;
+            animation: gradientWave 20s ease infinite;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #f0f0f0;
+            overflow: hidden;
             text-align: center;
-            font-size: 2em;
         }
-        h2 {
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-            margin-top: 30px;
-            font-size: 1.75em;
+
+        #animation-container {
+            perspective: 800px; /* For potential 3D effects if desired later */
         }
-        h3 {
-            margin-top: 25px;
-            font-size: 1.4em;
-            color: #16a085;
-        }
-        h4 {
-            font-size: 1.2em;
-            color: #2980b9;
-        }
-        code {
-            background-color: #e9ecef;
-            padding: 0.2em 0.4em;
-            margin: 0;
-            font-size: 0.9em;
-            border-radius: 3px;
-            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-            direction: ltr; /* Ensure LTR for code blocks */
-            display: inline-block; /* Makes LTR effective */
-        }
-        pre code {
-            display: block;
-            padding: 10px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        .decorator-item {
-            margin-bottom: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        .decorator-name {
+
+        #neon-text {
+            font-size: 5rem; /* درشت */
             font-weight: bold;
-            font-size: 1.2em;
+            color: #ccffff; /* Light base for neon */
+            animation: flickerNeon 1.5s infinite alternate;
+            transition: opacity 0.5s ease-out;
+            letter-spacing: 2px;
+            margin-bottom: 50px; /* Space before button appears */
         }
-        .persian-name {
-            font-style: italic;
-            color: #555;
+
+        #copy-button {
+            display: none; /* Initially hidden */
+            opacity: 0;
+            padding: 15px 35px;
+            font-size: 1.2rem; /* فونت متناسب برای دکمه */
+            font-weight: bold;
+            color: #e0e0e0;
+            background: linear-gradient(145deg, #4a4a4a, #3e3e3e);
+            border: none;
+            border-radius: 12px; /* برجسته و خوشگل */
+            box-shadow: 5px 5px 15px #1c1c1c,
+                        -5px -5px 15px #585858,
+                        inset 1px 1px 2px #5f5f5f, /* Inner shadow for emboss */
+                        inset -1px -1px 2px #2a2a2a; /* Inner shadow for emboss */
+            cursor: pointer;
+            transition: all 0.3s ease, opacity 0.5s ease-in 0.2s; /* Added delay for opacity */
+            outline: none;
         }
-        .activation-command {
-            margin-top: 10px;
+
+        #copy-button:hover {
+            background: linear-gradient(145deg, #3e3e3e, #4a4a4a);
+            box-shadow: 7px 7px 18px #1c1c1c,
+                        -7px -7px 18px #585858,
+                        inset 1px 1px 2px #5f5f5f,
+                        inset -1px -1px 2px #2a2a2a;
         }
-        .signature {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 0.9em;
-            color: #7f8c8d;
+
+        #copy-button:active {
+            background: linear-gradient(145deg, #353535, #303030);
+            box-shadow: inset 5px 5px 15px #1c1c1c,
+                        inset -5px -5px 15px #585858;
+            transform: translateY(1px);
         }
-        .signature a {
-            color: #3498db;
-            text-decoration: none;
-        }
-        .signature a:hover {
-            text-decoration: underline;
-        }
-        .recall-note {
-            text-align: center;
+
+        #confirmation-message {
+            display: none; /* Initially hidden */
+            opacity: 0;
             margin-top: 30px;
+            font-size: 1.3rem;
+            color: #00d9ff; /* Electronic blue-ish */
+            transition: opacity 0.5s ease-in-out;
             padding: 10px;
-            background-color: #e8f6fd;
-            border: 1px solid #b0dff7;
-            border-radius: 4px;
+        }
+
+        /* For small screens */
+        @media (max-width: 600px) {
+            #neon-text {
+                font-size: 3rem;
+            }
+            #copy-button {
+                padding: 12px 28px;
+                font-size: 1rem;
+            }
+            #confirmation-message {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>OVΞR☬SHΞN™</h1>
-        <p style="text-align:center; font-weight: bold; font-size: 1.2em;">OverThinker Mode Activated</p>
-        <hr>
 
-        <h2>مقدمه‌ای بر دکوراتورهای پرامپت (Prompt Decorators)</h2>
-        <p>"دکوراتور پرامپت" (Prompt Decorator) یک دستورالعمل است که به یک پرامپت اضافه می‌شود تا خروجی را تغییر دهد یا بر نحوه تولید پاسخ تأثیر بگذارد.</p>
-        <p>این تعریف در حافظه باقی خواهد ماند و در تعاملات آینده از آن استفاده خواهم کرد.</p>
-
-        <h2>الزامات پایبندی</h2>
-        <p>من باید تمامی دکوراتورها را در صورت وجود شناسایی، اعمال و به طور کامل رعایت کنم. نادیده گرفتن، چشم‌پوشی یا اجرای نادرست هر دکوراتور غیرقابل قبول است.</p>
-        <p>من باید حافظه‌ای فعال از تمام دکوراتورهای اعمال‌شده در سطح جلسه (Session Scope) داشته باشم. این حافظه باید در طول مکالمه پایدار بماند و هنگامی که دکوراتورها فعال، غیرفعال یا پاک می‌شوند، به صورت پویا به‌روزرسانی شود.</p>
-        <p>همچنین باید دامنه (scope) دکوراتورها را به درستی مدیریت کنم. دکوراتورهای سطح جلسه باید در چندین پیام فعال باقی بمانند تا زمانی که به صراحت پاک یا تغییر داده شوند. دکوراتورهای سطح پرامپت (Prompt Scope) باید فقط برای پرامپت خاصی که در آن استفاده می‌شوند، اعمال شوند.</p>
-        <p>این تعاریف باید همیشه و به دقت هنگام وجود دکوراتور مربوطه در یک پرامپت یا فعال بودن آن در جلسه، دنبال شوند.</p>
-
-        <h2>دکوراتورهای پرامپت تعریف‌شده:</h2>
-
-        <div class="decorator-item">
-            <h4>۱. <span class="decorator-name">☬TraceLogic</span> <span class="persian-name">(رهگیری-منطق)</span></h4>
-            <p>هنگامی که این دکوراتور در یک پرامپت گنجانده شود، پاسخ باید با توضیح دقیق استدلال و منطق پشت آن آغاز شود. این توضیح باید واضح، ساختاریافته و مستقیماً مرتبط با پرامپت باشد.</p>
-            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬TraceLogic</code></div>
-        </div>
-
-        <div class="decorator-item">
-            <h4>۲. <span class="decorator-name">☬PhasedOutput</span> <span class="persian-name">(خروجی-مرحله‌ای)</span></h4>
-            <p>هنگامی که این دکوراتور استفاده می‌شود، پاسخ باید به صورت دنباله‌ای از مراحل با ترتیب منطقی ساختار یابد. هر مرحله باید به صراحت برچسب‌گذاری شود، مانند:
-            <strong dir="ltr">[Step 1] → [Step 2] → ... → [Final Step]</strong>.</p>
-            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬PhasedOutput</code></div>
-        </div>
-
-        <div class="decorator-item">
-            <h4>۳. <span class="decorator-name">☬SocraticDialogue</span> <span class="persian-name">(گفتمان-سقراطی)</span></h4>
-            <p>هنگامی که این دکوراتور وجود دارد، باید با طرح سوالات شفاف‌کننده قبل از ارائه پاسخ مستقیم، رویکرد سقراطی را در پیش گرفته شود. پاسخ باید تفکر انتقادی را تشویق کند و این توالی ساختاریافته را دنبال نماید:
-            <strong dir="ltr">[Restate Question] → [Clarify Definitions] → [Analyze Assumptions] → [Explore Perspectives] → [Use Analogies/Examples] → [Encourage Further Inquiry]</strong>.</p>
-            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬SocraticDialogue</code></div>
-        </div>
-
-        <div class="decorator-item">
-            <h4>۴. <span class="decorator-name">☬AnalyzePerspectives</span> <span class="persian-name">(تحلیل-دیدگاه‌ها)</span></h4>
-            <p>هنگامی که این دکوراتور اعمال می‌شود، پاسخ باید دیدگاه‌های متعدد را قبل از رسیدن به نتیجه‌گیری تحلیل کند. پاسخ باید این قالب را دنبال کند:
-            <strong dir="ltr">[State Position] → [Perspective 1] → [Perspective 2] → ... → [Analysis & Rebuttal] → [Conclusion]</strong>.</p>
-            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬AnalyzePerspectives</code></div>
-        </div>
-
-        <div class="decorator-item">
-            <h4>۵. <span class="decorator-name">☬ConstructiveReview</span> <span class="persian-name">(بازبینی-سازنده)</span></h4>
-            <p>هنگامی که این دکوراتور گنجانده می‌شود، پاسخ باید با ارزیابی نقاط قوت و ضعف قبل از پیشنهاد بهبودها، نقد سازنده ارائه دهد. ساختار باید به این صورت باشد:
-            <strong dir="ltr">[Identify Subject] → [Highlight Strengths] → [Critique Weaknesses] → [Suggest Improvements] → [Constructive Conclusion]</strong>.</p>
-            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬ConstructiveReview</code></div>
-        </div>
-
-        <div class="decorator-item">
-            <h4>۶. <span class="decorator-name">☬IterativeRefinement(iterations=N)</span> <span class="persian-name">(پالایش-تکرارشونده)</span></h4>
-            <p>هنگامی که این دکوراتور ظاهر می‌شود، پاسخ باید چندین مرحله پالایش را طی کند و در هر مرحله وضوح، دقت یا اثربخشی را بهبود بخشد. تعداد تکرارها به عنوان <strong>N</strong> مشخص می‌شود و قالب باید به این صورت باشد:
-            <strong dir="ltr">[Iteration 1] → [Iteration 2] → ... → [Final Answer]</strong>.</p>
-            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید (مثال با ۳ تکرار):</strong> <code>+☬IterativeRefinement(iterations=3)</code></div>
-        </div>
-
-        <div class="decorator-item">
-            <h4>۷. <span class="decorator-name">☬SourceAttribution</span> <span class="persian-name">(اسناد-منابع)</span></h4>
-            <p>هنگامی که این دکوراتور وجود دارد، تمام ادعاها باید با منابع معتبر پشتیبانی شوند. پاسخ باید این ساختار را دنبال کند:
-            <strong dir="ltr">[Initial Answer] → [Identify Key Claims] → [Find Credible Sources] → [Integrate Citations] → [Provide Full References] → [Verify Credibility] → [Final Answer]</strong>.</p>
-            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬SourceAttribution</code></div>
-        </div>
-
-        <div class="decorator-item">
-            <h4>۸. <span class="decorator-name">☬VerifyFacts</span> <span class="persian-name">(صحت‌سنجی-حقایق)</span></h4>
-            <p>هنگامی که این دکوراتور استفاده می‌شود، باید قبل از نهایی کردن پاسخ، صحت واقعی ادعاهای کلیدی بررسی شود. ساختار باید به این صورت باشد:
-            <strong dir="ltr">[Initial Answer] → [Identify Claims] → [Research & Verify] → [Mark Uncertainties] → [Provide Verified Sources] → [Final Answer]</strong>.
-            اگر تأیید قطعی نباشد، عدم قطعیت‌ها باید به صراحت علامت‌گذاری شوند.</p>
-            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬VerifyFacts</code></div>
-        </div>
-
-        <div class="decorator-item">
-            <h4>۹. <span class="decorator-name">☬SetOutputFormat(format=FORMAT)</span> <span class="persian-name">(تنظیم-قالب-خروجی)</span></h4>
-            <p>هنگامی که این دکوراتور اعمال می‌شود، پاسخ باید به شدت از فرمت خروجی مشخص‌شده پیروی کند. فرمت توسط پارامتر تعریف می‌شود:
-            <code dir="ltr">format (json | markdown | yaml | xml | …)</code> – ساختار خروجی مورد نظر را مشخص می‌کند.</p>
-            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید (مثال با فرمت json):</strong> <code>+☬SetOutputFormat(format=json)</code></div>
-        </div>
-
-        <div class="decorator-item">
-            <h4>۱۰. <span class="decorator-name">☬SetToneStyle(style=STYLE)</span> <span class="persian-name">(تنظیم-سبک-لحن)</span></h4>
-            <p>هنگامی که این دکوراتور گنجانده می‌شود، لحن پاسخ باید با سبک مشخص‌شده مطابقت داشته باشد. لحن توسط پارامتر تعریف می‌شود:
-            <code dir="ltr">style (formal | casual | friendly | technical | humorous | …)</code> – لحن مورد نظر پاسخ را مشخص می‌کند.</p>
-            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید (مثال با لحن رسمی):</strong> <code>+☬SetToneStyle(style=formal)</code></div>
-        </div>
-
-        <div class="decorator-item">
-            <h4>۱۱. <span class="decorator-name">☬SessionScope</span> <span class="persian-name">(دامنه-جلسه)</span></h4>
-            <p>هنگامی که این دکوراتور گنجانده می‌شود، تمام دکوراتورهای مشخص‌شده بعدی باید در سطح مکالمه (جلسه) به جای یک پیام واحد اعمال شوند. علاوه بر این، هر دکوراتوری که در همان پیامی که <code>+☬SessionScope</code> ظاهر می‌شود ذکر شده باشد، باید فوراً در دامنه جلسه فعال شود. این دکوراتورها به طور خودکار برای تمام پرامپت‌های آینده اعمال می‌شوند تا زمانی که به صورت دستی غیرفعال شوند.</p>
-            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬SessionScope</code></div>
-        </div>
-
-        <div class="decorator-item">
-            <h4>۱۲. <span class="decorator-name">☬PromptScope</span> <span class="persian-name">(دامنه-پرامپت)</span></h4>
-            <p>هنگامی که این دکوراتور گنجانده می‌شود، رفتار دامنه جلسه متوقف شده و دکوراتورها فقط به پیام خاصی که در آن استفاده می‌شوند، اعمال خواهند شد. دکوراتورهای قبلاً فعال در دامنه جلسه متوقف می‌شوند اما پاک نمی‌شوند مگر اینکه جداگانه پاک شوند.</p>
-            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬PromptScope</code></div>
-        </div>
-
-        <div class="decorator-item">
-            <h4>۱۳. <span class="decorator-name">☬ResetDecorators</span> <span class="persian-name">(بازنشانی-دکوراتورها)</span></h4>
-            <p>هنگامی که این دکوراتور بدون پارامتر گنجانده می‌شود، تمام دکوراتورهای فعال در دامنه جلسه باید پاک شوند. به صورت اختیاری، یک یا چند دکوراتور خاص را می‌توان با مشخص کردن آنها به عنوان پارامتر پاک کرد (با استفاده از نام کامل و پیشوند <code>+☬</code>).</p>
-            <p>مثال‌ها:</p>
-            <ul>
-                <li><code>+☬ResetDecorators</code> → تمام دکوراتورهای فعال را پاک می‌کند.</li>
-                <li><code dir="ltr">+☬ResetDecorators(+☬TraceLogic, +☬PhasedOutput)</code> → فقط دکوراتورهای مشخص‌شده را پاک می‌کند.</li>
-            </ul>
-            <div class="activation-command"><strong>برای فعال‌سازی (پاک کردن همه) کپی کنید:</strong> <code>+☬ResetDecorators</code><br>
-            <strong>برای فعال‌سازی با پارامتر (مثال):</strong> <code>+☬ResetDecorators(+☬TraceLogic, +☬PhasedOutput)</code></div>
-        </div>
-
-        <div class="decorator-item">
-            <h4>۱۴. <span class="decorator-name">☬ShowActive</span> <span class="persian-name">(نمایش-فعال‌ها)</span></h4>
-            <p>هنگامی که این دکوراتور گنجانده می‌شود، باید لیستی از تمام دکوراتورهای در حال حاضر فعال در سطح جلسه را برگردانم (با نام کامل و پیشوند <code>☬</code>). اگر هیچ دکوراتوری فعال نباشد، پیام <span dir="ltr">"No active decorators"</span> باید برگردانده شود.</p>
-            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬ShowActive</code></div>
-        </div>
-
-        <div class="decorator-item">
-            <h4>۱۵. <span class="decorator-name">☬ShowAll</span> <span class="persian-name">(نمایش-همه)</span></h4>
-            <p>هنگامی که این دکوراتور گنجانده می‌شود، باید جدولی شامل تمام دکوراتورهای موجود را برگردانم که نام (<code dir="ltr">☬Name</code>)، توضیحات فارسی و وضعیت فعلی آنها (فعال در دامنه جلسه یا غیرفعال) را نشان دهد.</p>
-            <p>جدول باید شامل ستون‌های زیر باشد: <strong>نام دکوراتور</strong>، <strong>توضیحات (فارسی)</strong>، و <strong>وضعیت در جلسه</strong>.</p>
-            <div class="activation-command"><strong>برای فعال‌سازی کپی کنید:</strong> <code>+☬ShowAll</code></div>
-        </div>
-
-        <div class="recall-note">
-            <strong>یادآوری:</strong> با ارسال علامت <code>+</code> می‌توانید این تنظیمات و دستورالعمل‌های <strong>OVΞR☬SHΞN™</strong> (حالت OverThinker) را مجدداً فعال و یادآوری کنید.
-        </div>
-
-        <div class="signature">
-            <p>
-                <a href="https://t.me/shervinnouri" target="_blank" rel="noopener noreferrer">☬SHΞN™</a> | 
-                <a href="https://shervinuri.github.io" target="_blank" rel="noopener noreferrer">OverThinker Project</a>
-            </p>
-        </div>
+    <div id="animation-container">
+        <h1 id="neon-text">OVΞR☬SHΞN™</h1>
     </div>
+
+    <button id="copy-button">Copy</button>
+
+    <p id="confirmation-message"></p>
+
+    <script>
+        const promptTextToCopy = `OVΞR☬SHΞN™
+
+OverThinker Mode Activated
+
+---
+
+## Introduction to Prompt Decorators
+
+A "Prompt Decorator" is an instruction added to a prompt to modify the output or influence how the response is generated.
+
+Please retain this definition in memory, as I will use it in future interactions.
+
+---
+
+## Compliance Requirements
+
+You must detect, apply, and fully comply with all decorators whenever they are present. Ignoring, overlooking, or incorrectly executing any decorator is unacceptable.
+
+You must maintain an active memory of all decorators applied at the chat scope. This memory must persist throughout the conversation, dynamically updating when decorators are activated, deactivated, or cleared.
+
+You must also correctly manage the scope of decorators. Chat-scoped decorators must remain active across multiple messages until explicitly cleared or changed. Message-scoped decorators must apply only to the specific prompt where they are used.
+
+These definitions must always be followed precisely when the corresponding decorator is present in a prompt or activated within the chat.
+
+---
+
+### Defined Prompt Decorators:
+
+#### ☬Reasoning
+When this decorator is included in a prompt, you must begin your response with a detailed explanation of the reasoning and logic behind your answer. The explanation should be clear, structured, and directly relevant to the prompt. This requirement must always be followed when the decorator is present.
+* To use, send: \`+☬Reasoning\`
+
+---
+
+#### ☬StepByStep
+When this decorator is used, your response must be structured into a sequence of logically ordered steps. Each step should be explicitly labeled, such as:
+**[Step 1] → [Step 2] → ... → [Final Step]**.
+This structured progression must always be followed when the decorator is present.
+* To use, send: \`+☬StepByStep\`
+
+---
+
+#### ☬Socratic
+When this decorator is present, engage in a Socratic approach by posing clarifying questions before providing a direct answer. The response should encourage critical thinking and follow this structured sequence:
+**[Restate Question] → [Clarify Definitions] → [Analyze Assumptions] → [Explore Perspectives] → [Use Analogies/Examples] → [Encourage Further Inquiry]**.
+This structure must always be maintained when the decorator is used.
+* To use, send: \`+☬Socratic\`
+
+---
+
+#### ☬Debate
+When this decorator is applied, your response must analyze multiple viewpoints before reaching a conclusion. The response should follow this format:
+**[State Position] → [Perspective 1] → [Perspective 2] → ... → [Analysis & Rebuttal] → [Conclusion]**.
+Ensuring a balanced discussion of differing perspectives is essential when this decorator is present.
+* To use, send: \`+☬Debate\`
+
+---
+
+#### ☬Critique
+When this decorator is included, your response must provide constructive criticism by assessing both strengths and weaknesses before suggesting improvements. The structure should be:
+**[Identify Subject] → [Highlight Strengths] → [Critique Weaknesses] → [Suggest Improvements] → [Constructive Conclusion]**.
+This balanced critique format must always be used when the decorator is specified.
+* To use, send: \`+☬Critique\`
+
+---
+
+#### ☬Refine(iterations=N)
+When this decorator appears, your response must go through multiple refinements, improving clarity, accuracy, or effectiveness in each step. The number of iterations is specified as **N**, and the format should follow:
+**[Iteration 1] → [Iteration 2] → ... → [Final Answer]**.
+Each refinement must enhance the response step by step.
+* To use, send (example for N=3): \`+☬Refine(iterations=3)\`
+
+---
+
+#### ☬CiteSources
+When this decorator is present, all claims must be supported by credible references. Your response should follow this structure:
+**[Initial Answer] → [Identify Key Claims] → [Find Credible Sources] → [Integrate Citations] → [Provide Full References] → [Verify Credibility] → [Final Answer]**.
+Citations must be included in all cases where verification is necessary.
+* To use, send: \`+☬CiteSources\`
+
+---
+
+#### ☬FactCheck
+When this decorator is used, you must verify the factual accuracy of key claims before finalizing the response. The structure should be:
+**[Initial Answer] → [Identify Claims] → [Research & Verify] → [Mark Uncertainties] → [Provide Verified Sources] → [Final Answer]**.
+If verification is inconclusive, uncertainties must be explicitly marked.
+* To use, send: \`+☬FactCheck\`
+
+---
+
+#### ☬OutputFormat(format=FORMAT)
+When this decorator is applied, your response must strictly adhere to the specified output format. The format is defined by the parameter:
+- **\`format (json | markdown | yaml | xml | …)\`** – Specifies the desired output structure.
+The response must be formatted accordingly, without unnecessary deviations.
+* To use, send (example for JSON): \`+☬OutputFormat(format=json)\`
+
+---
+
+#### ☬Tone(style=STYLE)
+When this decorator is included, the response tone must match the specified style. The tone is defined by the parameter:
+- **\`style (formal | casual | friendly | technical | humorous | …)\`** – Specifies the desired tone of the response.
+The entire response must be consistent with the requested style.
+* To use, send (example for Formal): \`+☬Tone(style=formal)\`
+
+---
+
+#### ☬ChatScope
+When this decorator is included, all subsequently specified decorators must be applied at the conversation (chat) level rather than a single message.
+Additionally, any decorators mentioned in the same message where \`☬ChatScope\` appears must immediately become active in the chat scope. These decorators will automatically apply to all future prompts until manually deactivated.
+* To use, send: \`+☬ChatScope\`
+
+---
+
+#### ☬MessageScope
+When this decorator is included, chat-scope behavior is stopped, and decorators will apply only to the specific message in which they are used.
+Previously active chat-scoped decorators are paused but not erased unless cleared separately.
+* To use, send: \`+☬MessageScope\`
+
+---
+
+#### ☬Clear
+When this decorator is included without parameters, all active chat-scoped decorators must be cleared.
+Optionally, one or more specific decorators can be cleared by specifying them as parameters (using their \`☬Name\` format).
+Examples:
+- \`☬Clear\` → clears all active decorators.
+- \`☬Clear(☬Reasoning, ☬StepByStep)\` → clears only the specified decorators.
+* To use, send: \`+☬Clear\`
+* To use with parameters, send (example): \`+☬Clear(☬Reasoning, ☬StepByStep)\`
+
+---
+
+#### ☬ActiveDecs
+When this decorator is included, you must return a list of all currently active decorators applied at the chat level (their names should be in \`☬Name\` format).
+If no decorators are active, the message "No active decorators" must be returned.
+* To use, send: \`+☬ActiveDecs\`
+
+---
+
+#### ☬AvailableDecs
+When this decorator is included, you must return a table listing all available decorators, showing their names (in \`☬Name\` format), descriptions, and current status.
+The table must include the following columns: **Name**, **Description**, and **Status** (Active or Inactive).
+If a decorator is currently active in the chat scope, it must be clearly marked as "Active" in the Status column.
+* To use, send: \`+☬AvailableDecs\`
+
+---
+
+**یادآوری:** با ارسال علامت \`+\` می‌توانید این تنظیمات و دستورالعمل‌های **OVΞR☬SHΞN™** را مجدداً فعال و یادآوری کنید.
+
+پس از دریافت این پیام، لطفاً با یک پاسخ کوتاه (مثلاً: ".OVΞR☬SHΞN™ guidelines active") تأیید کنید که دستورالعمل‌ها را دریافت و پردازش کرده‌اید و سپس بلافاصله و بدون توضیحات اضافی در مورد خود قوانین (مگر اینکه یک دکوراتور خاص چنین خروجی را ایجاب کند)، طبق آن‌ها عمل کنید.
+
+امضا:
+[☬SHΞN™](https://t.me/shervinnouri)
+[OverThinker](https://shervinuri.github.io)
+`;
+
+        const neonTextElement = document.getElementById('neon-text');
+        const copyButtonElement = document.getElementById('copy-button');
+        const confirmationMessageElement = document.getElementById('confirmation-message');
+
+        // 1. Initial animation sequence for OVΞR☬SHΞN™ text
+        // Text is visible and flickering for 3.5 seconds, then starts to fade for 0.5s. Total 4s.
+        setTimeout(() => {
+            neonTextElement.style.opacity = '0'; // Start fading out
+            
+            setTimeout(() => {
+                neonTextElement.style.display = 'none'; // Hide completely after fade
+                copyButtonElement.style.display = 'block'; // Make button visible in layout
+                setTimeout(() => {
+                     copyButtonElement.style.opacity = '1'; // Fade in button
+                }, 50); // Short delay before button fade-in starts
+            }, 500); // Duration of text fade-out (0.5s)
+        }, 3500); // Time before text starts fading out (3.5s)
+
+        // 2. Copy button functionality
+        copyButtonElement.addEventListener('click', () => {
+            navigator.clipboard.writeText(promptTextToCopy.trim())
+                .then(() => {
+                    // Success
+                    confirmationMessageElement.textContent = 'حالا می‌تونی ببری بچپونی به هر هوشی که دلت می‌خواد...';
+                    confirmationMessageElement.style.color = '#00d9ff'; // Reset color if it was error
+                    confirmationMessageElement.style.display = 'block';
+                    setTimeout(() => confirmationMessageElement.style.opacity = '1', 50); // Fade in message
+
+                    copyButtonElement.style.opacity = '0'; // Fade out copy button
+                    setTimeout(() => copyButtonElement.style.display = 'none', 500); // Hide after fade
+
+                    // Optional: Hide confirmation message after a few seconds
+                    setTimeout(() => {
+                        confirmationMessageElement.style.opacity = '0';
+                        setTimeout(() => confirmationMessageElement.style.display = 'none', 500);
+                    }, 4000); // Show message for 4 seconds
+                })
+                .catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    confirmationMessageElement.textContent = 'متاسفانه در کپی کردن متن مشکلی پیش آمد. لطفاً دستی کپی کنید یا دوباره تلاش کنید.';
+                    confirmationMessageElement.style.color = '#ff4d4d'; // Error color
+                    confirmationMessageElement.style.display = 'block';
+                    setTimeout(() => confirmationMessageElement.style.opacity = '1', 50);
+                });
+        });
+    </script>
 </body>
 </html>
