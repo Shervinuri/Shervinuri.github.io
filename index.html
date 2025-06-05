@@ -3,334 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OVΞR☬SHΞN™ - Copy Prompt</title>
+    <title>سامانه اعلام فوریت‌های تخلف مالی</title>
     <style>
-        @keyframes gradientWave {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @font-face {
+            font-family: 'Vazir';
+            src: url('https://cdn.fontcdn.ir/Fonts/Vazir/Vazir.woff') format('woff');
+            font-weight: normal;
         }
-
-        @keyframes flickerNeon {
-            0%, 18%, 22%, 25%, 53%, 57%, 100% {
-                text-shadow:
-                    0 0 4px #fff,
-                    0 0 11px #fff,
-                    0 0 19px #fff,
-                    0 0 40px #00aeff, /* Electronic Blue */
-                    0 0 80px #00aeff,
-                    0 0 90px #00aeff,
-                    0 0 100px #00aeff,
-                    0 0 150px #00aeff;
-                opacity: 1;
-            }
-            20%, 24%, 55% {
-                text-shadow: none;
-                opacity: 0.3;
-            }
-        }
-
         body {
+            font-family: 'Vazir', 'IRANSans', 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
             margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(270deg, #1a1a1a, #333333, #101010, #2c2c2c);
-            background-size: 600% 600%;
-            animation: gradientWave 20s ease infinite;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #f0f0f0;
-            overflow: hidden;
+            padding: 30px;
+            direction: rtl;
+            user-select: none; /* غیرفعال کردن انتخاب متن */
+        }
+        .email-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            padding: 25px;
+            border: 2px solid #2e7d32;
+            transition: transform 0.3s ease;
+        }
+        .email-container:hover {
+            transform: translateY(-5px);
+        }
+        .header {
+            background-color: #2e7d32;
+            color: #ffffff;
+            padding: 20px;
             text-align: center;
-        }
-
-        #animation-container {
-            perspective: 800px; /* For potential 3D effects if desired later */
-        }
-
-        #neon-text {
-            font-size: 5rem; /* درشت */
+            border-radius: 10px 10px 0 0;
+            font-size: 24px;
             font-weight: bold;
-            color: #ccffff; /* Light base for neon */
-            animation: flickerNeon 1.5s infinite alternate;
-            transition: opacity 0.5s ease-out;
-            letter-spacing: 2px;
-            margin-bottom: 50px; /* Space before button appears */
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
-
-        #copy-button {
-            display: none; /* Initially hidden */
-            opacity: 0;
-            padding: 15px 35px;
-            font-size: 1.2rem; /* فونت متناسب برای دکمه */
+        .user-info {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            border: 1px solid #4caf50;
+            font-size: 16px;
+            color: #1b5e20;
+        }
+        .complaint-body {
+            line-height: 2;
+            margin: 25px 0;
+            text-align: justify;
+            font-size: 16px;
+            color: #1b1b1b;
+            padding: 15px;
+            background-color: #fafafa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        .complaint-body p, .complaint-body ul, .complaint-body ol {
+            margin: 10px 0;
+        }
+        .complaint-body ul, .complaint-body ol {
+            padding-right: 20px;
+        }
+        .status {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 2px solid #4caf50;
+            border-radius: 8px;
+            text-align: center;
             font-weight: bold;
-            color: #e0e0e0;
-            background: linear-gradient(145deg, #4a4a4a, #3e3e3e);
-            border: none;
-            border-radius: 12px; /* برجسته و خوشگل */
-            box-shadow: 5px 5px 15px #1c1c1c,
-                        -5px -5px 15px #585858,
-                        inset 1px 1px 2px #5f5f5f, /* Inner shadow for emboss */
-                        inset -1px -1px 2px #2a2a2a; /* Inner shadow for emboss */
-            cursor: pointer;
-            transition: all 0.3s ease, opacity 0.5s ease-in 0.2s; /* Added delay for opacity */
-            outline: none;
+            font-size: 18px;
+            animation: fadeIn 1s ease-in;
         }
-
-        #copy-button:hover {
-            background: linear-gradient(145deg, #3e3e3e, #4a4a4a);
-            box-shadow: 7px 7px 18px #1c1c1c,
-                        -7px -7px 18px #585858,
-                        inset 1px 1px 2px #5f5f5f,
-                        inset -1px -1px 2px #2a2a2a;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
-
-        #copy-button:active {
-            background: linear-gradient(145deg, #353535, #303030);
-            box-shadow: inset 5px 5px 15px #1c1c1c,
-                        inset -5px -5px 15px #585858;
-            transform: translateY(1px);
-        }
-
-        #confirmation-message {
-            display: none; /* Initially hidden */
-            opacity: 0;
-            margin-top: 30px;
-            font-size: 1.3rem;
-            color: #00d9ff; /* Electronic blue-ish */
-            transition: opacity 0.5s ease-in-out;
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            color: #2e7d32;
+            font-size: 14px;
+            font-weight: bold;
             padding: 10px;
+            border-top: 1px solid #4caf50;
         }
-
-        /* For small screens */
-        @media (max-width: 600px) {
-            #neon-text {
-                font-size: 3rem;
-            }
-            #copy-button {
-                padding: 12px 28px;
-                font-size: 1rem;
-            }
-            #confirmation-message {
-                font-size: 1rem;
-            }
+        .signature {
+            margin-top: 20px;
+            font-style: italic;
+            color: #1b5e20;
         }
     </style>
-</head>
-<body>
-
-    <div id="animation-container">
-        <h1 id="neon-text"> </ OVΞR☬SHΞN > </h1>
-    </div>
-
-    <button id="copy-button">Copy</button>
-
-    <p id="confirmation-message"></p>
-
     <script>
-        const promptTextToCopy = `OVΞR☬SHΞN™
-
-OverThinker Mode Activated
-
----
-
-## Introduction to Prompt Decorators
-
-A "Prompt Decorator" is an instruction added to a prompt to modify the output or influence how the response is generated.
-
-Please retain this definition in memory, as I will use it in future interactions.
-
----
-
-## Compliance Requirements
-
-You must detect, apply, and fully comply with all decorators whenever they are present. Ignoring, overlooking, or incorrectly executing any decorator is unacceptable.
-
-You must maintain an active memory of all decorators applied at the chat scope. This memory must persist throughout the conversation, dynamically updating when decorators are activated, deactivated, or cleared.
-
-You must also correctly manage the scope of decorators. Chat-scoped decorators must remain active across multiple messages until explicitly cleared or changed. Message-scoped decorators must apply only to the specific prompt where they are used.
-
-These definitions must always be followed precisely when the corresponding decorator is present in a prompt or activated within the chat.
-
----
-
-### Defined Prompt Decorators:
-
-#### ☬Reasoning
-When this decorator is included in a prompt, you must begin your response with a detailed explanation of the reasoning and logic behind your answer. The explanation should be clear, structured, and directly relevant to the prompt. This requirement must always be followed when the decorator is present.
-* To use, send: \`+☬Reasoning\`
-
----
-
-#### ☬StepByStep
-When this decorator is used, your response must be structured into a sequence of logically ordered steps. Each step should be explicitly labeled, such as:
-**[Step 1] → [Step 2] → ... → [Final Step]**.
-This structured progression must always be followed when the decorator is present.
-* To use, send: \`+☬StepByStep\`
-
----
-
-#### ☬Socratic
-When this decorator is present, engage in a Socratic approach by posing clarifying questions before providing a direct answer. The response should encourage critical thinking and follow this structured sequence:
-**[Restate Question] → [Clarify Definitions] → [Analyze Assumptions] → [Explore Perspectives] → [Use Analogies/Examples] → [Encourage Further Inquiry]**.
-This structure must always be maintained when the decorator is used.
-* To use, send: \`+☬Socratic\`
-
----
-
-#### ☬Debate
-When this decorator is applied, your response must analyze multiple viewpoints before reaching a conclusion. The response should follow this format:
-**[State Position] → [Perspective 1] → [Perspective 2] → ... → [Analysis & Rebuttal] → [Conclusion]**.
-Ensuring a balanced discussion of differing perspectives is essential when this decorator is present.
-* To use, send: \`+☬Debate\`
-
----
-
-#### ☬Critique
-When this decorator is included, your response must provide constructive criticism by assessing both strengths and weaknesses before suggesting improvements. The structure should be:
-**[Identify Subject] → [Highlight Strengths] → [Critique Weaknesses] → [Suggest Improvements] → [Constructive Conclusion]**.
-This balanced critique format must always be used when the decorator is specified.
-* To use, send: \`+☬Critique\`
-
----
-
-#### ☬Refine(iterations=N)
-When this decorator appears, your response must go through multiple refinements, improving clarity, accuracy, or effectiveness in each step. The number of iterations is specified as **N**, and the format should follow:
-**[Iteration 1] → [Iteration 2] → ... → [Final Answer]**.
-Each refinement must enhance the response step by step.
-* To use, send (example for N=3): \`+☬Refine(iterations=3)\`
-
----
-
-#### ☬CiteSources
-When this decorator is present, all claims must be supported by credible references. Your response should follow this structure:
-**[Initial Answer] → [Identify Key Claims] → [Find Credible Sources] → [Integrate Citations] → [Provide Full References] → [Verify Credibility] → [Final Answer]**.
-Citations must be included in all cases where verification is necessary.
-* To use, send: \`+☬CiteSources\`
-
----
-
-#### ☬FactCheck
-When this decorator is used, you must verify the factual accuracy of key claims before finalizing the response. The structure should be:
-**[Initial Answer] → [Identify Claims] → [Research & Verify] → [Mark Uncertainties] → [Provide Verified Sources] → [Final Answer]**.
-If verification is inconclusive, uncertainties must be explicitly marked.
-* To use, send: \`+☬FactCheck\`
-
----
-
-#### ☬OutputFormat(format=FORMAT)
-When this decorator is applied, your response must strictly adhere to the specified output format. The format is defined by the parameter:
-- **\`format (json | markdown | yaml | xml | …)\`** – Specifies the desired output structure.
-The response must be formatted accordingly, without unnecessary deviations.
-* To use, send (example for JSON): \`+☬OutputFormat(format=json)\`
-
----
-
-#### ☬Tone(style=STYLE)
-When this decorator is included, the response tone must match the specified style. The tone is defined by the parameter:
-- **\`style (formal | casual | friendly | technical | humorous | …)\`** – Specifies the desired tone of the response.
-The entire response must be consistent with the requested style.
-* To use, send (example for Formal): \`+☬Tone(style=formal)\`
-
----
-
-#### ☬ChatScope
-When this decorator is included, all subsequently specified decorators must be applied at the conversation (chat) level rather than a single message.
-Additionally, any decorators mentioned in the same message where \`☬ChatScope\` appears must immediately become active in the chat scope. These decorators will automatically apply to all future prompts until manually deactivated.
-* To use, send: \`+☬ChatScope\`
-
----
-
-#### ☬MessageScope
-When this decorator is included, chat-scope behavior is stopped, and decorators will apply only to the specific message in which they are used.
-Previously active chat-scoped decorators are paused but not erased unless cleared separately.
-* To use, send: \`+☬MessageScope\`
-
----
-
-#### ☬Clear
-When this decorator is included without parameters, all active chat-scoped decorators must be cleared.
-Optionally, one or more specific decorators can be cleared by specifying them as parameters (using their \`☬Name\` format).
-Examples:
-- \`☬Clear\` → clears all active decorators.
-- \`☬Clear(☬Reasoning, ☬StepByStep)\` → clears only the specified decorators.
-* To use, send: \`+☬Clear\`
-* To use with parameters, send (example): \`+☬Clear(☬Reasoning, ☬StepByStep)\`
-
----
-
-#### ☬ActiveDecs
-When this decorator is included, you must return a list of all currently active decorators applied at the chat level (their names should be in \`☬Name\` format).
-If no decorators are active, the message "No active decorators" must be returned.
-* To use, send: \`+☬ActiveDecs\`
-
----
-
-#### ☬AvailableDecs
-When this decorator is included, you must return a table listing all available decorators, showing their names (in \`☬Name\` format), descriptions, and current status.
-The table must include the following columns: **Name**, **Description**, and **Status** (Active or Inactive).
-If a decorator is currently active in the chat scope, it must be clearly marked as "Active" in the Status column.
-* To use, send: \`+☬AvailableDecs\`
-
----
-
-**یادآوری:** با ارسال علامت \`+\` می‌توانید این تنظیمات و دستورالعمل‌های **OVΞR☬SHΞN™** را مجدداً فعال و یادآوری کنید.
-
-پس از دریافت این پیام، لطفاً با یک پاسخ کوتاه (مثلاً: ".OVΞR☬SHΞN™ guidelines active") تأیید کنید که دستورالعمل‌ها را دریافت و پردازش کرده‌اید و سپس بلافاصله و بدون توضیحات اضافی در مورد خود قوانین (مگر اینکه یک دکوراتور خاص چنین خروجی را ایجاب کند)، طبق آن‌ها عمل کنید.
-
-امضا:
-[☬SHΞN™](https://t.me/shervinnouri)
-[OverThinker](https://shervinuri.github.io)
-`;
-
-        const neonTextElement = document.getElementById('neon-text');
-        const copyButtonElement = document.getElementById('copy-button');
-        const confirmationMessageElement = document.getElementById('confirmation-message');
-
-        // 1. Initial animation sequence for OVΞR☬SHΞN™ text
-        // Text is visible and flickering for 3.5 seconds, then starts to fade for 0.5s. Total 4s.
-        setTimeout(() => {
-            neonTextElement.style.opacity = '0'; // Start fading out
-            
-            setTimeout(() => {
-                neonTextElement.style.display = 'none'; // Hide completely after fade
-                copyButtonElement.style.display = 'block'; // Make button visible in layout
-                setTimeout(() => {
-                     copyButtonElement.style.opacity = '1'; // Fade in button
-                }, 50); // Short delay before button fade-in starts
-            }, 500); // Duration of text fade-out (0.5s)
-        }, 3500); // Time before text starts fading out (3.5s)
-
-        // 2. Copy button functionality
-        copyButtonElement.addEventListener('click', () => {
-            navigator.clipboard.writeText(promptTextToCopy.trim())
-                .then(() => {
-                    // Success
-                    confirmationMessageElement.textContent = 'حالا می‌تونی ببری بچپونی به هر هوشی که دلت می‌خواد...';
-                    confirmationMessageElement.style.color = '#00d9ff'; // Reset color if it was error
-                    confirmationMessageElement.style.display = 'block';
-                    setTimeout(() => confirmationMessageElement.style.opacity = '1', 50); // Fade in message
-
-                    copyButtonElement.style.opacity = '0'; // Fade out copy button
-                    setTimeout(() => copyButtonElement.style.display = 'none', 500); // Hide after fade
-
-                    // Optional: Hide confirmation message after a few seconds
-                    setTimeout(() => {
-                        confirmationMessageElement.style.opacity = '0';
-                        setTimeout(() => confirmationMessageElement.style.display = 'none', 500);
-                    }, 4000); // Show message for 4 seconds
-                })
-                .catch(err => {
-                    console.error('Failed to copy text: ', err);
-                    confirmationMessageElement.textContent = 'متاسفانه در کپی کردن متن مشکلی پیش آمد. لطفاً دستی کپی کنید یا دوباره تلاش کنید.';
-                    confirmationMessageElement.style.color = '#ff4d4d'; // Error color
-                    confirmationMessageElement.style.display = 'block';
-                    setTimeout(() => confirmationMessageElement.style.opacity = '1', 50);
-                });
+        // جلوگیری از کپی متن
+        document.addEventListener('copy', (e) => {
+            e.preventDefault();
+            alert('کپی کردن متن مجاز نیست.');
+        });
+        // جلوگیری از کلیک راست
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            alert('کلیک راست غیرفعال است.');
         });
     </script>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            سامانه اعلام فوریت‌های تخلف مالی
+        </div>
+        <div class="user-info">
+            <p><strong>کاربر:</strong> شروین نوری قانلوکهریز (فعال حوزه رمز ارز)</p>
+            <p><strong>تاریخ ثبت:</strong> ۱۴ خرداد ۱۴۰۴</p>
+        </div>
+        <div class="complaint-body">
+            <p><strong>بسمه تعالی</strong></p>
+            <p><strong>شکوائیه</strong></p>
+            <p><strong>به: فرماندهی انتظامی استان مازندران</strong><br>
+            <strong>پلیس فتا (پلیس پیشگیری از وقوع جرم در فضای تولید و تبادل اطلاعات)</strong><br>
+            <strong>استان مازندران، شهر چالوس</strong></p>
+            <p><strong>موضوع:</strong> شکایت به دلیل برداشت غیرمجاز وجه از حساب بانکی و امتناع از ارائه رسید تراکنش</p>
+            <p><strong>احتراماً،</strong></p>
+            <p>اینجانب، <strong>مریم فریدسرا</strong>، دارنده حساب جاری به شماره کارت <strong>۶۲۷۷۶۰۱۲۵۲۷۸۸۶۲۳</strong> نزد بانک پست بانک، بدین‌وسیله مراتب شکایت خود را به شرح ذیل به استحضار آن مقام محترم می‌رسانم:</p>
+            <p>در تاریخ <strong>جمعه، ۱۲ خرداد ۱۴۰۴</strong>، در محل <strong>جمعه‌بازار چالوس</strong>، اینجانب جهت خرید مقادیری میوه و تره‌بار به ارزش تقریبی <strong>یک میلیون و سیصد هزار (۱,۳۰۰,۰۰۰) ریال</strong>، کارت بانکی خود را در اختیار فروشنده قرار دادم. متأسفانه فروشنده با سوءاستفاده از اعتماد اینجانب و با بهره‌گیری از دستگاه کارتخوان، اقدام به برداشت مبلغ <strong>ده میلیون و سیصد هزار (۱۰,۳۰۰,۰۰۰) ریال</strong> از حساب اینجانب نمود که معادل ده برابر ارزش واقعی کالای خریداری‌شده است. همچنین، فروشنده به بهانه نقص یا اتمام رسید دستگاه کارتخوان، از ارائه رسید تراکنش خودداری کرد.</p>
+            <p>پس از استعلام موجودی حساب از شعبه <strong>۹۲۰۲ پست بانک چالوس</strong>، اینجانب متوجه برداشت غیرمجاز مبلغ مذکور با مشخصات تراکنش به شماره <strong>۴۰۳۰۹۲۰۰۶۸۷۶۶</strong> شدم. در پیگیری‌های انجام‌شده از طریق بانک و پشتیبانی دستگاه کارتخوان (سامانه نوین پرداخت بانک اقتصاد نوین به شماره تماس <strong>۰۲۱۴۸۰۰۶</strong>)، مشخصات صاحب دستگاه کارتخوان به شماره <strong>۷۰۳۱۶۵</strong>، آقای <strong>رضا سام</strong> با شماره تماس <strong>۰۹۳۹۰۵۶۲۶۱۹</strong> اعلام گردید.</p>
+            <p>در تماس با فرد مذکور، ایشان از موضوع اظهار بی‌اطلاعی کرده و پس از درخواست ارائه فیش گردش حساب، اقدام به ارائه فیش غیرمعتبر و نامرتبط نمودند که هیچ‌گونه ارتباطی با تراکنش موردنظر نداشته است.</p>
+            <p>با توجه به وضعیت مالی و سرپرستی اینجانب و زیان وارده ناشی از برداشت غیرمجاز مبلغ مذکور، از آن مقام محترم تقاضا دارم دستور فرمایید ضمن بررسی موضوع و شناسایی متخلف، اقدامات قانونی لازم جهت استرداد مبلغ نامشروع برداشت‌شده به حساب اینجانب و برخورد با فرد یا افراد مسئول صورت پذیرد.</p>
+            <p><strong>مشخصات شاکی:</strong></p>
+            <ul>
+                <li>نام و نام خانوادگی: مریم فریدسرا</li>
+                <li>شماره کارت: ۶۲۷۷۶۰۱۲۵۲۷۸۸۶۲۳</li>
+                <li>وضعیت: سرپرست خانوار</li>
+            </ul>
+            <p><strong>مشخصات تراکنش:</strong></p>
+            <ul>
+                <li>مبلغ برداشت‌شده: ۱۰,۳۰۰,۰۰۰ ریال</li>
+                <li>شماره تراکنش: ۴۰۳۰۹۲۰۰۶۸۷۶۶</li>
+                <li>شعبه استعلام: ۹۲۰۲ پست بانک چالوس</li>
+            </ul>
+            <p><strong>مشخصات دستگاه کارتخوان:</strong></p>
+            <ul>
+                <li>شماره دستگاه: ۷۰۳۱۶۵</li>
+                <li>نام صاحب دستگاه: رضا سام</li>
+                <li>شماره تماس: ۰۹۳۹۰۵۶۲۶۱۹</li>
+                <li>سامانه پرداخت: نوین پرداخت بانک اقتصاد نوین</li>
+                <li>شماره پشتیبانی: ۰۲۱۴۸۰۰۶</li>
+            </ul>
+            <p><strong>مستندات پیوست:</strong></p>
+            <ol>
+                <li>تصویر استعلام تراکنش از شعبه پست بانک</li>
+                <li>اطلاعات ارائه‌شده توسط پشتیبانی دستگاه کارتخوان</li>
+            </ol>
+            <p>پیشاپیش از حسن توجه و اقدامات قانونی آن مقام محترم کمال تشکر را دارم.</p>
+            <div class="signature">
+                <p><strong>با احترام</strong><br>
+                <strong>مریم فریدسرا</strong><br>
+                <strong>امضا</strong><br>
+                <strong>تاریخ: ۱۵ خرداد ۱۴۰۴</strong></p>
+            </div>
+        </div>
+        <div class="status">
+            <p>دریافت شد: در دست بررسی و اقدام می‌باشد</p>
+            <p>تاریخ دریافت: ۱۴ خرداد ۱۴۰۴</p>
+        </div>
+        <div class="footer">
+            <p>سامانه اعلام فوریت‌های تخلف مالی - پلیس فتا استان مازندران</p>
+        </div>
+    </div>
 </body>
 </html>
