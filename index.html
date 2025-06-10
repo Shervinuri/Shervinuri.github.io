@@ -2,7 +2,7 @@
 <!--
     * @project: MIDSHΞЯNI™ Web Interface
     * @author: ☬SHΞN™
-    * @version: 1.2.1
+    * @version: 1.3.0
     * @date: 2025-06-11
 -->
 <html lang="fa" dir="rtl">
@@ -37,16 +37,12 @@
         }
 
         #content-host {
-            width: 100%;
-            height: 100%;
-            display: block;
+            width: 100%; height: 100%; display: block;
         }
 
         .cover { position: fixed; left: 0; width: 100%; z-index: 10; pointer-events: none; }
         .top-cover { top: 0; height: 75px; background: linear-gradient(to bottom, var(--theme-bg) 80%, rgba(11, 15, 25, 0) 100%); }
-        
-        /* FIX: Increased bottom cover height to hide desktop footer */
-        .bottom-cover { bottom: 0; height: 85px; background: linear-gradient(to top, var(--theme-bg) 80%, rgba(11, 15, 25, 0) 100%); }
+        .bottom-cover { bottom: 0; height: 50px; background: linear-gradient(to top, var(--theme-bg) 80%, rgba(11, 15, 25, 0) 100%); }
 
         @keyframes wave {
             0% { background-position: 0% 50%; }
@@ -55,10 +51,15 @@
         }
         
         @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            25% { opacity: 0.3; }
-            50% { opacity: 0.8; }
-            75% { opacity: 0.5; }
+            0%, 100% { opacity: 1; } 25% { opacity: 0.3; }
+            50% { opacity: 0.8; } 75% { opacity: 0.5; }
+        }
+
+        /* NEW: Animation for the desktop blocker frame */
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(255, 82, 82, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 82, 82, 0); }
         }
 
         .header-content, .footer-content {
@@ -67,9 +68,7 @@
             font-family: 'Roboto', sans-serif; box-sizing: border-box;
         }
         .header-content { top: 0; height: 75px; flex-direction: column; padding-bottom: 10px; }
-        
-        /* FIX: Matched footer content height to the cover's new height */
-        .footer-content { bottom: 0; height: 85px; }
+        .footer-content { bottom: 0; height: 50px; }
 
         .main-title {
             font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 700;
@@ -107,11 +106,44 @@
             margin-top: 25px; color: rgba(255, 255, 255, 0.6);
             letter-spacing: 2px; animation: flicker 0.1s infinite;
         }
+        
+        /* NEW: Styles for the desktop blocker */
+        #desktop-blocker {
+            display: none; /* Hidden by default on mobile */
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--theme-bg);
+            z-index: 10000; /* On top of everything */
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
+        .blocker-message {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #fff;
+            padding: 40px;
+            border: 2px solid rgba(255, 82, 82, 0.8);
+            border-radius: 10px;
+            animation: pulse-red 2s infinite;
+        }
+
+        /* --- Responsive Section --- */
         @media (max-width: 600px) {
             .main-title { font-size: 1.2rem; }
             .subtitle { font-size: 0.55rem; }
             .intro-title-wrapper { font-size: 1.8rem; }
+        }
+
+        /* This media query activates the blocker on screens wider than 768px */
+        @media (min-width: 769px) {
+            #desktop-blocker {
+                display: flex;
+            }
         }
     </style>
 </head>
@@ -125,6 +157,16 @@
         <div class="loading-percentage">0%</div>
     </div>
     
+    <!-- NEW: The desktop blocker element -->
+    <div id="desktop-blocker">
+        <div class="blocker-message">
+            لپ تاپ مپتات و سیستمو غلاف کن که اینجا آنتن نمیده<br>
+            توکن مفت هست ولی برای مصرف منصفانه<br>
+            خاکی باش با گوشی بیا، قدمت سر چشم<br>
+            اگه تو گوشیتم داری این متنو می‌خونی، اون تیک بی‌صحاب رو از رو دسکتاپ مود توی ستینگت بردار!
+        </div>
+    </div>
+
     <div id="content-host"></div>
     
     <div class="cover top-cover"></div>
