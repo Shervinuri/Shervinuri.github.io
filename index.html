@@ -1,5 +1,180 @@
 <!DOCTYPE html>
-<html>
-  <head><title>Test Page</title></head>
-  <body><h1>Hello from Shervin!</h1></body>
+<!--
+    * @project: MIDSHΞЯNI™ Web Interface
+    * @author: ☬SHΞN™
+    * @version: 1.2.0
+    * @date: 2025-06-11
+-->
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>MIDSHΞЯNI™</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --theme-bg: #0b0f19;
+        }
+
+        body, html {
+            margin: 0; padding: 0; height: 100%; width: 100%;
+            background-color: var(--theme-bg);
+            color: #fff;
+            overflow: hidden; 
+        }
+
+        body.is-loading > *:not(#intro-screen):not(script) {
+            visibility: hidden;
+            opacity: 0;
+        }
+        
+        #content-host, .cover, .header-content, .footer-content {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        #content-host {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .cover { position: fixed; left: 0; width: 100%; z-index: 10; pointer-events: none; }
+        .top-cover { top: 0; height: 75px; background: linear-gradient(to bottom, var(--theme-bg) 80%, rgba(11, 15, 25, 0) 100%); }
+        .bottom-cover { bottom: 0; height: 50px; background: linear-gradient(to top, var(--theme-bg) 80%, rgba(11, 15, 25, 0) 100%); }
+
+        @keyframes wave {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            25% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+            75% { opacity: 0.5; }
+        }
+
+        .header-content, .footer-content {
+            position: fixed; left: 0; width: 100%; z-index: 11;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Roboto', sans-serif; box-sizing: border-box;
+        }
+        .header-content { top: 0; height: 75px; flex-direction: column; padding-bottom: 10px; }
+        .footer-content { bottom: 0; height: 50px; }
+
+        .main-title {
+            font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 700;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
+            background-size: 300% 300%; -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent; animation: wave 8s ease-in-out infinite;
+        }
+        .subtitle { font-size: 0.65rem; color: rgba(255, 255, 255, 0.8); margin-top: 2px; }
+        .footer-text { color: #ff8c00; font-size: 0.6rem; }
+        .footer-brand { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 0.7rem; color: #fff; margin: 0 5px; }
+        
+        #intro-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--theme-bg); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 1; transition: opacity 1.5s ease-in-out;
+        }
+        #intro-screen.hidden { opacity: 0; pointer-events: none; }
+        .intro-title-wrapper {
+            position: relative; font-family: 'Orbitron', sans-serif;
+            font-size: 3rem; font-weight: 700; visibility: hidden;
+        }
+        .intro-title-wrapper.font-loaded { visibility: visible; }
+        .intro-title-base { color: #1a1c23; }
+        .intro-title-fill {
+            position: absolute; top: 0; left: 0; height: 100%; width: 100%;
+            white-space: nowrap; color: transparent;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
+            background-size: 300% 300%; -webkit-background-clip: text; background-clip: text;
+            animation: wave 8s ease-in-out infinite;
+            clip-path: inset(0 100% 0 0);
+        }
+        .loading-percentage {
+            font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700;
+            margin-top: 25px; color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 2px; animation: flicker 0.1s infinite;
+        }
+
+        @media (max-width: 600px) {
+            .main-title { font-size: 1.2rem; }
+            .subtitle { font-size: 0.55rem; }
+            .intro-title-wrapper { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body class="is-loading">
+
+    <div id="intro-screen">
+        <div class="intro-title-wrapper">
+            <div class="intro-title-fill">MIDSHΞЯNI™</div>
+            <div class="intro-title-base">MIDSHΞЯNI™</div>
+        </div>
+        <div class="loading-percentage">0%</div>
+    </div>
+    
+    <div id="content-host"></div>
+    
+    <div class="cover top-cover"></div>
+    <div class="cover bottom-cover"></div>
+    <div class="header-content">
+        <div class="main-title">MIDSHΞЯNI™</div>
+        <div class="subtitle">By ☬SHΞN™ (+18 moded midjourney)</div>
+    </div>
+    <div class="footer-content">
+        <span class="footer-text">All design and production rights belong </span>
+        <span class="footer-brand">☬SHΞN™ ai</span>
+        <span class="footer-text">© 2025</span>
+    </div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const _a = document.getElementById('intro-screen');
+        const _b = document.querySelector('.intro-title-wrapper');
+        const _c = document.querySelector('.intro-title-fill');
+        const _d = document.querySelector('.loading-percentage');
+        const _e = document.body;
+
+        const _run = () => {
+            _b.classList.add('font-loaded');
+            let _p = 0;
+            const _t = 3000;
+            const _i = setInterval(() => {
+                _p++;
+                if (_p <= 100) {
+                    _d.textContent = _p + '%';
+                    _c.style.clipPath = `inset(0 ${100 - _p}% 0 0)`;
+                } else {
+                    clearInterval(_i);
+                    _d.style.animation = 'none';
+                    _d.style.opacity = '1';
+                    _a.classList.add('hidden');
+                    _e.classList.remove('is-loading');
+                    setTimeout(() => { _a.remove(); }, 1500);
+                }
+            }, _t / 100);
+        };
+        
+        const _h = document.getElementById('content-host');
+        const _s = _h.attachShadow({ mode: 'open' });
+        const _el = document.createElement(atob('aWZyYW1l'));
+        _el.src = atob('aHR0cHM6Ly9kYWdmaW5uMTk2Mi1taWRqb3VybmV5LWZyZWUuaGYuc3BhY2Uv');
+        _el.style.cssText = 'width:100%;height:100%;border:none;';
+        _s.appendChild(_el);
+
+        document.fonts.ready.then(_run).catch(err => {
+             console.warn(atob('Rm9udCBsb2FkaW5nIGZhaWxlZC4='), err);
+            _run();
+        });
+    });
+    </script>
+</body>
 </html>
