@@ -2,7 +2,7 @@
 <!--
     * @project: MIDSHΞЯNI™ Web Interface
     * @author: ☬SHΞN™
-    * @version: 1.2.0
+    * @version: 1.2.1
     * @date: 2025-06-11
 -->
 <html lang="fa" dir="rtl">
@@ -44,7 +44,9 @@
 
         .cover { position: fixed; left: 0; width: 100%; z-index: 10; pointer-events: none; }
         .top-cover { top: 0; height: 75px; background: linear-gradient(to bottom, var(--theme-bg) 80%, rgba(11, 15, 25, 0) 100%); }
-        .bottom-cover { bottom: 0; height: 50px; background: linear-gradient(to top, var(--theme-bg) 80%, rgba(11, 15, 25, 0) 100%); }
+        
+        /* FIX: Increased bottom cover height to hide desktop footer */
+        .bottom-cover { bottom: 0; height: 85px; background: linear-gradient(to top, var(--theme-bg) 80%, rgba(11, 15, 25, 0) 100%); }
 
         @keyframes wave {
             0% { background-position: 0% 50%; }
@@ -65,7 +67,9 @@
             font-family: 'Roboto', sans-serif; box-sizing: border-box;
         }
         .header-content { top: 0; height: 75px; flex-direction: column; padding-bottom: 10px; }
-        .footer-content { bottom: 0; height: 50px; }
+        
+        /* FIX: Matched footer content height to the cover's new height */
+        .footer-content { bottom: 0; height: 85px; }
 
         .main-title {
             font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 700;
