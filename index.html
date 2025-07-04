@@ -1,226 +1,184 @@
 <!DOCTYPE html>
-<!--
-    * @project: MIDSHΞЯNI™ Web Interface
-    * @author: ☬SHΞN™
-    * @version: 1.3.0
-    * @date: 2025-06-11
--->
-<html lang="fa" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MIDSHΞЯNI™</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☬SHΞN™ Subscription</title>
     <style>
-        :root {
-            --theme-bg: #0b0f19;
-        }
-
-        body, html {
-            margin: 0; padding: 0; height: 100%; width: 100%;
-            background-color: var(--theme-bg);
+        body {
+            background-color: #000;
             color: #fff;
-            overflow: hidden; 
-        }
-
-        body.is-loading > *:not(#intro-screen):not(script) {
-            visibility: hidden;
-            opacity: 0;
-        }
-        
-        #content-host, .cover, .header-content, .footer-content {
-            visibility: visible;
-            opacity: 1;
-            transition: opacity 0.8s ease-in-out;
-        }
-
-        #content-host {
-            width: 100%; height: 100%; display: block;
-        }
-
-        .cover { position: fixed; left: 0; width: 100%; z-index: 10; pointer-events: none; }
-        .top-cover { top: 0; height: 75px; background: linear-gradient(to bottom, var(--theme-bg) 80%, rgba(11, 15, 25, 0) 100%); }
-        .bottom-cover { bottom: 0; height: 50px; background: linear-gradient(to top, var(--theme-bg) 80%, rgba(11, 15, 25, 0) 100%); }
-
-        @keyframes wave {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        @keyframes flicker {
-            0%, 100% { opacity: 1; } 25% { opacity: 0.3; }
-            50% { opacity: 0.8; } 75% { opacity: 0.5; }
-        }
-
-        /* NEW: Animation for the desktop blocker frame */
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(255, 82, 82, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 82, 82, 0); }
-        }
-
-        .header-content, .footer-content {
-            position: fixed; left: 0; width: 100%; z-index: 11;
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Roboto', sans-serif; box-sizing: border-box;
-        }
-        .header-content { top: 0; height: 75px; flex-direction: column; padding-bottom: 10px; }
-        .footer-content { bottom: 0; height: 50px; }
-
-        .main-title {
-            font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 700;
-            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
-            background-size: 300% 300%; -webkit-background-clip: text; background-clip: text;
-            -webkit-text-fill-color: transparent; animation: wave 8s ease-in-out infinite;
-        }
-        .subtitle { font-size: 0.65rem; color: rgba(255, 255, 255, 0.8); margin-top: 2px; }
-        .footer-text { color: #ff8c00; font-size: 0.6rem; }
-        .footer-brand { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 0.7rem; color: #fff; margin: 0 5px; }
-        
-        #intro-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--theme-bg); z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            opacity: 1; transition: opacity 1.5s ease-in-out;
-        }
-        #intro-screen.hidden { opacity: 0; pointer-events: none; }
-        .intro-title-wrapper {
-            position: relative; font-family: 'Orbitron', sans-serif;
-            font-size: 3rem; font-weight: 700; visibility: hidden;
-        }
-        .intro-title-wrapper.font-loaded { visibility: visible; }
-        .intro-title-base { color: #1a1c23; }
-        .intro-title-fill {
-            position: absolute; top: 0; left: 0; height: 100%; width: 100%;
-            white-space: nowrap; color: transparent;
-            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
-            background-size: 300% 300%; -webkit-background-clip: text; background-clip: text;
-            animation: wave 8s ease-in-out infinite;
-            clip-path: inset(0 100% 0 0);
-        }
-        .loading-percentage {
-            font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700;
-            margin-top: 25px; color: rgba(255, 255, 255, 0.6);
-            letter-spacing: 2px; animation: flicker 0.1s infinite;
-        }
-        
-        /* NEW: Styles for the desktop blocker */
-        #desktop-blocker {
-            display: none; /* Hidden by default on mobile */
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--theme-bg);
-            z-index: 10000; /* On top of everything */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden; /* Prevent horizontal scroll from potential glow overflow */
+        }
+
+        .title-label {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ff6600; /* Neon Orange */
+            text-shadow: 0 0 5px #ff6600, 0 0 10px #ff6600, 0 0 20px #ff6600, 0 0 40px #ff9933, 0 0 70px #ff9933;
+            margin-bottom: 40px;
+            transform: perspective(100px) rotateX(5deg); 
+        }
+
+        .content-plate {
+            background-color: rgba(128, 128, 128, 0.1); /* Transparent gray */
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(128, 128, 128, 0.2);
             text-align: center;
-            padding: 20px;
-            box-sizing: border-box;
+            width: 90%;
+            max-width: 700px; /* Increased max-width for longer URL */
         }
 
-        .blocker-message {
-            font-family: 'Roboto', sans-serif;
-            font-size: 1.2rem;
-            line-height: 1.8;
+        .instructions {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .subscription-link-container {
+            margin-bottom: 25px;
+        }
+
+        .subscription-url {
+            background-color: #222;
+            color: #eee;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem; /* Adjusted for potentially long URL */
+            word-break: break-all; /* Ensure long URL wraps */
+            display: block; /* Make it block to allow padding and centering of text if needed */
+            text-align: left; /* Align URL text to the left */
+            border: 1px solid #444;
+        }
+
+        .copy-button {
+            background-color: #ff6600; /* Neon Orange */
             color: #fff;
-            padding: 40px;
-            border: 2px solid rgba(255, 82, 82, 0.8);
-            border-radius: 10px;
-            animation: pulse-red 2s infinite;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 12px 25px;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 0 5px #ff6600, 0 0 10px #ff9933;
         }
 
-        /* --- Responsive Section --- */
+        .copy-button:hover {
+            background-color: #e65c00; /* Darker orange */
+            box-shadow: 0 0 7px #ff6600, 0 0 15px #ff9933;
+        }
+        .copy-button:active {
+            transform: scale(0.98);
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.8rem;
+            color: #777;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Responsive adjustments */
         @media (max-width: 600px) {
-            .main-title { font-size: 1.2rem; }
-            .subtitle { font-size: 0.55rem; }
-            .intro-title-wrapper { font-size: 1.8rem; }
+            .title-label {
+                font-size: 2.5rem;
+                margin-bottom: 30px;
+            }
+            .content-plate {
+                padding: 20px;
+                width: 95%;
+            }
+            .subscription-url {
+                font-size: 0.75rem;
+            }
+            .copy-button {
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+            .instructions {
+                font-size: 0.85rem;
+            }
         }
-
-        /* This media query activates the blocker on screens wider than 768px */
-        @media (min-width: 769px) {
-            #desktop-blocker {
-                display: flex;
+        @media (max-width: 400px) {
+            .title-label {
+                font-size: 2rem;
+            }
+            .subscription-url {
+                font-size: 0.7rem; /* Even smaller for very small screens */
             }
         }
     </style>
 </head>
-<body class="is-loading">
+<body>
+    <div class="title-label">☬SHΞN™</div>
 
-    <div id="intro-screen">
-        <div class="intro-title-wrapper">
-            <div class="intro-title-fill">MIDSHΞЯNI™</div>
-            <div class="intro-title-base">MIDSHΞЯNI™</div>
+    <div class="content-plate">
+        <p class="instructions">
+            This is your permanent subscription link. It is automatically updated by a background process (e.g., every few hours).
+            <br>Copy the link below and add it to your VPN client.
+        </p>
+
+        <div class="subscription-link-container">
+            <p class="instructions" style="font-size: 0.8em; color: #aaa;">
+                (Remember to replace YOUR_USERNAME, YOUR_REPO_NAME, and main (if your default branch is different) with your actual GitHub details if you are hosting this yourself.)
+            </p>
+            <code id="subscriptionUrl" class="subscription-url">https://raw.githubusercontent.com/Shervinuri/v3ray/refs/heads/main/Sub.txt</code>
         </div>
-        <div class="loading-percentage">0%</div>
-    </div>
-    
-    <!-- NEW: The desktop blocker element -->
-    <div id="desktop-blocker">
-        <div class="blocker-message">
-            لپ تاپ مپتات و سیستمو غلاف کن که اینجا آنتن نمیده<br>
-            توکن مفت هست ولی برای مصرف منصفانه<br>
-            خاکی باش با گوشی بیا، قدمت سر چشم<br>
-            اگه تو گوشیتم داری این متنو می‌خونی، اون تیک بی‌صحاب رو از رو دسکتاپ مود توی ستینگت بردار!
-        </div>
-    </div>
-
-    <div id="content-host"></div>
-    
-    <div class="cover top-cover"></div>
-    <div class="cover bottom-cover"></div>
-    <div class="header-content">
-        <div class="main-title">MIDSHΞЯNI™</div>
-        <div class="subtitle">By ☬SHΞN™ (+18 moded midjourney)</div>
-    </div>
-    <div class="footer-content">
-        <span class="footer-text">All design and production rights belong </span>
-        <span class="footer-brand">☬SHΞN™ ai</span>
-        <span class="footer-text">© 2025</span>
-    </div>
-    
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const _a = document.getElementById('intro-screen');
-        const _b = document.querySelector('.intro-title-wrapper');
-        const _c = document.querySelector('.intro-title-fill');
-        const _d = document.querySelector('.loading-percentage');
-        const _e = document.body;
-
-        const _run = () => {
-            _b.classList.add('font-loaded');
-            let _p = 0;
-            const _t = 3000;
-            const _i = setInterval(() => {
-                _p++;
-                if (_p <= 100) {
-                    _d.textContent = _p + '%';
-                    _c.style.clipPath = `inset(0 ${100 - _p}% 0 0)`;
-                } else {
-                    clearInterval(_i);
-                    _d.style.animation = 'none';
-                    _d.style.opacity = '1';
-                    _a.classList.add('hidden');
-                    _e.classList.remove('is-loading');
-                    setTimeout(() => { _a.remove(); }, 1500);
-                }
-            }, _t / 100);
-        };
         
-        const _h = document.getElementById('content-host');
-        const _s = _h.attachShadow({ mode: 'open' });
-        const _el = document.createElement(atob('aWZyYW1l'));
-        _el.src = atob('aHR0cHM6Ly9kYWdmaW5uMTk2Mi1taWRqb3VybmV5LWZyZWUuaGYuc3BhY2Uv');
-        _el.style.cssText = 'width:100%;height:100%;border:none;';
-        _s.appendChild(_el);
+        <button class="copy-button" id="copyButton">Copy Link</button>
+        <p id="copyFeedback" style="color: #00ff00; margin-top: 10px; height: 1em;"></p>
 
-        document.fonts.ready.then(_run).catch(err => {
-             console.warn(atob('Rm9udCBsb2FkaW5nIGZhaWxlZC4='), err);
-            _run();
+    </div>
+
+    <div class="footer">
+        Developed by SHΞN
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const copyButton = document.getElementById('copyButton');
+            const subscriptionUrlElement = document.getElementById('subscriptionUrl');
+            const copyFeedback = document.getElementById('copyFeedback');
+
+            // --- IMPORTANT ---
+            // The URL below is a placeholder. 
+            // It will be constructed by the GitHub Action and committed to SHEN_SUB.txt.
+            // This page simply displays the *expected* location of that file.
+            // The user should verify this URL structure matches their repository settings.
+            const actualSubscriptionURL = subscriptionUrlElement.textContent.trim();
+
+            copyButton.addEventListener('click', () => {
+                navigator.clipboard.writeText(actualSubscriptionURL)
+                    .then(() => {
+                        copyFeedback.textContent = 'Copied to clipboard!';
+                        copyButton.textContent = 'Copied!';
+                        setTimeout(() => {
+                            copyFeedback.textContent = '';
+                            copyButton.textContent = 'Copy Link';
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy link: ', err);
+                        copyFeedback.textContent = 'Failed to copy. Please copy manually.';
+                        setTimeout(() => {
+                            copyFeedback.textContent = '';
+                        }, 3000);
+                    });
+            });
         });
-    });
     </script>
 </body>
 </html>
