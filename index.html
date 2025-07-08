@@ -1,426 +1,151 @@
-
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>v2rolling - Professional Edition</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root {
-            --bg-light: #f0f2f5; --bg-dark: #0a0a0a;
-            --text-light: #1a1a1a; --text-dark: #f5f5f5;
-            --card-light: #ffffff; --card-dark: #1c1c1e;
-            --border-light: #e2e8f0; --border-dark: #2d3748;
-            --accent: #3b82f6; --accent-rgb: 59, 130, 246;
-            --accent-hover: #2563eb;
-        }
-        [data-theme="light"] {
-            --bg: var(--bg-light); --text: var(--text-light);
-            --card: var(--card-light); --border: var(--border-light);
-        }
-        [data-theme="dark"] {
-            --bg: var(--bg-dark); --text: var(--text-dark);
-            --card: var(--card-dark); --border: var(--border-dark);
-        }
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            touch-action: none;
-        }
-        .glass-ui {
-            background: color-mix(in srgb, var(--bg) 60%, transparent);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        .logo-gradient {
-            background: linear-gradient(45deg, var(--accent), var(--accent-hover));
-            -webkit-background-clip: text; background-clip: text; color: transparent;
-        }
-        .title-gradient {
-            background: linear-gradient(45deg, var(--text), var(--accent));
-            -webkit-background-clip: text; background-clip: text; color: transparent;
-        }
-        .tilted-scroll-container {
-            perspective: 1000px;
-            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-            mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-        }
-        .scroll-item {
-            background-color: var(--card);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        [data-theme="light"] .scroll-item { box-shadow: 0 4px 15px -5px rgba(0, 0, 0, 0.1), 0 2px 8px -6px rgba(0, 0, 0, 0.08); }
-        [data-theme="dark"] .scroll-item { box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.4); }
-        .scroll-item.near-center { transform: scale(1.03) translateY(-3px) translateZ(10px); }
-        [data-theme="light"] .scroll-item.center {
-            transform: scale(1.08) translateY(-5px) translateZ(20px);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.25), 0 10px 20px -10px rgba(0, 0, 0, 0.15);
-        }
-        [data-theme="dark"] .scroll-item.center {
-            transform: scale(1.08) translateY(-5px) translateZ(20px);
-            box-shadow: 0 0 12px 2px rgba(var(--accent-rgb), 0.2), 0 0 30px 5px rgba(var(--accent-rgb), 0.1), 0 8px 30px 0px rgba(0,0,0,0.6);
-        }
-        .action-btn {
-            background: color-mix(in srgb, var(--card) 50%, transparent);
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-        .action-btn:hover {
-            background-color: var(--accent);
-            border-color: var(--accent-hover);
-            color: white;
-        }
-        #toast-container {
-            perspective: 800px;
-        }
-        #toast {
-            transform-origin: right center;
-            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        }
-        .sparkle {
-            position: fixed;
-            width: 5px;
-            height: 5px;
-            background-color: var(--accent);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 999;
-            opacity: 1;
-            box-shadow: 0 0 8px var(--accent), 0 0 12px var(--accent);
-        }
-        @keyframes fall {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--end-x), var(--end-y)) scale(0);
-                opacity: 0;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>v2rolling - Professional Edition</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg-light: #f0f2f5; --bg-dark: #0a0a0a;
+      --text-light: #1a1a1a; --text-dark: #f5f5f5;
+      --card-light: #fff;    --card-dark: #1c1c1e;
+      --border-light: #e2e8f0; --border-dark: #2d3748;
+      --accent: #3b82f6;
+    }
+    [data-theme="light"] {
+      --bg: var(--bg-light); --text: var(--text-light);
+      --card: var(--card-light); --border: var(--border-light);
+    }
+    [data-theme="dark"] {
+      --bg: var(--bg-dark); --text: var(--text-dark);
+      --card: var(--card-dark); --border: var(--border-dark);
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+    }
+    .mobile-fixed-footer {
+      display: none;
+    }
+    @media (max-width: 640px) {
+      .mobile-fixed-footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        height: 52px;
+        background: var(--card, #fff);
+        color: var(--text, #222);
+        border-top: 1px solid var(--border, #e2e8f0);
+        z-index: 1050;
+        font-size: 1rem;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+      }
+      .footer {
+        display: none !important;
+      }
+    }
+  </style>
 </head>
-<body data-theme="dark" class="overflow-hidden antialiased">
-    
-    <header class="header glass-ui fixed top-0 left-0 right-0 z-[1000] flex justify-between items-center p-4 md:px-8 md:py-4">
-        <div class="logo-gradient text-2xl font-bold">☬</div>
-        <button class="theme-toggle p-2 rounded-lg transition-all duration-300 transform hover:scale-110 hover:rotate-12" id="themeToggle" aria-label="تغییر تم">
-            <svg class="sun-icon hidden w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-            <svg class="moon-icon hidden w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-        </button>
-    </header>
-
-    <main class="min-h-screen w-full flex flex-col justify-center items-center py-16">
-        <h1 class="title-gradient text-4xl md:text-5xl font-light text-center mb-8">SHΞN</h1>
-        <div class="tilted-scroll-container w-full h-[60vh] max-h-[500px] md:h-[500px] flex justify-center items-center cursor-grab active:cursor-grabbing" id="scrollArea">
-            <div class="tilted-scroll w-[90%] sm:w-[80%] md:w-full max-w-xs md:max-w-sm will-change-transform absolute" id="scrollContainer">
-            </div>
-        </div>
-    </main>
-
-    <footer class="footer glass-ui fixed bottom-0 left-0 right-0 p-3 z-[1000] border-t border-[var(--border)] text-center text-sm opacity-70">
-        <p>Exclusive ☬ SHΞЯѴIN</p>
-    </footer>
-
-    <div id="toast-container" class="fixed top-20 right-5 z-[1001]">
-        <div id="toast" class="bg-[var(--accent)] text-white font-bold py-3 px-5 rounded-lg shadow-lg" style="transform: translateX(calc(100% + 2rem)) rotateY(-45deg);">
-        </div>
+<body data-theme="dark" class="antialiased min-h-screen">
+  <header class="glass-ui fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-3 md:px-8">
+    <div class="logo-gradient text-2xl font-bold">☬</div>
+    <button id="themeToggle" class="p-2 rounded-lg transition-all duration-300 hover:scale-110" aria-label="Toggle theme">
+      <svg class="sun-icon hidden w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2m11-11h-2M3 12H1m16.24-7.76l-1.42 1.42M6.34 17.66l-1.42 1.42M17.66 17.66l-1.42-1.42M6.34 6.34L4.92 4.92"/></svg>
+      <svg class="moon-icon w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+    </button>
+  </header>
+  <main class="flex flex-col items-center justify-center min-h-screen pt-24 pb-20">
+    <h1 class="title-gradient text-4xl md:text-5xl font-light mb-8">SHΞN</h1>
+    <div class="w-full max-w-xs sm:max-w-md md:max-w-xl flex flex-col gap-3">
+      <div id="subs" class="flex flex-col gap-3"></div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const initialData = [
-                { label: "Mahsanet MCI 1", link: "https://raw.githubusercontent.com/mahsanet/MahsaFreeConfig/main/mci/sub_1.txt", filename: "mahsanet_mci_1.txt" },
-                { label: "Mahsanet MCI 3", link: "https://raw.githubusercontent.com/mahsanet/MahsaFreeConfig/main/mci/sub_3.txt", filename: "mahsanet_mci_3.txt" },
-                { label: "Mahsanet MTN 1", link: "https://raw.githubusercontent.com/mahsanet/MahsaFreeConfig/main/mtn/sub_1.txt", filename: "mahsanet_mtn_1.txt" },
-                { label: "Mahsanet MTN 2", link: "https://raw.githubusercontent.com/mahsanet/MahsaFreeConfig/main/mtn/sub_2.txt", filename: "mahsanet_mtn_2.txt" },
-                { label: "NiREvil Clash EMS", link: "https://raw.githubusercontent.com/NiREvil/vless/main/sub/clash-ems.yml", filename: "nirevil_clash_ems.yml" },
-                { label: "NiREvil Sing-Box", link: "https://raw.githubusercontent.com/NiREvil/vless/main/sing-box.json", filename: "nirevil_singbox.json" },
-                { label: "NiREvil Warp", link: "https://raw.githubusercontent.com/NiREvil/vless/main/warp.json", filename: "nirevil_warp.json" },
-                { label: "NiREvil V2RayNG WG", link: "https://raw.githubusercontent.com/NiREvil/vless/main/sub/v2rayng-wg.txt", filename: "nirevil_v2rayng_wg.txt" },
-                { label: "NiREvil Clash Meta WG", link: "https://raw.githubusercontent.com/NiREvil/vless/main/sub/clash-meta-wg.yml", filename: "nirevil_clash_meta_wg.yml" },
-                { label: "NiREvil Nekobox WG", link: "https://raw.githubusercontent.com/NiREvil/vless/main/sub/nekobox-wg.txt", filename: "nirevil_nekobox_wg.txt" },
-                { label: "Mohammadgb V2RayNG", link: "https://raw.githubusercontent.com/Mohammadgb0078/IRV2ray/main/v2rayng.json", filename: "mohammadgb_v2rayng.json" },
-                { label: "Mohammadgb VLESS", link: "https://raw.githubusercontent.com/Mohammadgb0078/IRV2ray/main/vless.txt", filename: "mohammadgb_vless.txt" },
-                { label: "Mohammadgb VMESS", link: "https://raw.githubusercontent.com/Mohammadgb0078/IRV2ray/main/vmess.txt", filename: "mohammadgb_vmess.txt" },
-                { label: "Barry-Far Sub 1", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub1.txt", filename: "barry_sub1.txt" },
-                { label: "Barry-Far Sub 2", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub2.txt", filename: "barry_sub2.txt" },
-                { label: "Barry-Far Sub 3", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub3.txt", filename: "barry_sub3.txt" },
-                { label: "Barry-Far Sub 4", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub4.txt", filename: "barry_sub4.txt" },
-                { label: "Barry-Far Sub 5", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub5.txt", filename: "barry_sub5.txt" },
-                { label: "Barry-Far Sub 6", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub6.txt", filename: "barry_sub6.txt" },
-                { label: "Barry-Far Sub 7", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub7.txt", filename: "barry_sub7.txt" },
-                { label: "Barry-Far Sub 8", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub8.txt", filename: "barry_sub8.txt" },
-                { label: "Barry-Far VLESS", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Splitted-By-Protocol/vless.txt", filename: "barry_vless.txt" },
-                { label: "Barry-Far VMESS", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Splitted-By-Protocol/vmess.txt", filename: "barry_vmess.txt" },
-                { label: "MatinGhanbari All", link: "https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/all_sub.txt", filename: "matinghanbari_all.txt" },
-                { label: "MatinGhanbari Super", link: "https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/super-sub.txt", filename: "matinghanbari_super.txt" },
-                { label: "MatinGhanbari Sub 1", link: "https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/subs/sub1.txt", filename: "matinghanbari_sub1.txt" },
-                { label: "MatinGhanbari Sub 2", link: "https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/subs/sub2.txt", filename: "matinghanbari_sub2.txt" },
-                { label: "MatinGhanbari Sub 3", link: "https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/subs/sub3.txt", filename: "matinghanbari_sub3.txt" },
-                { label: "Kobabi Sub", link: "https://raw.githubusercontent.com/liketolivefree/kobabi/main/sub.txt", filename: "kobabi_sub.txt" },
-                { label: "Kobabi Clash", link: "https://raw.githubusercontent.com/liketolivefree/kobabi/main/clash_mt_ir_prov_l.yaml", filename: "kobabi_clash.yaml" },
-                { label: "Kobabi Singbox", link: "https://raw.githubusercontent.com/liketolivefree/kobabi/main/singbox.json", filename: "kobabi_singbox.json" },
-                { label: "Epodonios All", link: "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt", filename: "epodonios_all.txt" },
-                { label: "Epodonios VLESS", link: "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/Splitted-By-Protocol/vless.txt", filename: "epodonios_vless.txt" },
-                { label: "Epodonios VMESS", link: "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/Splitted-By-Protocol/vmess.txt", filename: "epodonios_vmess.txt" },
-                { label: "SasukeFreestyle Config", link: "https://raw.githubusercontent.com/SasukeFreestyle/XTLS-Iran-Reality/main/config.json", filename: "sasukefreestyle_config.json" }
-            ];
-
-            const V2RayApp = {
-                config: {
-                    physics: { damping: 0.95, velocityThreshold: 0.05, throwMultiplier: 1.5 },
-                },
-                state: {
-                    isDragging: false, animationFrameId: null, positionY: 0, velocityY: 0,
-                    dragStart: { y: 0, time: 0, position: 0 },
-                    totalHeight: 0, blockHeight: 0, isLooping: false, toastTimer: null,
-                },
-                elements: {
-                    body: document.body,
-                    themeToggle: document.getElementById('themeToggle'),
-                    scrollArea: document.getElementById('scrollArea'),
-                    scrollContainer: document.getElementById('scrollContainer'),
-                    toast: document.getElementById('toast'),
-                },
-                init() {
-                    this.setupTheme();
-                    this.setupEventListeners();
-                    this.generateScrollItems();
-                    this.startPhysicsLoop();
-                    window.addEventListener('resize', () => this.generateScrollItems());
-                },
-                shuffleArray(array) {
-                    for (let i = array.length - 1; i > 0; i--) {
-                        const j = Math.floor(Math.random() * (i + 1));
-                        [array[i], array[j]] = [array[j], array[i]];
-                    }
-                },
-                generateScrollItems() {
-                    this.shuffleArray(initialData);
-                    this.elements.scrollContainer.innerHTML = '';
-                    if (initialData.length === 0) return;
-
-                    const itemsToRender = [...initialData, ...initialData, ...initialData];
-                    
-                    itemsToRender.forEach((sub) => {
-                        const scrollItem = document.createElement('div');
-                        scrollItem.className = 'scroll-item w-full rounded-2xl p-4 md:p-6 my-3 md:my-4 relative overflow-hidden transform-origin-center';
-                        scrollItem.innerHTML = `
-                            <div class="item-content flex items-center gap-4 w-full">
-                                <div class="item-icon text-2xl font-bold text-[var(--accent)] flex-shrink-0">☬</div>
-                                <div class="item-text flex-1 font-medium min-w-0 whitespace-nowrap overflow-hidden text-ellipsis">${sub.label}</div>
-                                <div class="item-actions flex gap-2 opacity-0 transform scale-80 translate-x-3 transition-all duration-300">
-                                    <button class="action-btn copy-btn w-10 h-10 flex items-center justify-center rounded-lg transform hover:scale-110 transition-transform" title="کپی لینک">
-                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                                    </button>
-                                    <button class="action-btn download-btn w-10 h-10 flex items-center justify-center rounded-lg transform hover:scale-110 transition-transform" title="دانلود محتوای کانفیگ">
-                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                    </button>
-                                </div>
-                            </div>`;
-                        
-                        scrollItem.addEventListener('mouseenter', () => item.querySelector('.item-actions').classList.remove('opacity-0', 'scale-80', 'translate-x-3'));
-                        scrollItem.addEventListener('mouseleave', () => {
-                            if (!item.classList.contains('center')) {
-                                item.querySelector('.item-actions').classList.add('opacity-0', 'scale-80', 'translate-x-3');
-                            }
-                        });
-
-                        const item = scrollItem;
-                        scrollItem.querySelector('.copy-btn').addEventListener('click', (e) => { e.stopPropagation(); this.copyToClipboard(sub.link, sub.label); });
-                        scrollItem.querySelector('.download-btn').addEventListener('click', (e) => { e.stopPropagation(); this.downloadSubscriptionContent(sub.link, sub.filename); });
-                        this.elements.scrollContainer.appendChild(scrollItem);
-                    });
-                    
-                    this.state.totalHeight = this.elements.scrollContainer.scrollHeight;
-                    this.state.blockHeight = this.state.totalHeight / 3;
-                    this.state.positionY = 0;
-                    this.applyTransform();
-                },
-                startPhysicsLoop() {
-                    if (this.state.isLooping) return;
-                    this.state.isLooping = true;
-                    const loop = () => {
-                        if (!this.state.isDragging) {
-                            this.state.positionY += this.state.velocityY;
-                            this.state.velocityY *= this.config.physics.damping;
-                            if (Math.abs(this.state.velocityY) < this.config.physics.velocityThreshold) {
-                                this.state.velocityY = 0; this.state.isLooping = false;
-                                cancelAnimationFrame(this.state.animationFrameId); return;
-                            }
-                        }
-                        this.applyTransform();
-                        this.state.animationFrameId = requestAnimationFrame(loop);
-                    };
-                    this.state.animationFrameId = requestAnimationFrame(loop);
-                },
-                applyTransform() {
-                    const { blockHeight } = this.state;
-                    if (blockHeight === 0) return;
-                    const offset = -blockHeight + (this.state.positionY % blockHeight);
-                    const transformBase = 'rotateX(20deg) rotateZ(-10deg) skewX(10deg)';
-                    this.elements.scrollContainer.style.transform = `${transformBase} translateY(${offset}px)`;
-                    this.updateCenterItem();
-                },
-                handleDragStart(e) {
-                    this.state.isDragging = true; this.state.velocityY = 0;
-                    cancelAnimationFrame(this.state.animationFrameId); this.state.isLooping = false;
-                    const y = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
-                    this.state.dragStart = { y: y, time: Date.now(), position: this.state.positionY };
-                    document.addEventListener('mousemove', this.handleDragMove.bind(this));
-                    document.addEventListener('touchmove', this.handleDragMove.bind(this), { passive: false });
-                    document.addEventListener('mouseup', this.handleDragEnd.bind(this), { once: true });
-                    document.addEventListener('touchend', this.handleDragEnd.bind(this), { once: true });
-                },
-                handleDragMove(e) {
-                    if (!this.state.isDragging) return;
-                    if (e.cancelable) e.preventDefault();
-                    const y = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
-                    const deltaY = y - this.state.dragStart.y;
-                    this.state.positionY = this.state.dragStart.position + deltaY;
-                    this.applyTransform();
-                },
-                handleDragEnd(e) {
-                    if (!this.state.isDragging) return;
-                    this.state.isDragging = false;
-                    const y = e.type === 'touchend' ? e.changedTouches[0].clientY : e.clientY;
-                    const deltaY = y - this.state.dragStart.y;
-                    const deltaTime = Date.now() - this.state.dragStart.time;
-                    if (deltaTime < 400 && Math.abs(deltaY) > 5) { this.state.velocityY = (deltaY / deltaTime) * this.config.physics.throwMultiplier * 15; }
-                    this.startPhysicsLoop();
-                    document.removeEventListener('mousemove', this.handleDragMove.bind(this));
-                    document.removeEventListener('touchmove', this.handleDragMove.bind(this));
-                },
-                async downloadSubscriptionContent(url, filename) {
-                    this.showToast(`...داره میااااد 💦 ${filename}...`);
-                    try {
-                        const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
-                        const response = await fetch(proxyUrl);
-                        if (!response.ok) throw new Error(`Network error: ${response.status}`);
-                        const content = await response.text();
-                        this.downloadAsFile(content, filename);
-                    } catch (error) {
-                        this.showToast(' چیزی توش نی‌ ، اصن هس نمیدم ! .');
-                        console.error("Content download failed:", error);
-                    }
-                },
-                setupTheme() {
-                    const savedTheme = localStorage.getItem('theme') || 'dark';
-                    this.updateTheme(savedTheme);
-                    this.elements.themeToggle.addEventListener('click', () => {
-                        const currentTheme = this.elements.body.getAttribute('data-theme');
-                        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                        this.updateTheme(newTheme);
-                        localStorage.setItem('theme', newTheme);
-                    });
-                },
-                updateTheme(theme) {
-                    this.elements.body.setAttribute('data-theme', theme);
-                    document.querySelector('.sun-icon').classList.toggle('hidden', theme === 'dark');
-                    document.querySelector('.moon-icon').classList.toggle('hidden', theme === 'light');
-                },
-                setupEventListeners() {
-                    const sa = this.elements.scrollArea;
-                    sa.addEventListener('mousedown', this.handleDragStart.bind(this));
-                    sa.addEventListener('touchstart', this.handleDragStart.bind(this), { passive: false });
-                    document.addEventListener('contextmenu', e => e.preventDefault());
-                },
-                updateCenterItem() {
-                    const items = this.elements.scrollContainer.querySelectorAll('.scroll-item');
-                    if (items.length === 0) return;
-                    const containerRect = this.elements.scrollArea.getBoundingClientRect();
-                    const centerY = containerRect.top + containerRect.height / 2;
-                    items.forEach(item => {
-                        const itemRect = item.getBoundingClientRect();
-                        const itemCenterY = itemRect.top + itemRect.height / 2;
-                        const distance = Math.abs(centerY - itemCenterY);
-                        item.classList.remove('center', 'near-center');
-                        const actions = item.querySelector('.item-actions');
-                        if (distance < 30) {
-                            item.classList.add('center');
-                            actions.classList.remove('opacity-0', 'scale-80', 'translate-x-3');
-                        } else if (distance < 90) {
-                            item.classList.add('near-center');
-                            actions.classList.add('opacity-0', 'scale-80', 'translate-x-3');
-                        } else {
-                            actions.classList.add('opacity-0', 'scale-80', 'translate-x-3');
-                        }
-                    });
-                },
-                async copyToClipboard(text, label) {
-                    try {
-                        await navigator.clipboard.writeText(text);
-                        this.showToast(`لینک ${label}  📦 محتوا به شما وارد شد !`);
-                    } catch (err) {
-                        const textArea = document.createElement('textarea');
-                        textArea.value = text;
-                        textArea.style.position = 'fixed';
-                        textArea.style.top = '-9999px';
-                        this.elements.body.appendChild(textArea);
-                        textArea.select();
-                        document.execCommand('copy');
-                        this.elements.body.removeChild(textArea);
-                        this.showToast(`لینک ${label} 📦 محتوا به شما وارد شد !`);
-                    }
-                },
-                downloadAsFile(content, filename) {
-                    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = filename;
-                    this.elements.body.appendChild(a);
-                    a.click();
-                    this.elements.body.removeChild(a);
-                    window.URL.revokeObjectURL(url);
-                    this.showToast(`فایل ${filename} 📂 پوشه به طور کامل واردتون شد!`);
-                },
-                createSparkleEffect() {
-                    const toastRect = this.elements.toast.getBoundingClientRect();
-                    const particleCount = 25;
-                    for (let i = 0; i < particleCount; i++) {
-                        const sparkle = document.createElement('div');
-                        sparkle.className = 'sparkle';
-                        this.elements.body.appendChild(sparkle);
-
-                        const startX = toastRect.left + Math.random() * toastRect.width;
-                        const startY = toastRect.top + Math.random() * toastRect.height;
-                        
-                        sparkle.style.left = `${startX}px`;
-                        sparkle.style.top = `${startY}px`;
-
-                        const animDuration = Math.random() * 1.5 + 0.8;
-                        const endX = (Math.random() - 0.5) * 200;
-                        const endY = window.innerHeight - startY + 50;
-
-                        sparkle.style.setProperty('--end-x', `${endX}px`);
-                        sparkle.style.setProperty('--end-y', `${endY}px`);
-                        sparkle.style.animation = `fall ${animDuration}s cubic-bezier(0.1, 0.5, 0.9, 0.1) forwards`;
-
-                        sparkle.addEventListener('animationend', () => {
-                            sparkle.remove();
-                        });
-                    }
-                },
-                showToast(message) {
-                    clearTimeout(this.state.toastTimer);
-                    const toast = this.elements.toast;
-                    toast.textContent = message;
-                    
-                    toast.style.transform = 'translateX(0) rotateY(0deg)';
-
-                    this.state.toastTimer = setTimeout(() => {
-                        toast.style.transform = 'translateX(calc(100% + 2rem)) rotateY(-45deg)';
-                        this.createSparkleEffect();
-                    }, 3000);
-                }
-            };
-
-            V2RayApp.init();
-        });
-    </script>
+  </main>
+  <footer class="footer glass-ui fixed bottom-0 left-0 right-0 p-3 z-40 border-t border-[var(--border)] text-center text-sm opacity-70">
+    <p>Exclusive ☬ SHΞЯѴIN</p>
+  </footer>
+  <div class="mobile-fixed-footer">
+    MOBILE FIXED FOOTER
+  </div>
+  <script>
+    const subsData = [
+      { label: "Mahsanet MCI 1", link: "https://raw.githubusercontent.com/mahsanet/MahsaFreeConfig/main/mci/sub_1.txt" },
+      { label: "Mahsanet MCI 3", link: "https://raw.githubusercontent.com/mahsanet/MahsaFreeConfig/main/mci/sub_3.txt" },
+      { label: "Mahsanet MTN 1", link: "https://raw.githubusercontent.com/mahsanet/MahsaFreeConfig/main/mtn/sub_1.txt" },
+      { label: "Mahsanet MTN 2", link: "https://raw.githubusercontent.com/mahsanet/MahsaFreeConfig/main/mtn/sub_2.txt" },
+      { label: "NiREvil Clash EMS", link: "https://raw.githubusercontent.com/NiREvil/vless/main/sub/clash-ems.yml" },
+      { label: "NiREvil Sing-Box", link: "https://raw.githubusercontent.com/NiREvil/vless/main/sing-box.json" },
+      { label: "NiREvil Warp", link: "https://raw.githubusercontent.com/NiREvil/vless/main/warp.json" },
+      { label: "NiREvil V2RayNG WG", link: "https://raw.githubusercontent.com/NiREvil/vless/main/sub/v2rayng-wg.txt" },
+      { label: "NiREvil Clash Meta WG", link: "https://raw.githubusercontent.com/NiREvil/vless/main/sub/clash-meta-wg.yml" },
+      { label: "NiREvil Nekobox WG", link: "https://raw.githubusercontent.com/NiREvil/vless/main/sub/nekobox-wg.txt" },
+      { label: "Mohammadgb V2RayNG", link: "https://raw.githubusercontent.com/Mohammadgb0078/IRV2ray/main/v2rayng.json" },
+      { label: "Mohammadgb VLESS", link: "https://raw.githubusercontent.com/Mohammadgb0078/IRV2ray/main/vless.txt" },
+      { label: "Mohammadgb VMESS", link: "https://raw.githubusercontent.com/Mohammadgb0078/IRV2ray/main/vmess.txt" },
+      { label: "Barry-Far Sub 1", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub1.txt" },
+      { label: "Barry-Far Sub 2", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub2.txt" },
+      { label: "Barry-Far Sub 3", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub3.txt" },
+      { label: "Barry-Far Sub 4", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub4.txt" },
+      { label: "Barry-Far Sub 5", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub5.txt" },
+      { label: "Barry-Far Sub 6", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub6.txt" },
+      { label: "Barry-Far Sub 7", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub7.txt" },
+      { label: "Barry-Far Sub 8", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Sub8.txt" },
+      { label: "Barry-Far VLESS", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Splitted-By-Protocol/vless.txt" },
+      { label: "Barry-Far VMESS", link: "https://raw.githubusercontent.com/barry-far/V2ray-config/main/Splitted-By-Protocol/vmess.txt" },
+      { label: "MatinGhanbari All", link: "https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/all_sub.txt" },
+      { label: "MatinGhanbari Super", link: "https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/super-sub.txt" },
+      { label: "MatinGhanbari Sub 1", link: "https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/subs/sub1.txt" },
+      { label: "MatinGhanbari Sub 2", link: "https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/subs/sub2.txt" },
+      { label: "MatinGhanbari Sub 3", link: "https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/subs/sub3.txt" },
+      { label: "Kobabi Sub", link: "https://raw.githubusercontent.com/liketolivefree/kobabi/main/sub.txt" },
+      { label: "Kobabi Clash", link: "https://raw.githubusercontent.com/liketolivefree/kobabi/main/clash_mt_ir_prov_l.yaml" },
+      { label: "Kobabi Singbox", link: "https://raw.githubusercontent.com/liketolivefree/kobabi/main/singbox.json" },
+      { label: "Epodonios All", link: "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt" },
+      { label: "Epodonios VLESS", link: "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/Splitted-By-Protocol/vless.txt" },
+      { label: "Epodonios VMESS", link: "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/Splitted-By-Protocol/vmess.txt" },
+      { label: "SasukeFreestyle Config", link: "https://raw.githubusercontent.com/SasukeFreestyle/XTLS-Iran-Reality/main/config.json" }
+    ];
+    const subsEl = document.getElementById("subs");
+    subsData.forEach(sub => {
+      const item = document.createElement('div');
+      item.className = "flex items-center justify-between p-3 rounded-xl shadow bg-[var(--card)] border border-[var(--border)]";
+      item.innerHTML = `
+        <div class="flex items-center gap-3 overflow-x-auto">
+          <span class="text-xl text-[var(--accent)]">☬</span>
+          <span class="font-medium text-ellipsis whitespace-nowrap overflow-hidden max-w-[120px] sm:max-w-[200px]">${sub.label}</span>
+        </div>
+        <div class="flex gap-2">
+          <button title="Copy" class="copy-btn p-2 rounded-md bg-[var(--bg)] hover:bg-[var(--accent)] hover:text-white transition" data-link="${sub.link}">Copy</button>
+          <a href="${sub.link}" target="_blank" download class="p-2 rounded-md bg-[var(--bg)] hover:bg-[var(--accent)] hover:text-white transition">Download</a>
+        </div>
+      `;
+      subsEl.appendChild(item);
+    });
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('copy-btn')) {
+        navigator.clipboard.writeText(e.target.dataset.link);
+      }
+    });
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', function() {
+      const body = document.body;
+      const current = body.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-theme', next);
+      document.querySelector('.sun-icon').classList.toggle('hidden', next === 'dark');
+      document.querySelector('.moon-icon').classList.toggle('hidden', next === 'light');
+      localStorage.setItem('theme', next);
+    });
+    window.addEventListener('DOMContentLoaded', function() {
+      const saved = localStorage.getItem('theme') || 'dark';
+      document.body.setAttribute('data-theme', saved);
+      document.querySelector('.sun-icon').classList.toggle('hidden', saved === 'dark');
+      document.querySelector('.moon-icon').classList.toggle('hidden', saved === 'light');
+    });
+  </script>
 </body>
 </html>
+```
