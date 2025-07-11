@@ -1,0 +1,133 @@
+{
+  "outbounds": [
+    {
+      "type": "vmess",
+      "tag": "vless_1",
+      "server": "example.com",
+      "server_port": 443,
+      "uuid": "placeholder-uuid",
+      "security": "auto"
+    },
+    {
+      "type": "vmess",
+      "tag": "vless_2",
+      "server": "example.com",
+      "server_port": 443,
+      "uuid": "placeholder-uuid",
+      "security": "auto"
+    },
+    {
+      "type": "vmess",
+      "tag": "vless_3",
+      "server": "example.com",
+      "server_port": 443,
+      "uuid": "placeholder-uuid",
+      "security": "auto"
+    },
+    {
+      "type": "vmess",
+      "tag": "vless_4",
+      "server": "example.com",
+      "server_port": 443,
+      "uuid": "placeholder-uuid",
+      "security": "auto"
+    },
+    {
+      "type": "vmess",
+      "tag": "vmess_1",
+      "server": "example.com",
+      "server_port": 443,
+      "uuid": "placeholder-uuid",
+      "security": "auto"
+    },
+    {
+      "type": "vmess",
+      "tag": "vmess_2",
+      "server": "example.com",
+      "server_port": 443,
+      "uuid": "placeholder-uuid",
+      "security": "auto"
+    },
+    {
+      "type": "vmess",
+      "tag": "hysteria2_1",
+      "server": "example.com",
+      "server_port": 443,
+      "uuid": "placeholder-uuid",
+      "security": "auto"
+    },
+    {
+      "type": "vmess",
+      "tag": "hysteria2_2",
+      "server": "example.com",
+      "server_port": 443,
+      "uuid": "placeholder-uuid",
+      "security": "auto"
+    },
+    {
+      "type": "vmess",
+      "tag": "hysteria2_3",
+      "server": "example.com",
+      "server_port": 443,
+      "uuid": "placeholder-uuid",
+      "security": "auto"
+    },
+    {
+      "type": "vmess",
+      "tag": "hysteria2_4",
+      "server": "example.com",
+      "server_port": 443,
+      "uuid": "placeholder-uuid",
+      "security": "auto"
+    },
+    {
+      "type": "vmess",
+      "tag": "vmess_3",
+      "server": "example.com",
+      "server_port": 443,
+      "uuid": "placeholder-uuid",
+      "security": "auto"
+    },
+    {
+      "type": "vmess",
+      "tag": "hysteria2_5",
+      "server": "example.com",
+      "server_port": 443,
+      "uuid": "placeholder-uuid",
+      "security": "auto"
+    },
+    {
+      "type": "vmess",
+      "tag": "vmess_4",
+      "server": "example.com",
+      "server_port": 443,
+      "uuid": "placeholder-uuid",
+      "security": "auto"
+    }
+  ],
+  "route": {
+    "autoDetectInterface": true,
+    "final": "selector",
+    "rules": []
+  },
+  "outboundSelectors": [
+    {
+      "tag": "selector",
+      "outbounds": [
+        "vless_1",
+        "vless_2",
+        "vless_3",
+        "vless_4",
+        "vmess_1",
+        "vmess_2",
+        "hysteria2_1",
+        "hysteria2_2",
+        "hysteria2_3",
+        "hysteria2_4",
+        "vmess_3",
+        "hysteria2_5",
+        "vmess_4"
+      ]
+    }
+  ]
+}
