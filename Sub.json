@@ -1,132 +1,148 @@
 {
   "outbounds": [
     {
-      "type": "vmess",
-      "tag": "vless_1",
-      "server": "example.com",
-      "server_port": 443,
-      "uuid": "placeholder-uuid",
-      "security": "auto"
+      "type": "vless",
+      "tag": "☬SHΞN™_chikichikichikichikibambam.chikhero.com:80",
+      "server": "chikichikichikichikibambam.chikhero.com",
+      "server_port": 80,
+      "uuid": "fd789b5a-011a-482b-804d-238415d78322",
+      "flow": "",
+      "packet_encoding": "none",
+      "transport": { "type": "xhttp" }
+    },
+    {
+      "type": "vless",
+      "tag": "☬SHΞN™_65.109.177.253:80",
+      "server": "65.109.177.253",
+      "server_port": 80,
+      "uuid": "a94abeeb-bde1-4d7c-c3ac-21c497570724",
+      "flow": "",
+      "packet_encoding": "none",
+      "transport": { "type": "tcp" }
+    },
+    {
+      "type": "vless",
+      "tag": "☬SHΞN™_167.235.24.54:445",
+      "server": "167.235.24.54",
+      "server_port": 445,
+      "uuid": "4c20a5ff-bb27-4feb-a941-bca90eaedfde",
+      "flow": "",
+      "packet_encoding": "none",
+      "transport": { "type": "tcp" }
+    },
+    {
+      "type": "vless",
+      "tag": "☬SHΞN™_62.60.244.252:25888",
+      "server": "62.60.244.252",
+      "server_port": 25888,
+      "uuid": "301d049f-26d9-15ba-a83c-b1d5111d4444",
+      "flow": "xtls-rprx-vision",
+      "packet_encoding": "none",
+      "transport": { "type": "tcp" }
     },
     {
       "type": "vmess",
-      "tag": "vless_2",
-      "server": "example.com",
-      "server_port": 443,
-      "uuid": "placeholder-uuid",
-      "security": "auto"
+      "tag": "☬SHΞN™_q_170",
+      "server": "ee1.daallygold.com",
+      "server_port": 52262,
+      "uuid": "af5a0d0c-c898-4a51-ba6a-47179d483e41",
+      "alter_id": 0,
+      "security": "auto",
+      "transport": { "type": "tcp" }
     },
     {
       "type": "vmess",
-      "tag": "vless_3",
-      "server": "example.com",
-      "server_port": 443,
-      "uuid": "placeholder-uuid",
-      "security": "auto"
+      "tag": "☬SHΞN™_q_183",
+      "server": "120.26.55.225",
+      "server_port": 50002,
+      "uuid": "418048af-a293-4b99-9b0c-98ca3580dd24",
+      "alter_id": 0,
+      "security": "auto",
+      "transport": { "type": "tcp" }
+    },
+    {
+      "type": "hysteria2",
+      "tag": "☬SHΞN™_yapc1_36600",
+      "server": "yapc-1.adamhayward.co.uk",
+      "server_port": 36600,
+      "password": "Yet-Another-Public-Config-1",
+      "obfs": { "type": "salamander", "password": "Yet-Another-Public-Config-1" },
+      "tls": { "enabled": true, "server_name": "YAPC-1.afshin.ir", "insecure": false }
+    },
+    {
+      "type": "hysteria2",
+      "tag": "☬SHΞN™_yapc1_35200",
+      "server": "yapc-1.adamhayward.co.uk",
+      "server_port": 35200,
+      "password": "Yet-Another-Public-Config-1",
+      "obfs": { "type": "salamander", "password": "Yet-Another-Public-Config-1" },
+      "tls": { "enabled": true, "server_name": "YAPC-1.afshin.ir", "insecure": false }
+    },
+    {
+      "type": "hysteria2",
+      "tag": "☬SHΞN™_yapc1_36300",
+      "server": "yapc-1.adamhayward.co.uk",
+      "server_port": 36300,
+      "password": "Yet-Another-Public-Config-1",
+      "obfs": { "type": "salamander", "password": "Yet-Another-Public-Config-1" },
+      "tls": { "enabled": true, "server_name": "YAPC-1.afshin.ir", "insecure": false }
+    },
+    {
+      "type": "hysteria2",
+      "tag": "☬SHΞN™_yapc1_35000",
+      "server": "yapc-1.adamhayward.co.uk",
+      "server_port": 35000,
+      "password": "Yet-Another-Public-Config-1",
+      "obfs": { "type": "salamander", "password": "Yet-Another-Public-Config-1" },
+      "tls": { "enabled": true, "server_name": "YAPC-1.afshin.ir", "insecure": false }
     },
     {
       "type": "vmess",
-      "tag": "vless_4",
-      "server": "example.com",
-      "server_port": 443,
-      "uuid": "placeholder-uuid",
-      "security": "auto"
+      "tag": "☬SHΞN™_q_177",
+      "server": "120.210.205.59",
+      "server_port": 50002,
+      "uuid": "418048af-a293-4b99-9b0c-98ca3580dd24",
+      "alter_id": 0,
+      "security": "auto",
+      "transport": { "type": "tcp" }
+    },
+    {
+      "type": "hysteria2",
+      "tag": "☬SHΞN™_yapc1_36400",
+      "server": "yapc-1.adamhayward.co.uk",
+      "server_port": 36400,
+      "password": "Yet-Another-Public-Config-1",
+      "obfs": { "type": "salamander", "password": "Yet-Another-Public-Config-1" },
+      "tls": { "enabled": true, "server_name": "YAPC-1.afshin.ir", "insecure": false }
     },
     {
       "type": "vmess",
-      "tag": "vmess_1",
-      "server": "example.com",
-      "server_port": 443,
-      "uuid": "placeholder-uuid",
-      "security": "auto"
-    },
-    {
-      "type": "vmess",
-      "tag": "vmess_2",
-      "server": "example.com",
-      "server_port": 443,
-      "uuid": "placeholder-uuid",
-      "security": "auto"
-    },
-    {
-      "type": "vmess",
-      "tag": "hysteria2_1",
-      "server": "example.com",
-      "server_port": 443,
-      "uuid": "placeholder-uuid",
-      "security": "auto"
-    },
-    {
-      "type": "vmess",
-      "tag": "hysteria2_2",
-      "server": "example.com",
-      "server_port": 443,
-      "uuid": "placeholder-uuid",
-      "security": "auto"
-    },
-    {
-      "type": "vmess",
-      "tag": "hysteria2_3",
-      "server": "example.com",
-      "server_port": 443,
-      "uuid": "placeholder-uuid",
-      "security": "auto"
-    },
-    {
-      "type": "vmess",
-      "tag": "hysteria2_4",
-      "server": "example.com",
-      "server_port": 443,
-      "uuid": "placeholder-uuid",
-      "security": "auto"
-    },
-    {
-      "type": "vmess",
-      "tag": "vmess_3",
-      "server": "example.com",
-      "server_port": 443,
-      "uuid": "placeholder-uuid",
-      "security": "auto"
-    },
-    {
-      "type": "vmess",
-      "tag": "hysteria2_5",
-      "server": "example.com",
-      "server_port": 443,
-      "uuid": "placeholder-uuid",
-      "security": "auto"
-    },
-    {
-      "type": "vmess",
-      "tag": "vmess_4",
-      "server": "example.com",
-      "server_port": 443,
-      "uuid": "placeholder-uuid",
-      "security": "auto"
+      "tag": "☬SHΞN™_q_169",
+      "server": "15002.kuaiyin02.top",
+      "server_port": 15002,
+      "uuid": "9f513161-576b-3abc-9c98-06e52c3a24c6",
+      "alter_id": 0,
+      "security": "auto",
+      "transport": { "type": "tcp" }
     }
   ],
-  "route": {
-    "autoDetectInterface": true,
-    "final": "selector",
-    "rules": []
-  },
   "outboundSelectors": [
     {
       "tag": "selector",
       "outbounds": [
-        "vless_1",
-        "vless_2",
-        "vless_3",
-        "vless_4",
-        "vmess_1",
-        "vmess_2",
-        "hysteria2_1",
-        "hysteria2_2",
-        "hysteria2_3",
-        "hysteria2_4",
-        "vmess_3",
-        "hysteria2_5",
-        "vmess_4"
+        "☬SHΞN™_chikichikichikichikibambam.chikhero.com:80",
+        "☬SHΞN™_65.109.177.253:80",
+        "☬SHΞN™_167.235.24.54:445",
+        "☬SHΞN™_62.60.244.252:25888",
+        "☬SHΞN™_q_170",
+        "☬SHΞN™_q_183",
+        "☬SHΞN™_yapc1_36600",
+        "☬SHΞN™_yapc1_35200",
+        "☬SHΞN™_yapc1_36300",
+        "☬SHΞN™_yapc1_35000",
+        "☬SHΞN™_q_177",
+        "☬SHΞN™_yapc1_36400",
+        "☬SHΞN™_q_169"
       ]
     }
   ]
