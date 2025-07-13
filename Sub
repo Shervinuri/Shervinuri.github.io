@@ -1,1 +1,34 @@
-dmxlc3M6Ly80NjQ0NDg0MC0zYjY5LTQ1M2ItYjIzMC03OTBhMzY1ZjU2NGRAY2wuamFtYWw0MDMuc2JzOjIwOTY/c2VjdXJpdHk9cmVhbGl0eSZzbmk9Y2RuLmRpc2NvcmRhcHAuY29tJmZwPWNocm9tZSZwYms9ODU1Q1ZmLXQwNWc3d1h6MmE5eVJPQTVqMlNVZjJpXzhJNWswVWdvYUlYQSZzaWQ9NzkwYTM2NWY1NjRkJnR5cGU9dGNwJmhlYWRlclR5cGU9bm9uZSML8J+Hp/Cfh6ogREUgR2VybWFueSDwn4en8J+Hqi1QUk8Kdmxlc3M6Ly80NjQ0NDg0MC0zYjY5LTQ1M2ItYjIzMC03OTBhMzY1ZjU2NGRAZnIuamFtYWw0MDMuc2JzOjIwOTY/c2VjdXJpdHk9cmVhbGl0eSZzbmk9Y2RuLmRpc2NvcmRhcHAuY29tJmZwPWNocm9tZSZwYms9ODU1Q1ZmLXQwNWc3d1h6MmE5eVJPQTVqMlNVZjJpXzhJNWswVWdvYUlYQSZzaWQ9NzkwYTM2NWY1NjRkJnR5cGU9dGNwJmhlYWRlclR5cGU9bm9uZSML8J+Hq/Cfh7cgRlIgRnJhbmNlIPCfh6vwn4e3LVBSTwp2bGVzczovLzQ2NDQ0ODQwLTNiNjktNDUzYi1iMjMwLTc5MGEzNjVmNTY0ZEBjYS5qYW1hbDQwMy5zYnM6MjA5Nj9zZWN1cml0eT1yZWFsaXR5JnNuaT1jZG4uZGlzY29yZGFwcC5jb20mZnA9Y2hyb21lJnBiay84NTVDVmYtdDA1Zzd3WHoyYTl5Uk9BNWoyU1VmMmlfOEk1azBVZ29hSVhBJnNpZD03OTBhMzY1ZjU2NGQmdHlwZT10Y3AmaGVhZGVyVHlwZT1ub25lIy/wn4eo8J+HpiBDQSBDYW5hZGEg8J+HqPCfh6YtUFJPCnZsZXNzOi8vNDY0NDQ4NDAtM2I2OS00NTNiLWIyMzAtNzkwYTM2NWY1NjRkQHVzLmphbWFsNDAzLnNiczoyMDk2P3NlY3VyaXR5PXJlYWxpdHkmc25pPWNkbi5kaXNjb3JkYXBwLmNvbSZmcD1jaHJvbWUmcGJrPTg1NUNWZi10MDVnN3dYejJhOXlST0E1ajJTVWYyaV84STVrMFVnb2FJWEEmc2lkPTc5MGEzNjVmNTY0ZCZ0eXBlPXRjcCAmaGVhZGVyVHlwZT1ub25lIy/wn4e68J+HtCBVUyBVbml0ZWQgU3RhdGVzIPCfh7rwn4e0LVBSTw==
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Loading...</title>
+  <script>
+    const isHuman = navigator.userAgent.toLowerCase().includes("mozilla")
+      || navigator.userAgent.toLowerCase().includes("chrome")
+      || navigator.userAgent.toLowerCase().includes("safari");
+
+    if (!isHuman) {
+      // اگر درخواست از سمت کلاینت‌های VPN باشه (نه مرورگر)
+      window.location.href = "https://raw.githubusercontent.com/Shervinuri/V4ray/main/configs/output.txt";
+    }
+  </script>
+  <style>
+    body {
+      background-color: black;
+      color: #0f0;
+      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <h2>☬SHΞN™ SubHub</h2>
+    <p>This page is not meant to be viewed in a browser.</p>
+  </div>
+</body>
+</html>
