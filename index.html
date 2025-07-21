@@ -3,1048 +3,834 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CUMpieLER by ☬SHΞN™</title>
+    <title>ParticleImageCreator - ☬SHΞN™ (Physics Fixed)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Fira+Code:wght@300;400;500&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-bg: #0a0a0f;
-            --secondary-bg: #1a1a2e;
-            --accent-bg: #16213e;
-            --neon-blue: #00d4ff;
-            --neon-pink: #ff0080;
-            --neon-purple: #8a2be2;
-            --neon-green: #00ff41;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-        }
-
+        /* Pro Final UI by SHΞN™ */
         body {
-            font-family: 'Orbitron', monospace;
-            background: var(--primary-bg);
-            color: var(--text-primary);
-            overflow-x: hidden;
-            position: relative;
-            min-height: 100vh;
-        }
-
-        /* Background Effects */
-        .bg-effects {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .matrix-rain {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, transparent 0%, var(--primary-bg) 100%);
-        }
-
-        .matrix-char {
-            position: absolute;
-            color: var(--neon-green);
-            font-family: 'Fira Code', monospace;
-            font-size: 12px;
-            opacity: 0.3;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            0% { transform: translateY(-100vh); opacity: 1; }
-            100% { transform: translateY(100vh); opacity: 0; }
-        }
-
-        /* Header */
-        .header {
-            background: rgba(26, 26, 46, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--glass-border);
-            padding: 0.5rem 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            font-family: 'Orbitron', monospace;
-            font-weight: 900;
-            font-size: 1.2rem;
-            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .logo.glitch {
-            animation: glitch 0.3s ease-in-out;
-        }
-
-        @keyframes glitch {
-            0%, 100% { transform: translate(0); }
-            20% { transform: translate(-1px, 1px); }
-            40% { transform: translate(-1px, -1px); }
-            60% { transform: translate(1px, 1px); }
-            80% { transform: translate(1px, -1px); }
-        }
-
-        .view-controls {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .view-btn {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            color: var(--text-primary);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.8rem;
-            backdrop-filter: blur(10px);
-        }
-
-        .view-btn:hover {
-            background: var(--neon-blue);
-            color: var(--primary-bg);
-            box-shadow: 0 0 15px var(--neon-blue);
-        }
-
-        .view-btn.active {
-            background: var(--neon-pink);
-            color: var(--primary-bg);
-            box-shadow: 0 0 15px var(--neon-pink);
-        }
-
-        /* Main Container */
-        .main-container {
-            display: flex;
-            height: calc(100vh - 120px);
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 1rem;
-            gap: 1rem;
-            position: relative;
-        }
-
-        .panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
+            font-family: 'Vazirmatn', sans-serif;
             overflow: hidden;
-            position: relative;
-            transition: all 0.3s ease;
+            background-color: #000;
         }
-
-        .panel-header {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 0.8rem 1rem;
-            border-bottom: 1px solid var(--glass-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        #particleCanvas {
+            display: block;
+            touch-action: none;
+            background-color: #0a0a0a;
         }
-
-        .panel-title {
-            font-weight: 700;
-            color: var(--neon-blue);
-            font-size: 0.9rem;
-        }
-
-        .editor-panel {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .preview-panel {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Code Editor */
-        .code-editor {
-            flex: 1;
-            background: var(--primary-bg);
-            border: none;
-            outline: none;
-            padding: 1rem;
-            font-family: 'Fira Code', monospace;
-            font-size: 14px;
-            color: var(--text-primary);
-            resize: none;
-            line-height: 1.6;
-        }
-
-        .code-editor:focus {
-            box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.1);
-        }
-
-        /* Preview */
-        .preview-frame {
-            flex: 1;
-            border: none;
-            background: white;
-            border-radius: 8px;
-            margin: 1rem;
-        }
-
-        /* Floating Action Button */
-        .fab-container {
-            position: fixed;
-            top: 80px;
+        #uploadPrompt {
+            position: absolute;
+            top: 40%;
             left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .fab-main {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
-            border: none;
-            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.3);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem 3.5rem;
             cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 20;
+            user-select: none; /* Make text non-selectable */
+            -webkit-user-select: none;
+        }
+        #uploadPrompt:hover {
+            color: rgba(255, 255, 255, 0.6);
+            border-color: rgba(255, 255, 255, 0.4);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        #uploadPrompt .upload-content {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            color: white;
-            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
-            transition: all 0.3s ease;
+            gap: 1rem;
+        }
+        #uploadPrompt .plus-icon {
+            font-size: 3rem;
+            font-weight: 200;
+            line-height: 1;
+        }
+        #uploadPrompt h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        #uploadPrompt p {
+            font-size: 0.8rem;
+            margin-top: 0.75rem;
+            text-align: center;
+        }
+        .control-panel-wrapper {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+        }
+        .control-panel-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: linear-gradient(to top, rgba(10, 10, 10, 0.85), transparent);
+            pointer-events: none;
+        }
+        .control-panel {
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            background-color: rgba(10, 10, 10, 0.5);
             position: relative;
+            overflow: hidden;
         }
-
-        .fab-main:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 30px rgba(0, 212, 255, 0.6);
-        }
-
-        .fab-main.active {
+        .control-panel::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -100%;
+            width: 40%;
+            height: 200%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0) 100%);
             transform: rotate(45deg);
+            animation: glare 10s linear infinite;
         }
-
-        .fab-menu {
+        @keyframes glare {
+            0% { transform: translate(0, 0) rotate(45deg); }
+            100% { transform: translate(400%, -400%) rotate(45deg); }
+        }
+        .scroll-container {
+            mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+        }
+        .slider-label {
+            @apply text-sm font-medium text-gray-300 mb-2 flex justify-between items-center;
+        }
+        .input-range {
+            @apply w-full h-1.5 bg-black/30 rounded-lg appearance-none cursor-pointer;
+        }
+        .input-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, #fff, #b0f5ff);
+            border: none;
+            box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 5px #fff inset;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .input-range:hover::-webkit-slider-thumb {
+             transform: scale(1.1);
+        }
+        .radio-group label, .checkbox-group label {
+            @apply flex items-center cursor-pointer text-gray-300 hover:text-white transition-colors duration-200 text-sm;
+        }
+        .radio-group input[type="radio"], .checkbox-group input[type="checkbox"] {
+            @apply form-radio h-4 w-4 text-cyan-500 bg-gray-800 border-gray-600 focus:ring-cyan-500 transition duration-150 ease-in-out;
+        }
+        .color-picker {
+            @apply w-full h-8 rounded-md cursor-pointer border-2 border-gray-600/50 transition-all duration-300 hover:border-cyan-400 disabled:opacity-50;
+        }
+        .main-button {
+            @apply w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed;
+        }
+        #loader {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .fab-menu.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .fab-item {
-            position: absolute;
-            width: 45px;
-            height: 45px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
+            border: 5px solid rgba(255, 255, 255, 0.2);
+            border-left-color: #00FFFF;
             border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-primary);
-            font-size: 18px;
-            transition: all 0.3s ease;
-            transform: scale(0);
-        }
-
-        .fab-menu.active .fab-item {
-            transform: scale(1);
-        }
-
-        .fab-item:hover {
-            background: var(--neon-blue);
-            color: var(--primary-bg);
-            box-shadow: 0 0 15px var(--neon-blue);
-        }
-
-        .fab-item:nth-child(1) { top: -80px; left: 0; animation-delay: 0.1s; }
-        .fab-item:nth-child(2) { top: -60px; left: 60px; animation-delay: 0.15s; }
-        .fab-item:nth-child(3) { top: 0; left: 80px; animation-delay: 0.2s; }
-        .fab-item:nth-child(4) { top: 60px; left: 60px; animation-delay: 0.25s; }
-        .fab-item:nth-child(5) { top: 80px; left: 0; animation-delay: 0.3s; }
-        .fab-item:nth-child(6) { top: 60px; left: -60px; animation-delay: 0.35s; }
-        .fab-item:nth-child(7) { top: 0; left: -80px; animation-delay: 0.4s; }
-        .fab-item:nth-child(8) { top: -60px; left: -60px; animation-delay: 0.45s; }
-
-        /* Selector Mode */
-        .selector-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            cursor: crosshair;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            z-index: 100;
             display: none;
         }
-
-        .selector-overlay.active {
-            display: block;
-        }
-
-        .crop-area {
-            position: absolute;
-            border: 2px dashed var(--neon-blue);
-            background: rgba(0, 212, 255, 0.1);
-            pointer-events: none;
-        }
-
-        /* Notifications */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            padding: 1rem 1.5rem;
-            color: var(--text-primary);
-            z-index: 3000;
-            transform: translateX(400px);
-            transition: all 0.3s ease;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.success {
-            border-left: 4px solid var(--neon-green);
-        }
-
-        .notification.error {
-            border-left: 4px solid var(--neon-pink);
-        }
-
-        /* Footer */
-        .footer {
-            background: rgba(26, 26, 46, 0.8);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid var(--glass-border);
-            padding: 0.5rem 1rem;
-            text-align: center;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-            font-size: 0.8rem;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .social-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-
-        .social-link:hover {
-            color: var(--neon-blue);
-            text-shadow: 0 0 10px var(--neon-blue);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .main-container {
-                flex-direction: column;
-                height: auto;
-                min-height: calc(100vh - 120px);
-            }
-            
-            .fab-container {
-                top: 70px;
-                right: 20px;
-                left: auto;
-                transform: none;
-            }
-            
-            .header-content {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-            
-            .footer-content {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-        }
-
-        /* View Modes */
-        .fullscreen-editor .preview-panel,
-        .fullscreen-preview .editor-panel {
-            display: none;
-        }
-
-        .fullscreen-editor .editor-panel,
-        .fullscreen-preview .preview-panel {
-            flex: 1;
-        }
-
-        /* Syntax Highlighting */
-        .highlight-html { color: #ff6b6b; }
-        .highlight-css { color: #4ecdc4; }
-        .highlight-js { color: #ffe66d; }
-        .highlight-tag { color: #ff8a80; }
-        .highlight-attr { color: #82b1ff; }
-        .highlight-string { color: #c3e88d; }
-        .highlight-comment { color: #546e7a; }
-
-        /* Loading Animation */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: var(--neon-blue);
-            animation: spin 1s ease-in-out infinite;
-        }
-
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
         }
-
-        /* Tooltip */
-        .tooltip {
-            position: relative;
+        .hint-text {
+            background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.6), rgba(255,255,255,0.1));
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: sweep-animation 6s linear infinite;
         }
-
-        .tooltip::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary-bg);
-            color: var(--text-primary);
-            padding: 0.5rem;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        .tooltip:hover::after {
-            opacity: 1;
-            visibility: visible;
+        @keyframes sweep-animation {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
     </style>
 </head>
-<body>
-    <!-- Background Effects -->
-    <div class="bg-effects">
-        <div class="matrix-rain" id="matrixRain"></div>
+<body class="bg-black text-white flex flex-col h-screen">
+    <!-- Preview Area -->
+    <div id="previewArea" class="relative overflow-hidden flex-grow">
+        <canvas id="particleCanvas" class="absolute inset-0 w-full h-full"></canvas>
+        <div id="loader"></div>
+        <label for="imageUpload" id="uploadPrompt">
+            <div class="upload-content">
+                <span class="plus-icon">+</span>
+                <h2>Upload Media</h2>
+            </div>
+            <p>PNG , JPEG , WEBp , ....</p>
+        </label>
+        <input type="file" id="imageUpload" accept="image/png,image/jpeg,image/webp" class="hidden">
     </div>
 
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo" id="logo">CUMpieLER by ☬SHΞN™</div>
-            <div class="view-controls">
-                <button class="view-btn active" data-view="split">تقسیم</button>
-                <button class="view-btn" data-view="editor">ویرایشگر</button>
-                <button class="view-btn" data-view="preview">پیش‌نمایش</button>
+    <!-- Control Panel -->
+    <div class="control-panel-wrapper flex-shrink-0">
+        <div class="control-panel p-4" style="height: 30vh;">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 overflow-y-auto h-full pr-2 scroll-container">
+                <!-- Particle Settings -->
+                <div class="flex flex-col gap-3">
+                    <h3 class="text-lg font-semibold text-gray-100 border-b border-white/10 pb-2">تنظیمات ذرات</h3>
+                    <div>
+                        <label for="particleSize" class="slider-label">اندازه: <span id="particleSizeValue" class="font-bold text-cyan-300"></span></label>
+                        <input type="range" id="particleSize" min="0.5" max="5" step="0.1" value="1.2" class="input-range">
+                    </div>
+                    <div>
+                        <label for="particleGap" class="slider-label">فاصله: <span id="particleGapValue" class="font-bold text-cyan-300"></span></label>
+                        <input type="range" id="particleGap" min="1" max="10" step="1" value="2" class="input-range">
+                    </div>
+                     <div>
+                        <label for="particleDensity" class="slider-label">تراکم: <span id="particleDensityValue" class="font-bold text-cyan-300"></span></label>
+                        <input type="range" id="particleDensity" min="1" max="50" step="1" value="26" class="input-range">
+                    </div>
+                    <div>
+                        <label for="returnSpeed" class="slider-label">سرعت بازگشت: <span id="returnSpeedValue" class="font-bold text-cyan-300"></span></label>
+                        <input type="range" id="returnSpeed" min="5" max="50" step="1" value="12" class="input-range">
+                    </div>
+                </div>
+
+                <!-- Interaction Settings -->
+                <div class="flex flex-col gap-3">
+                     <h3 class="text-lg font-semibold text-gray-100 border-b border-white/10 pb-2">تنظیمات تعامل</h3>
+                     <div>
+                        <label for="interactionRadius" class="slider-label">شعاع تأثیر: <span id="interactionRadiusValue" class="font-bold text-cyan-300"></span></label>
+                        <input type="range" id="interactionRadius" min="50" max="500" step="10" value="400" class="input-range">
+                    </div>
+                    <div>
+                        <label for="forceIntensity" class="slider-label">شدت نیرو: <span id="forceIntensityValue" class="font-bold text-cyan-300"></span></label>
+                        <input type="range" id="forceIntensity" min="0.1" max="3" step="0.1" value="1.7" class="input-range">
+                    </div>
+                     <div>
+                        <label for="interactionDelay" class="slider-label">تأخیر واکنش: <span id="interactionDelayValue" class="font-bold text-cyan-300"></span></label>
+                        <input type="range" id="interactionDelay" min="0" max="500" step="50" value="0" class="input-range">
+                    </div>
+                    <div>
+                        <label for="returnDelay" class="slider-label">تأخیر بازگشت: <span id="returnDelayValue" class="font-bold text-cyan-300"></span></label>
+                        <input type="range" id="returnDelay" min="0" max="500" step="50" value="0" class="input-range">
+                    </div>
+                </div>
+
+                <!-- Display & Color -->
+                <div class="flex flex-col gap-3">
+                    <h3 class="text-lg font-semibold text-gray-100 border-b border-white/10 pb-2">نمایش و رنگ</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="radio-group flex flex-col gap-3">
+                            <span class="font-semibold text-gray-400 text-sm">حالت نمایش:</span>
+                            <label><input type="radio" name="displayMode" value="image" checked> <span class="ml-2">تصویر</span></label>
+                            <label><input type="radio" name="displayMode" value="circle"> <span class="ml-2">دایره</span></label>
+                            <label><input type="radio" name="displayMode" value="scatter"> <span class="ml-2">پراکنده</span></label>
+                            <label><input type="radio" name="displayMode" value="grid"> <span class="ml-2">شبکه</span></label>
+                        </div>
+                        <div class="radio-group flex flex-col gap-3">
+                            <span class="font-semibold text-gray-400 text-sm">حالت رنگ:</span>
+                            <label><input type="radio" name="colorMode" value="original" checked> <span class="ml-2">اصلی</span></label>
+                            <label><input type="radio" name="colorMode" value="dynamicRgb"> <span class="ml-2">RGB متحرک</span></label>
+                            <label><input type="radio" name="colorMode" value="monochromatic"> <span class="ml-2">تک‌رنگ</span></label>
+                            <input type="color" id="monoColor" value="#00FFFF" class="color-picker">
+                            <label><input type="radio" name="colorMode" value="gradient"> <span class="ml-2">گرادیانت</span></label>
+                            <div class="flex gap-2">
+                                <input type="color" id="gradientColor1" value="#FF00FF" class="color-picker">
+                                <input type="color" id="gradientColor2" value="#00FFFF" class="color-picker">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Effects & Download -->
+                <div class="flex flex-col gap-3">
+                    <h3 class="text-lg font-semibold text-gray-100 border-b border-white/10 pb-2">افکت‌ها و خروجی</h3>
+                    <div class="checkbox-group grid grid-cols-2 gap-3 mt-2">
+                        <label><input type="checkbox" id="gravityEffect" checked> <span class="ml-2">گرانش</span></label>
+                        <label><input type="checkbox" id="explosionEffect"> <span class="ml-2">انفجار</span></label>
+                        <label><input type="checkbox" id="waveEffect"> <span class="ml-2">موج</span></label>
+                        <label><input type="checkbox" id="swirlEffect"> <span class="ml-2">چرخش</span></label>
+                    </div>
+                    <div class="mt-auto flex flex-col gap-4">
+                         <button id="downloadHtml" class="main-button" disabled>
+                            دانلود فایل HTML
+                        </button>
+                        <p class="hint-text text-center text-xs opacity-75 self-center">> Exclusive by ☬SHΞN™ </p>
+                    </div>
+                </div>
             </div>
         </div>
-    </header>
+    </div>
 
-    <!-- Main Container -->
-    <main class="main-container" id="mainContainer">
-        <!-- Editor Panel -->
-        <div class="panel editor-panel">
-            <div class="panel-header">
-                <div class="panel-title">🤖 ویرایشگر کد</div>
-                <div class="panel-info">HTML/CSS/JS</div>
-            </div>
-            <textarea class="code-editor" id="codeEditor" placeholder="کد HTML خود را اینجا بنویسید..."><!DOCTYPE html>
-<html lang="fa">
+    <script>
+    /*
+        Particle Image Creator - Pro Final Design
+        Developed by ☬SHΞN™
+    */
+
+    // --- DOM Elements ---
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    const imageUpload = document.getElementById('imageUpload');
+    const uploadPrompt = document.getElementById('uploadPrompt');
+    const downloadHtmlBtn = document.getElementById('downloadHtml');
+    const loader = document.getElementById('loader');
+    const allInputs = document.querySelectorAll('input');
+
+    // --- Global State ---
+    let particles = [];
+    let baseImageParticles = [];
+    let currentImageBase64 = '';
+    let animationFrameId;
+    let hue = 0;
+    let mouse = { x: undefined, y: undefined };
+    let isPointerDown = false;
+    let lastClickTime = 0;
+
+    // --- Configuration Settings ---
+    let settings = {};
+
+    function updateSettings() {
+        settings = {
+            particleSize: parseFloat(document.getElementById('particleSize').value),
+            particleGap: parseInt(document.getElementById('particleGap').value),
+            particleDensity: parseInt(document.getElementById('particleDensity').value),
+            returnSpeed: parseInt(document.getElementById('returnSpeed').value),
+            displayMode: document.querySelector('input[name="displayMode"]:checked').value,
+            colorMode: document.querySelector('input[name="colorMode"]:checked').value,
+            monoColor: document.getElementById('monoColor').value,
+            gradientColor1: document.getElementById('gradientColor1').value,
+            gradientColor2: document.getElementById('gradientColor2').value,
+            interactionRadius: parseInt(document.getElementById('interactionRadius').value),
+            forceIntensity: parseFloat(document.getElementById('forceIntensity').value),
+            gravityEffect: document.getElementById('gravityEffect').checked,
+            explosionEffect: document.getElementById('explosionEffect').checked,
+            waveEffect: document.getElementById('waveEffect').checked,
+            swirlEffect: document.getElementById('swirlEffect').checked,
+            imageScale: 0.80,
+            maxParticles: 10000 
+        };
+    }
+
+    // --- Particle Class Definition ---
+    class Particle {
+        constructor(x, y, color) {
+            this.x = x;
+            this.y = y;
+            this.baseX = x;
+            this.baseY = y;
+            this.originalColor = color;
+            this.density = (Math.random() * (settings.particleDensity / 2)) + (settings.particleDensity / 2);
+            this.isInteracting = false;
+            this.vx = 0;
+            this.vy = 0;
+        }
+
+        draw() {
+            let displayColor = this.originalColor;
+            
+            if (settings.colorMode === 'dynamicRgb') {
+                if (this.isInteracting) {
+                    const particleHue = (hue + (this.x - this.y) * 0.3) % 360;
+                    displayColor = `hsl(${particleHue}, 100%, 65%)`;
+                }
+            } else if (settings.colorMode === 'monochromatic') {
+                displayColor = settings.monoColor;
+            } else if (settings.colorMode === 'gradient') {
+                const color1 = hexToRgb(settings.gradientColor1);
+                const color2 = hexToRgb(settings.gradientColor2);
+                const ratio = Math.min(this.y / canvas.height, 1);
+                const r = Math.floor(color1.r + (color2.r - color1.r) * ratio);
+                const g = Math.floor(color1.g + (color2.g - color1.g) * ratio);
+                const b = Math.floor(color1.b + (color2.b - color1.b) * ratio);
+                displayColor = `rgb(${r},${g},${b})`;
+            }
+
+            ctx.fillStyle = displayColor;
+            ctx.fillRect(this.x, this.y, settings.particleSize, settings.particleSize);
+        }
+
+        update() {
+            const dx = mouse.x - this.x;
+            const dy = mouse.y - this.y;
+            const distance = Math.sqrt(dx * dx + dy * dy) || 1;
+
+            this.isInteracting = (isPointerDown && distance < settings.interactionRadius);
+
+            if (this.isInteracting) {
+                const force = (settings.interactionRadius - distance) / settings.interactionRadius;
+                this.vx -= (dx / distance) * force * this.density * settings.forceIntensity * 0.1;
+                this.vy -= (dy / distance) * force * this.density * settings.forceIntensity * 0.1;
+            }
+            
+            // Apply spring force to return to base position
+            const returnForceX = (this.baseX - this.x) / (settings.returnSpeed * 2);
+            const returnForceY = (this.baseY - this.y) / (settings.returnSpeed * 2);
+            this.vx += returnForceX;
+            this.vy += returnForceY;
+
+            // Apply continuous effects
+            if (settings.gravityEffect) this.vy += 0.05;
+            if (settings.waveEffect) this.vx += Math.sin(this.y * 0.05 + hue * 0.05) * 0.1;
+            if (settings.swirlEffect) {
+                const angle = Math.atan2(this.y - canvas.height / 2, this.x - canvas.width / 2);
+                const swirlForce = Math.min(distance / 10000, 0.1);
+                this.vx += -Math.sin(angle) * swirlForce;
+                this.vy += Math.cos(angle) * swirlForce;
+            }
+
+            this.x += this.vx;
+            this.y += this.vy;
+            this.vx *= 0.90; // Damping
+            this.vy *= 0.90;
+        }
+    }
+
+    // --- Core Functions ---
+    function init() {
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        if (!currentImageBase64) {
+            uploadPrompt.style.display = 'flex';
+            return;
+        }
+        uploadPrompt.style.display = 'none';
+        loader.style.display = 'block';
+
+        const mainImage = new Image();
+        mainImage.crossOrigin = "Anonymous";
+        mainImage.src = currentImageBase64;
+
+        mainImage.onload = () => {
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            
+            const effectiveHeight = canvas.height * 0.7; 
+            const maxCanvasDim = Math.min(canvas.width, effectiveHeight) * settings.imageScale;
+            const scale = Math.min(maxCanvasDim / mainImage.width, maxCanvasDim / mainImage.height);
+            const scaledWidth = Math.floor(mainImage.width * scale);
+            const scaledHeight = Math.floor(mainImage.height * scale);
+            
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+
+            const xOffset = Math.floor((canvas.width - scaledWidth) / 2);
+            const yOffset = Math.floor((effectiveHeight - scaledHeight) / 2);
+
+            tempCtx.drawImage(mainImage, xOffset, yOffset, scaledWidth, scaledHeight);
+            const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+
+            baseImageParticles = [];
+            for (let y = 0; y < imageData.height; y += settings.particleGap) {
+                for (let x = 0; x < imageData.width; x += settings.particleGap) {
+                    const alpha = imageData.data[(y * imageData.width + x) * 4 + 3];
+                    if (alpha > 128) {
+                        const r = imageData.data[(y * imageData.width + x) * 4];
+                        const g = imageData.data[(y * imageData.width + x) * 4 + 1];
+                        const b = imageData.data[(y * imageData.width + x) * 4 + 2];
+                        baseImageParticles.push({ x, y, color: `rgb(${r},${g},${b})` });
+                    }
+                }
+            }
+            
+            const shuffled = baseImageParticles.sort(() => 0.5 - Math.random());
+            particles = shuffled.slice(0, settings.maxParticles).map(pData => new Particle(pData.x, pData.y, pData.color));
+            
+            loader.style.display = 'none';
+            if (!animationFrameId) animate();
+        };
+        mainImage.onerror = () => {
+            loader.style.display = 'none';
+            showPlaceholderMessage('خطا در بارگذاری تصویر');
+        };
+    }
+
+    function updateParticlePositions() {
+        if (!particles.length || !baseImageParticles.length) return;
+
+        if (settings.displayMode === 'image') {
+            particles.forEach((p, i) => {
+                if (baseImageParticles[i]) {
+                    p.baseX = baseImageParticles[i].x;
+                    p.baseY = baseImageParticles[i].y;
+                }
+            });
+            return;
+        }
+        
+        let targetParticles = [];
+        const particleCount = particles.length;
+
+        if (settings.displayMode === 'circle') {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = Math.min(canvas.width, canvas.height) * 0.35;
+            targetParticles = Array.from({ length: particleCount }, (_, i) => ({
+                x: centerX + Math.cos((i / particleCount) * Math.PI * 2) * radius,
+                y: centerY + Math.sin((i / particleCount) * Math.PI * 2) * radius
+            }));
+        } else if (settings.displayMode === 'scatter') {
+            targetParticles = Array.from({ length: particleCount }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height
+            }));
+        } else if (settings.displayMode === 'grid') {
+            const gridSpacing = 20;
+            const cols = Math.floor(Math.sqrt(particleCount) * (canvas.width / canvas.height));
+            const startX = (canvas.width - (cols * gridSpacing)) / 2;
+            const startY = (canvas.height - (Math.ceil(particleCount / cols) * gridSpacing)) / 2;
+            targetParticles = Array.from({ length: particleCount }, (_, i) => ({
+                x: startX + (i % cols) * gridSpacing,
+                y: startY + Math.floor(i / cols) * gridSpacing
+            }));
+        }
+        
+        particles.forEach((p, i) => {
+            if (targetParticles[i]) {
+                p.baseX = targetParticles[i].x;
+                p.baseY = targetParticles[i].y;
+            }
+        });
+    }
+
+    function animate() {
+        hue++;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw();
+        }
+        animationFrameId = requestAnimationFrame(animate);
+    }
+
+    // --- Helper Functions ---
+    function showPlaceholderMessage(message) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.font = '24px Vazirmatn';
+        ctx.textAlign = 'center';
+        ctx.fillText(message, canvas.width / 2, canvas.height / 2);
+    }
+    function hexToRgb(hex) {
+        let r = 0, g = 0, b = 0;
+        if (hex.length == 4) { r = parseInt(hex[1] + hex[1], 16); g = parseInt(hex[2] + hex[2], 16); b = parseInt(hex[3] + hex[3], 16); }
+        else if (hex.length == 7) { r = parseInt(hex.substring(1, 3), 16); g = parseInt(hex.substring(3, 5), 16); b = parseInt(hex.substring(5, 7), 16); }
+        return { r, g, b };
+    }
+    function debounce(func, delay) {
+        let timeout;
+        return function(...args) { clearTimeout(timeout); timeout = setTimeout(() => func.apply(this, args), delay); };
+    }
+    function applyExplosionEffect() {
+        if (!settings.explosionEffect) return;
+        particles.forEach(p => {
+            const dx = p.x - mouse.x;
+            const dy = p.y - mouse.y;
+            const distance = Math.sqrt(dx * dx + dy * dy) + 1;
+            if (distance < settings.interactionRadius) {
+                const angle = Math.atan2(dy, dx);
+                const force = (settings.interactionRadius - distance) / distance;
+                p.vx += Math.cos(angle) * force * 20;
+                p.vy += Math.sin(angle) * force * 20;
+            }
+        });
+    }
+
+    // --- Event Handlers ---
+    function handleSettingsChange(e) {
+        updateSettings();
+        
+        const { id, name } = e.target;
+
+        const valueSpan = document.getElementById(id + 'Value');
+        if (valueSpan) {
+            valueSpan.textContent = e.target.value;
+        }
+
+        document.getElementById('monoColor').disabled = (settings.colorMode !== 'monochromatic');
+        document.getElementById('gradientColor1').disabled = (settings.colorMode !== 'gradient');
+        document.getElementById('gradientColor2').disabled = (settings.colorMode !== 'gradient');
+
+        if (id === 'particleGap' && currentImageBase64) {
+            init();
+        } else if (name === 'displayMode' && currentImageBase64) {
+            updateParticlePositions();
+        }
+    }
+    
+    function handleFileUpload(file) {
+        if (file && (file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/webp')) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                currentImageBase64 = event.target.result;
+                downloadHtmlBtn.disabled = false;
+                init();
+            };
+            reader.readAsDataURL(file);
+        } else {
+            alert('لطفا یک فایل تصویر معتبر (PNG, JPEG, WEBP) انتخاب کنید.');
+        }
+    }
+
+    // --- Interaction Event Listeners ---
+    function setPointerPosition(e) {
+        const rect = canvas.getBoundingClientRect();
+        const event = e.touches ? e.touches[0] : e;
+        mouse.x = event.clientX - rect.left;
+        mouse.y = event.clientY - rect.top;
+    }
+
+    function onPointerDown(e) {
+        isPointerDown = true;
+        setPointerPosition(e);
+        if (Date.now() - lastClickTime < 300) {
+            applyExplosionEffect();
+        }
+        lastClickTime = Date.now();
+    }
+
+    function onPointerMove(e) {
+        if (isPointerDown) {
+            setPointerPosition(e);
+        }
+    }
+
+    function onPointerUp() {
+        isPointerDown = false;
+    }
+
+    canvas.addEventListener('mousedown', onPointerDown);
+    canvas.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
+    canvas.addEventListener('mouseleave', onPointerUp);
+
+    canvas.addEventListener('touchstart', onPointerDown, { passive: true });
+    canvas.addEventListener('touchmove', onPointerMove, { passive: true });
+    window.addEventListener('touchend', onPointerUp);
+    window.addEventListener('touchcancel', onPointerUp);
+
+    // --- Other Listeners ---
+    allInputs.forEach(input => {
+        input.addEventListener('input', handleSettingsChange);
+    });
+    imageUpload.addEventListener('change', (e) => handleFileUpload(e.target.files[0]));
+
+    // --- Download Functionality (FIXED) ---
+    downloadHtmlBtn.addEventListener('click', () => {
+        if (!currentImageBase64) {
+            alert('لطفا ابتدا یک تصویر آپلود کنید.');
+            return;
+        }
+        
+        const settingsToEmbed = { ...settings };
+        
+        const standaloneScript = `
+        (function() {
+            const canvas = document.getElementById('particleCanvas');
+            const ctx = canvas.getContext('2d');
+            const settings = ${JSON.stringify(settingsToEmbed)};
+            const IMAGE_BASE64 = \`${currentImageBase64}\`;
+            let particles = [];
+            let animationFrameId;
+            let hue = 0;
+            let mouse = { x: undefined, y: undefined };
+            let isPointerDown = false;
+
+            class Particle {
+                constructor(x, y, color) {
+                    this.x = x; this.y = y; this.baseX = x; this.baseY = y;
+                    this.originalColor = color;
+                    this.density = (Math.random() * (settings.particleDensity / 2)) + (settings.particleDensity / 2);
+                    this.isInteracting = false;
+                    this.vx = 0; this.vy = 0;
+                }
+                draw() {
+                    let displayColor = this.originalColor;
+                    if (settings.colorMode === 'dynamicRgb' && this.isInteracting) {
+                        const particleHue = (hue + (this.x - this.y) * 0.3) % 360;
+                        displayColor = \`hsl(\${particleHue}, 100%, 65%)\`;
+                    } else if (settings.colorMode === 'monochromatic') {
+                        displayColor = settings.monoColor;
+                    } else if (settings.colorMode === 'gradient') {
+                        const color1 = hexToRgb(settings.gradientColor1);
+                        const color2 = hexToRgb(settings.gradientColor2);
+                        const ratio = Math.min(this.y / canvas.height, 1);
+                        const r = Math.floor(color1.r + (color2.r - color1.r) * ratio);
+                        const g = Math.floor(color1.g + (color2.g - color1.g) * ratio);
+                        const b = Math.floor(color1.b + (color2.b - color1.b) * ratio);
+                        displayColor = \`rgb(\${r},\${g},\${b})\`;
+                    }
+                    ctx.fillStyle = displayColor;
+                    ctx.fillRect(this.x, this.y, settings.particleSize, settings.particleSize);
+                }
+                update() {
+                    const dx = mouse.x - this.x; const dy = mouse.y - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy) || 1;
+                    this.isInteracting = (isPointerDown && distance < settings.interactionRadius);
+                    if (this.isInteracting) {
+                        const force = (settings.interactionRadius - distance) / settings.interactionRadius;
+                        this.vx -= (dx / distance) * force * this.density * settings.forceIntensity * 0.1;
+                        this.vy -= (dy / distance) * force * this.density * settings.forceIntensity * 0.1;
+                    }
+                    this.vx += (this.baseX - this.x) / (settings.returnSpeed * 2);
+                    this.vy += (this.baseY - this.y) / (settings.returnSpeed * 2);
+                    if (settings.gravityEffect) this.vy += 0.05;
+                    if (settings.waveEffect) this.vx += Math.sin(this.y * 0.05 + hue * 0.05) * 0.1;
+                    if (settings.swirlEffect) {
+                        const angle = Math.atan2(this.y - canvas.height / 2, this.x - canvas.width / 2);
+                        const swirlForce = Math.min(distance / 10000, 0.1);
+                        this.vx += -Math.sin(angle) * swirlForce;
+                        this.vy += Math.cos(angle) * swirlForce;
+                    }
+                    this.x += this.vx; this.y += this.vy;
+                    this.vx *= 0.90; this.vy *= 0.90;
+                }
+            }
+
+            function init() {
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                const mainImage = new Image();
+                mainImage.crossOrigin = "Anonymous";
+                mainImage.src = IMAGE_BASE64;
+                mainImage.onload = () => {
+                    const tempCanvas = document.createElement('canvas');
+                    const tempCtx = tempCanvas.getContext('2d');
+                    const maxCanvasDim = Math.min(canvas.width, canvas.height) * settings.imageScale;
+                    const scale = Math.min(maxCanvasDim / mainImage.width, maxCanvasDim / mainImage.height);
+                    const scaledWidth = Math.floor(mainImage.width * scale);
+                    const scaledHeight = Math.floor(mainImage.height * scale);
+                    tempCanvas.width = canvas.width; tempCanvas.height = canvas.height;
+                    const xOffset = Math.floor((canvas.width - scaledWidth) / 2);
+                    const yOffset = Math.floor((canvas.height * 0.7 - scaledHeight) / 2);
+                    tempCtx.drawImage(mainImage, xOffset, yOffset, scaledWidth, scaledHeight);
+                    const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+                    let baseImageParticles = [];
+                    for (let y = 0; y < imageData.height; y += settings.particleGap) {
+                        for (let x = 0; x < imageData.width; x += settings.particleGap) {
+                            if (imageData.data[(y * imageData.width + x) * 4 + 3] > 128) {
+                                const r = imageData.data[(y * imageData.width + x) * 4];
+                                const g = imageData.data[(y * imageData.width + x) * 4 + 1];
+                                const b = imageData.data[(y * imageData.width + x) * 4 + 2];
+                                baseImageParticles.push({ x, y, color: \`rgb(\${r},\${g},\${b})\` });
+                            }
+                        }
+                    }
+                    const shuffled = baseImageParticles.sort(() => 0.5 - Math.random());
+                    particles = shuffled.slice(0, settings.maxParticles).map(pData => new Particle(pData.x, pData.y, pData.color));
+                    animate();
+                };
+            }
+
+            function animate() {
+                hue++;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                }
+                animationFrameId = requestAnimationFrame(animate);
+            }
+            function hexToRgb(hex) {
+                let r = 0, g = 0, b = 0;
+                if (hex.length == 4) { r = parseInt(hex[1] + hex[1], 16); g = parseInt(hex[2] + hex[2], 16); b = parseInt(hex[3] + hex[3], 16); }
+                else if (hex.length == 7) { r = parseInt(hex.substring(1, 3), 16); g = parseInt(hex.substring(3, 5), 16); b = parseInt(hex.substring(5, 7), 16); }
+                return { r, g, b };
+            }
+
+            function setPointerPosition(e) {
+                const rect = canvas.getBoundingClientRect();
+                const event = e.touches ? e.touches[0] : e;
+                mouse.x = event.clientX - rect.left;
+                mouse.y = event.clientY - rect.top;
+            }
+            canvas.addEventListener('mousedown', (e) => { isPointerDown = true; setPointerPosition(e); });
+            canvas.addEventListener('mousemove', (e) => { if (isPointerDown) setPointerPosition(e); });
+            window.addEventListener('mouseup', () => { isPointerDown = false; });
+            canvas.addEventListener('touchstart', (e) => { isPointerDown = true; setPointerPosition(e); }, { passive: true });
+            canvas.addEventListener('touchmove', (e) => { if (isPointerDown) setPointerPosition(e); }, { passive: true });
+            window.addEventListener('touchend', () => { isPointerDown = false; });
+            
+            init();
+            window.addEventListener('resize', init);
+        })();
+    `;
+
+        const htmlContent = `
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نمونه صفحه</title>
+    <title>Particle Image by ☬SHΞN™</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            text-align: center;
-            max-width: 500px;
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        p {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        .btn {
-            background: #667eea;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-        .btn:hover {
-            background: #764ba2;
-            transform: translateY(-2px);
-        }
+        body { margin: 0; overflow: hidden; background-color: #0a0a0a; }
+        canvas { display: block; touch-action: none; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>سلام دنیا! 👋</h1>
-        <p>این یک نمونه صفحه HTML است که با CUMpieLER ساخته شده.</p>
-        <button class="btn" onclick="alert('سلام از CUMpieLER!')">کلیک کنید</button>
-    </div>
-</body>
-</html></textarea>
-        </div>
-
-        <!-- Preview Panel -->
-        <div class="panel preview-panel">
-            <div class="panel-header">
-                <div class="panel-title">🫣 پیشـ نمایش</div>
-                <div class="panel-info">Live Preview</div>
-            </div>
-            <iframe class="preview-frame" id="previewFrame"></iframe>
-        </div>
-    </main>
-
-    <!-- Floating Action Button -->
-    <div class="fab-container" id="fabContainer">
-        <button class="fab-main" id="fabMain">🛠️</button>
-        <div class="fab-menu" id="fabMenu">
-            <button class="fab-item tooltip" data-tooltip="اجرا" id="runCode">▶️</button>
-            <button class="fab-item tooltip" data-tooltip="فرمت" id="formatCode">🎨</button>
-            <button class="fab-item tooltip" data-tooltip="دانلود" id="downloadCode">💾</button>
-            <button class="fab-item tooltip" data-tooltip="کپی" id="copyCode">📋</button>
-            <button class="fab-item tooltip" data-tooltip="پاک کردن" id="clearCode">🗑️</button>
-            <button class="fab-item tooltip" data-tooltip="انتخابگر" id="selectorTool">🎯</button>
-            <button class="fab-item tooltip" data-tooltip="راهنما" id="showHelp">❓</button>
-            <button class="fab-item tooltip" data-tooltip="تنظیمات" id="settings">⚙️</button>
-        </div>
-    </div>
-
-    <!-- Selector Overlay -->
-    <div class="selector-overlay" id="selectorOverlay">
-        <div class="crop-area" id="cropArea"></div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div>طراحی و توسعه توسط ☬SHΞN™</div>
-            <div class="social-links">
-                <a href="https://t.me/shervini" class="social-link" target="_blank">📱</a>
-                <a href="https://x.com/shervinonx" class="social-link" target="_blank">🐦</a>
-                <a href="https://shervinuri.github.io" class="social-link" target="_blank">💻</a>
-            </div>
-        </div>
-    </footer>
-
+    <canvas id="particleCanvas"></canvas>
     <script>
-        class CUMpieLER {
-            constructor() {
-                this.initializeElements();
-                this.setupEventListeners();
-                this.initializeMatrixRain();
-                this.setupGlitchEffect();
-                this.runCode();
-                this.selectorMode = false;
-                this.isDragging = false;
-                this.startX = 0;
-                this.startY = 0;
-            }
+        ${standaloneScript}
+    <\/script>
+</body>
+</html>`;
+        
+        const blob = new Blob([htmlContent.trim()], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'particle_image_by_shen.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
 
-            initializeElements() {
-                this.codeEditor = document.getElementById('codeEditor');
-                this.previewFrame = document.getElementById('previewFrame');
-                this.fabMain = document.getElementById('fabMain');
-                this.fabMenu = document.getElementById('fabMenu');
-                this.fabContainer = document.getElementById('fabContainer');
-                this.mainContainer = document.getElementById('mainContainer');
-                this.selectorOverlay = document.getElementById('selectorOverlay');
-                this.cropArea = document.getElementById('cropArea');
-                this.logo = document.getElementById('logo');
-            }
-
-            setupEventListeners() {
-                // FAB Menu
-                this.fabMain.addEventListener('click', () => this.toggleFabMenu());
-                
-                // View Controls
-                document.querySelectorAll('.view-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => this.changeView(e.target.dataset.view));
-                });
-
-                // Code Editor
-                this.codeEditor.addEventListener('input', () => this.debounce(this.runCode.bind(this), 500)());
-                this.codeEditor.addEventListener('keydown', (e) => this.handleKeyboardShortcuts(e));
-
-                // FAB Items
-                document.getElementById('runCode').addEventListener('click', () => this.runCode());
-                document.getElementById('formatCode').addEventListener('click', () => this.formatCode());
-                document.getElementById('downloadCode').addEventListener('click', () => this.downloadCode());
-                document.getElementById('copyCode').addEventListener('click', () => this.copyCode());
-                document.getElementById('clearCode').addEventListener('click', () => this.clearCode());
-                document.getElementById('selectorTool').addEventListener('click', () => this.toggleSelector());
-                document.getElementById('showHelp').addEventListener('click', () => this.showHelp());
-                document.getElementById('settings').addEventListener('click', () => this.showSettings());
-
-                // Selector Events
-                this.selectorOverlay.addEventListener('mousedown', (e) => this.startCrop(e));
-                this.selectorOverlay.addEventListener('mousemove', (e) => this.updateCrop(e));
-                this.selectorOverlay.addEventListener('mouseup', (e) => this.endCrop(e));
-                this.selectorOverlay.addEventListener('click', (e) => this.handleSelectorClick(e));
-
-                // FAB Dragging
-                this.setupFabDragging();
-
-                // Preview Frame Load
-                this.previewFrame.addEventListener('load', () => this.setupPreviewInteraction());
-            }
-
-            setupFabDragging() {
-                let isDragging = false;
-                let startX, startY, startLeft, startTop;
-
-                this.fabMain.addEventListener('mousedown', (e) => {
-                    if (e.button === 0) {
-                        isDragging = true;
-                        startX = e.clientX;
-                        startY = e.clientY;
-                        const rect = this.fabContainer.getBoundingClientRect();
-                        startLeft = rect.left;
-                        startTop = rect.top;
-                        e.preventDefault();
-                    }
-                });
-
-                document.addEventListener('mousemove', (e) => {
-                    if (isDragging) {
-                        const deltaX = e.clientX - startX;
-                        const deltaY = e.clientY - startY;
-                        this.fabContainer.style.left = (startLeft + deltaX) + 'px';
-                        this.fabContainer.style.top = (startTop + deltaY) + 'px';
-                        this.fabContainer.style.transform = 'none';
-                    }
-                });
-
-                document.addEventListener('mouseup', () => {
-                    isDragging = false;
-                });
-            }
-
-            toggleFabMenu() {
-                const isActive = this.fabMenu.classList.contains('active');
-                this.fabMenu.classList.toggle('active');
-                this.fabMain.classList.toggle('active');
-                
-                if (!isActive) {
-                    this.fabMain.innerHTML = '✕';
-                } else {
-                    this.fabMain.innerHTML = '⚡';
-                }
-            }
-
-            changeView(view) {
-                document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
-                document.querySelector(`[data-view="${view}"]`).classList.add('active');
-                
-                this.mainContainer.className = 'main-container';
-                if (view === 'editor') {
-                    this.mainContainer.classList.add('fullscreen-editor');
-                } else if (view === 'preview') {
-                    this.mainContainer.classList.add('fullscreen-preview');
-                }
-            }
-
-            runCode() {
-                const code = this.codeEditor.value;
-                const blob = new Blob([code], { type: 'text/html' });
-                const url = URL.createObjectURL(blob);
-                this.previewFrame.src = url;
-                
-                setTimeout(() => URL.revokeObjectURL(url), 1000);
-            }
-
-            formatCode() {
-                let code = this.codeEditor.value;
-                
-                // Simple HTML formatting
-                code = code.replace(/></g, '>\n<');
-                code = code.replace(/^\s+|\s+$/gm, '');
-                
-                const lines = code.split('\n');
-                let indentLevel = 0;
-                const indentSize = 2;
-                
-                const formattedLines = lines.map(line => {
-                    const trimmedLine = line.trim();
-                    if (!trimmedLine) return '';
-                    
-                    if (trimmedLine.startsWith('</')) {
-                        indentLevel = Math.max(0, indentLevel - 1);
-                    }
-                    
-                    const indentedLine = ' '.repeat(indentLevel * indentSize) + trimmedLine;
-                    
-                    if (trimmedLine.startsWith('<') && !trimmedLine.startsWith('</') && !trimmedLine.endsWith('/>')) {
-                        indentLevel++;
-                    }
-                    
-                    return indentedLine;
-                });
-                
-                this.codeEditor.value = formattedLines.join('\n');
-                this.showNotification('کد فرمت شد!', 'success');
-            }
-
-            downloadCode() {
-                const code = this.codeEditor.value;
-                const blob = new Blob([code], { type: 'text/html' });
-                const url = URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `cumpieler-${Date.now()}.html`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                this.showNotification('فایل دانلود شد!', 'success');
-            }
-
-            async copyCode() {
-                try {
-                    await navigator.clipboard.writeText(this.codeEditor.value);
-                    this.showNotification('کد کپی شد!', 'success');
-                } catch (err) {
-                    this.showNotification('خطا در کپی کردن!', 'error');
-                }
-            }
-
-            clearCode() {
-                if (confirm('آیا مطمئن هستید که می‌خواهید کد را پاک کنید؟')) {
-                    this.codeEditor.value = '';
-                    this.runCode();
-                    this.showNotification('کد پاک شد!', 'success');
-                }
-            }
-
-            toggleSelector() {
-                this.selectorMode = !this.selectorMode;
-                this.selectorOverlay.classList.toggle('active', this.selectorMode);
-                
-                if (this.selectorMode) {
-                    this.showNotification('حالت انتخابگر فعال شد', 'success');
-                    document.body.style.cursor = 'crosshair';
-                } else {
-                    this.showNotification('حالت انتخابگر غیرفعال شد', 'success');
-                    document.body.style.cursor = 'default';
-                }
-                
-                this.toggleFabMenu();
-            }
-
-            startCrop(e) {
-                if (!this.selectorMode) return;
-                
-                this.isDragging = true;
-                this.startX = e.clientX;
-                this.startY = e.clientY;
-                
-                this.cropArea.style.left = this.startX + 'px';
-                this.cropArea.style.top = this.startY + 'px';
-                this.cropArea.style.width = '0px';
-                this.cropArea.style.height = '0px';
-                this.cropArea.style.display = 'block';
-            }
-
-            updateCrop(e) {
-                if (!this.isDragging || !this.selectorMode) return;
-                
-                const currentX = e.clientX;
-                const currentY = e.clientY;
-                
-                const width = Math.abs(currentX - this.startX);
-                const height = Math.abs(currentY - this.startY);
-                const left = Math.min(currentX, this.startX);
-                const top = Math.min(currentY, this.startY);
-                
-                this.cropArea.style.left = left + 'px';
-                this.cropArea.style.top = top + 'px';
-                this.cropArea.style.width = width + 'px';
-                this.cropArea.style.height = height + 'px';
-            }
-
-            endCrop(e) {
-                if (!this.isDragging || !this.selectorMode) return;
-                
-                this.isDragging = false;
-                this.cropArea.style.display = 'none';
-                
-                // Simulate element selection and code highlighting
-                this.highlightRelatedCode();
-            }
-
-            handleSelectorClick(e) {
-                if (!this.selectorMode || this.isDragging) return;
-                
-                // Simulate clicking on an element
-                this.highlightRelatedCode();
-            }
-
-            highlightRelatedCode() {
-                // Simple simulation of code highlighting
-                const code = this.codeEditor.value;
-                const lines = code.split('\n');
-                
-                // Find HTML tags and highlight them
-                let highlightStart = -1;
-                let highlightEnd = -1;
-                
-                for (let i = 0; i < lines.length; i++) {
-                    if (lines[i].includes('<div') || lines[i].includes('<h1') || lines[i].includes('<p')) {
-                        highlightStart = code.indexOf(lines[i]);
-                        highlightEnd = highlightStart + lines[i].length;
-                        break;
-                    }
-                }
-                
-                if (highlightStart !== -1) {
-                    this.codeEditor.focus();
-                    this.codeEditor.setSelectionRange(highlightStart, highlightEnd);
-                    this.showNotification('کد مربوطه هایلایت شد!', 'success');
-                }
-            }
-
-            setupPreviewInteraction() {
-                try {
-                    const previewDoc = this.previewFrame.contentDocument;
-                    if (previewDoc) {
-                        previewDoc.addEventListener('click', (e) => {
-                            if (this.selectorMode) {
-                                e.preventDefault();
-                                this.highlightElementCode(e.target);
-                            }
-                        });
-                    }
-                } catch (err) {
-                    // Cross-origin restrictions
-                }
-            }
-
-            highlightElementCode(element) {
-                const tagName = element.tagName.toLowerCase();
-                const code = this.codeEditor.value;
-                const regex = new RegExp(`<${tagName}[^>]*>`, 'i');
-                const match = code.match(regex);
-                
-                if (match) {
-                    const start = code.indexOf(match[0]);
-                    const end = start + match[0].length;
-                    this.codeEditor.focus();
-                    this.codeEditor.setSelectionRange(start, end);
-                    this.showNotification(`عنصر ${tagName} هایلایت شد!`, 'success');
-                }
-            }
-
-            showHelp() {
-                const helpText = `
-🚀 راهنمای CUMpieLER:
-
-⌨️ میانبرهای کیبورد:
-• Ctrl+Enter: اجرای کد
-• Ctrl+S: دانلود فایل
-• Ctrl+A: انتخاب همه
-• Ctrl+Z: بازگشت
-• Ctrl+Y: تکرار
-
-🎯 ابزار انتخابگر:
-• کلیک روی عناصر در پیش‌نمایش
-• کشیدن برای انتخاب ناحیه
-• کد مربوطه هایلایت می‌شود
-
-📱 حالت‌های نمایش:
-• تقسیم: نمایش همزمان کد و پیش‌نمایش
-• ویرایشگر: تمام صفحه برای کدنویسی
-• پیش‌نمایش: تمام صفحه برای نمایش
-
-💡 نکات:
-• کد به صورت خودکار اجرا می‌شود
-• از HTML, CSS, JS پشتیبانی می‌کند
-• دکمه شناور قابل جابجایی است
-                `;
-                
-                alert(helpText);
-                this.toggleFabMenu();
-            }
-
-            showSettings() {
-                const settings = prompt(`
-⚙️ تنظیمات CUMpieLER:
-
-1. اندازه فونت ویرایشگر (px):
-فعلی: 14px
-                `, '14');
-                
-                if (settings) {
-                    this.codeEditor.style.fontSize = settings + 'px';
-                    this.showNotification('تنظیمات اعمال شد!', 'success');
-                }
-                
-                this.toggleFabMenu();
-            }
-
-            handleKeyboardShortcuts(e) {
-                if (e.ctrlKey) {
-                    switch (e.key) {
-                        case 'Enter':
-                            e.preventDefault();
-                            this.runCode();
-                            break;
-                        case 's':
-                            e.preventDefault();
-                            this.downloadCode();
-                            break;
-                    }
-                }
-            }
-
-            showNotification(message, type = 'success') {
-                const notification = document.createElement('div');
-                notification.className = `notification ${type}`;
-                notification.textContent = message;
-                
-                document.body.appendChild(notification);
-                
-                setTimeout(() => notification.classList.add('show'), 100);
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                    setTimeout(() => document.body.removeChild(notification), 300);
-                }, 3000);
-            }
-
-            initializeMatrixRain() {
-                const matrixRain = document.getElementById('matrixRain');
-                const chars = '01';
-                
-                for (let i = 0; i < 50; i++) {
-                    const char = document.createElement('div');
-                    char.className = 'matrix-char';
-                    char.textContent = chars[Math.floor(Math.random() * chars.length)];
-                    char.style.left = Math.random() * 100 + '%';
-                    char.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                    char.style.animationDelay = Math.random() * 2 + 's';
-                    matrixRain.appendChild(char);
-                }
-            }
-
-            setupGlitchEffect() {
-                setInterval(() => {
-                    if (Math.random() < 0.1) { // 10% chance every interval
-                        this.logo.classList.add('glitch');
-                        setTimeout(() => {
-                            this.logo.classList.remove('glitch');
-                        }, 300);
-                    }
-                }, 5000); // Check every 5 seconds
-            }
-
-            debounce(func, wait) {
-                let timeout;
-                return function executedFunction(...args) {
-                    const later = () => {
-                        clearTimeout(timeout);
-                        func(...args);
-                    };
-                    clearTimeout(timeout);
-                    timeout = setTimeout(later, wait);
-                };
-            }
-        }
-
-        // Initialize CUMpieLER when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            new CUMpieLER();
-        });
-
-        // Prevent context menu on FAB
-        document.addEventListener('contextmenu', (e) => {
-            if (e.target.closest('.fab-container')) {
-                e.preventDefault();
+    // --- Initial Load ---
+    window.addEventListener('load', () => {
+        updateSettings();
+        allInputs.forEach(input => {
+            const valueSpan = document.getElementById(input.id + 'Value');
+            if (valueSpan) {
+                valueSpan.textContent = input.value;
             }
         });
+        document.getElementById('monoColor').disabled = true;
+        document.getElementById('gradientColor1').disabled = true;
+        document.getElementById('gradientColor2').disabled = true;
+        document.getElementById('gravityEffect').checked = true;
+
+
+        init();
+    });
+    window.addEventListener('resize', debounce(init, 250));
+
     </script>
 </body>
 </html>
