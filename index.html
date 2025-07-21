@@ -1,836 +1,553 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ParticleImageCreator - ☬SHΞN™ (Physics Fixed)</title>
-    <!-- Tailwind CSS CDN -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>☬SHΞN™ Art Creator | Final Stable Version</title>
+
+    <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Google Font: Vazirmatn -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet" />
+
     <style>
-        /* Pro Final UI by SHΞN™ */
+        /* General styles */
         body {
-            font-family: 'Vazirmatn', sans-serif;
-            overflow: hidden;
+            font-family: "Vazirmatn", sans-serif;
             background-color: #000;
+            overflow: hidden;
         }
-        #particleCanvas {
-            display: block;
-            touch-action: none;
-            background-color: #0a0a0a;
-        }
-        #uploadPrompt {
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255, 255, 255, 0.3);
-            border: 2px dashed rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 2.5rem 3.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 20;
-            user-select: none; /* Make text non-selectable */
-            -webkit-user-select: none;
-        }
-        #uploadPrompt:hover {
-            color: rgba(255, 255, 255, 0.6);
-            border-color: rgba(255, 255, 255, 0.4);
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-        #uploadPrompt .upload-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-        }
-        #uploadPrompt .plus-icon {
-            font-size: 3rem;
-            font-weight: 200;
-            line-height: 1;
-        }
-        #uploadPrompt h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-        #uploadPrompt p {
-            font-size: 0.8rem;
-            margin-top: 0.75rem;
-            text-align: center;
-        }
-        .control-panel-wrapper {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 10;
-        }
-        .control-panel-wrapper::before {
-            content: '';
-            position: absolute;
-            top: -80px;
-            left: 0;
-            right: 0;
-            height: 80px;
-            background: linear-gradient(to top, rgba(10, 10, 10, 0.85), transparent);
-            pointer-events: none;
-        }
-        .control-panel {
+        .glass {
             backdrop-filter: blur(16px) saturate(180%);
             -webkit-backdrop-filter: blur(16px) saturate(180%);
-            background-color: rgba(10, 10, 10, 0.5);
-            position: relative;
-            overflow: hidden;
-        }
-        .control-panel::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -100%;
-            width: 40%;
-            height: 200%;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0) 100%);
-            transform: rotate(45deg);
-            animation: glare 10s linear infinite;
-        }
-        @keyframes glare {
-            0% { transform: translate(0, 0) rotate(45deg); }
-            100% { transform: translate(400%, -400%) rotate(45deg); }
+            background-color: rgba(10, 10, 10, 0.65);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
         .scroll-container {
-            mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
         }
-        .slider-label {
-            @apply text-sm font-medium text-gray-300 mb-2 flex justify-between items-center;
+        #loader {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            border: 5px solid rgba(255, 255, 255, 0.2);
+            border-left-color: #00ffff;
+            border-radius: 50%;
+            width: 50px; height: 50px;
+            animation: spin 1s linear infinite;
+            z-index: 100; display: none;
         }
+        @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+        /* Custom styled range inputs */
         .input-range {
             @apply w-full h-1.5 bg-black/30 rounded-lg appearance-none cursor-pointer;
         }
         .input-range::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
+            -webkit-appearance: none; appearance: none;
+            width: 18px; height: 18px;
             border-radius: 50%;
             background: radial-gradient(circle at center, #fff, #b0f5ff);
             border: none;
-            box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 5px #fff inset;
+            box-shadow: 0 0 8px #00ffff, 0 0 15px #00ffff, 0 0 4px #fff inset;
             cursor: pointer;
             transition: transform 0.2s ease;
         }
-        .input-range:hover::-webkit-slider-thumb {
-             transform: scale(1.1);
+        .input-range:hover::-webkit-slider-thumb { transform: scale(1.1); }
+
+        /* Final Toggle Switch */
+        .mode-toggle {
+            position: relative;
+            display: flex;
+            width: 220px;
+            height: 38px;
+            margin: 0 auto 1rem;
+            direction: ltr; /* Isolate from page RTL for correct animation */
         }
-        .radio-group label, .checkbox-group label {
-            @apply flex items-center cursor-pointer text-gray-300 hover:text-white transition-colors duration-200 text-sm;
-        }
-        .radio-group input[type="radio"], .checkbox-group input[type="checkbox"] {
-            @apply form-radio h-4 w-4 text-cyan-500 bg-gray-800 border-gray-600 focus:ring-cyan-500 transition duration-150 ease-in-out;
-        }
-        .color-picker {
-            @apply w-full h-8 rounded-md cursor-pointer border-2 border-gray-600/50 transition-all duration-300 hover:border-cyan-400 disabled:opacity-50;
-        }
-        .main-button {
-            @apply w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed;
-        }
-        #loader {
+        .toggle-bg {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 5px solid rgba(255, 255, 255, 0.2);
-            border-left-color: #00FFFF;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            z-index: 100;
-            display: none;
+            inset: 0;
+            background: rgba(15, 15, 15, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 9999px;
+            z-index: 1;
         }
-        @keyframes spin {
-            to { transform: translate(-50%, -50%) rotate(360deg); }
+        .toggle-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+            z-index: 3;
+            transition: color 0.5s ease;
         }
-        .hint-text {
-            background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.6), rgba(255,255,255,0.1));
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: sweep-animation 6s linear infinite;
+        .toggle-btn.active { color: white; }
+        .toggle-glow {
+            position: absolute;
+            top: 3px; bottom: 3px;
+            width: calc(50% - 6px);
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.5);
+            border-radius: 9999px;
+            z-index: 2;
+            transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+            transform: translateX(3px); /* Initial position (Left side for LTR) */
         }
-        @keyframes sweep-animation {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        .mode-toggle[data-mode="particle"] .toggle-glow {
+            transform: translateX(calc(100% + 3px)); /* Moves to the right button */
         }
+
+        /* Custom Toast Notification */
+        #toast {
+            position: fixed; top: -100px; left: 50%;
+            transform: translateX(-50%);
+            background-color: #1a202c; color: white;
+            padding: 12px 24px; border-radius: 8px;
+            border: 1px solid #00ffff;
+            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.2);
+            z-index: 1000;
+            transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #toast.show { top: 40px; }
     </style>
 </head>
-<body class="bg-black text-white flex flex-col h-screen">
+<body class="text-white flex flex-col h-screen">
     <!-- Preview Area -->
-    <div id="previewArea" class="relative overflow-hidden flex-grow">
-        <canvas id="particleCanvas" class="absolute inset-0 w-full h-full"></canvas>
+    <div id="previewArea" class="relative flex-grow overflow-hidden select-none">
+        <canvas id="particleCanvas" class="absolute inset-0 w-full h-full bg-black"></canvas>
+        <pre id="asciiOutput" class="absolute inset-0 w-full h-full whitespace-pre font-mono text-white/90 hidden overflow-auto p-2 text-center bg-black"></pre>
         <div id="loader"></div>
-        <label for="imageUpload" id="uploadPrompt">
-            <div class="upload-content">
-                <span class="plus-icon">+</span>
-                <h2>Upload Media</h2>
-            </div>
-            <p>PNG , JPEG , WEBp , ....</p>
+        <label for="imageUpload" id="uploadPrompt" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center text-white/30 border-2 border-dashed border-white/20 rounded-2xl p-10 cursor-pointer transition hover:text-white/60 hover:border-white/40 hover:bg-white/5 z-20">
+            <span class="text-5xl">+</span>
+            <h2 class="mt-3 text-xl font-semibold">بارگذاری تصویر</h2>
+            <p class="text-xs mt-2">PNG • JPEG • WEBP</p>
         </label>
-        <input type="file" id="imageUpload" accept="image/png,image/jpeg,image/webp" class="hidden">
+        <input type="file" id="imageUpload" accept="image/png,image/jpeg,image/webp" class="hidden" />
     </div>
 
+    <div id="toast"></div>
+
     <!-- Control Panel -->
-    <div class="control-panel-wrapper flex-shrink-0">
-        <div class="control-panel p-4" style="height: 30vh;">
-            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 overflow-y-auto h-full pr-2 scroll-container">
-                <!-- Particle Settings -->
-                <div class="flex flex-col gap-3">
-                    <h3 class="text-lg font-semibold text-gray-100 border-b border-white/10 pb-2">تنظیمات ذرات</h3>
-                    <div>
-                        <label for="particleSize" class="slider-label">اندازه: <span id="particleSizeValue" class="font-bold text-cyan-300"></span></label>
-                        <input type="range" id="particleSize" min="0.5" max="5" step="0.1" value="1.2" class="input-range">
-                    </div>
-                    <div>
-                        <label for="particleGap" class="slider-label">فاصله: <span id="particleGapValue" class="font-bold text-cyan-300"></span></label>
-                        <input type="range" id="particleGap" min="1" max="10" step="1" value="2" class="input-range">
-                    </div>
-                     <div>
-                        <label for="particleDensity" class="slider-label">تراکم: <span id="particleDensityValue" class="font-bold text-cyan-300"></span></label>
-                        <input type="range" id="particleDensity" min="1" max="50" step="1" value="26" class="input-range">
-                    </div>
-                    <div>
-                        <label for="returnSpeed" class="slider-label">سرعت بازگشت: <span id="returnSpeedValue" class="font-bold text-cyan-300"></span></label>
-                        <input type="range" id="returnSpeed" min="5" max="50" step="1" value="12" class="input-range">
-                    </div>
-                </div>
+    <div class="control-panel-wrapper relative w-full flex-shrink-0">
+        <div class="absolute -top-20 left-0 right-0 h-20 bg-gradient-to-t from-black/80 to-transparent pointer-events-none"></div>
+        <div class="control-panel glass p-4 flex flex-col" style="height:38vh;">
+            <div id="modeToggle" class="mode-toggle flex-shrink-0" data-mode="particle">
+                <div class="toggle-bg"></div>
+                <div class="toggle-glow"></div>
+                <button class="toggle-btn" data-mode="ascii">ASCII Art</button>
+                <button class="toggle-btn active" data-mode="particle">Particle</button>
+            </div>
 
-                <!-- Interaction Settings -->
-                <div class="flex flex-col gap-3">
-                     <h3 class="text-lg font-semibold text-gray-100 border-b border-white/10 pb-2">تنظیمات تعامل</h3>
-                     <div>
-                        <label for="interactionRadius" class="slider-label">شعاع تأثیر: <span id="interactionRadiusValue" class="font-bold text-cyan-300"></span></label>
-                        <input type="range" id="interactionRadius" min="50" max="500" step="10" value="400" class="input-range">
-                    </div>
-                    <div>
-                        <label for="forceIntensity" class="slider-label">شدت نیرو: <span id="forceIntensityValue" class="font-bold text-cyan-300"></span></label>
-                        <input type="range" id="forceIntensity" min="0.1" max="3" step="0.1" value="1.7" class="input-range">
-                    </div>
-                     <div>
-                        <label for="interactionDelay" class="slider-label">تأخیر واکنش: <span id="interactionDelayValue" class="font-bold text-cyan-300"></span></label>
-                        <input type="range" id="interactionDelay" min="0" max="500" step="50" value="0" class="input-range">
-                    </div>
-                    <div>
-                        <label for="returnDelay" class="slider-label">تأخیر بازگشت: <span id="returnDelayValue" class="font-bold text-cyan-300"></span></label>
-                        <input type="range" id="returnDelay" min="0" max="500" step="50" value="0" class="input-range">
-                    </div>
-                </div>
-
-                <!-- Display & Color -->
-                <div class="flex flex-col gap-3">
-                    <h3 class="text-lg font-semibold text-gray-100 border-b border-white/10 pb-2">نمایش و رنگ</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="radio-group flex flex-col gap-3">
-                            <span class="font-semibold text-gray-400 text-sm">حالت نمایش:</span>
-                            <label><input type="radio" name="displayMode" value="image" checked> <span class="ml-2">تصویر</span></label>
-                            <label><input type="radio" name="displayMode" value="circle"> <span class="ml-2">دایره</span></label>
-                            <label><input type="radio" name="displayMode" value="scatter"> <span class="ml-2">پراکنده</span></label>
-                            <label><input type="radio" name="displayMode" value="grid"> <span class="ml-2">شبکه</span></label>
+            <div class="flex-grow overflow-hidden relative">
+                <!-- Particle Settings Panel -->
+                <div id="particleSettings" class="settings-panel absolute inset-0 overflow-y-auto pr-1 scroll-container">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-3 px-2">
+                        <!-- Columns 1, 2, 3 for settings -->
+                        <div class="flex flex-col space-y-3">
+                            <h3 class="text-base font-semibold border-b border-white/10 pb-2">تنظیمات ذرات</h3>
+                            <div>
+                                <label for="particleSize" class="flex justify-between text-xs">اندازه<span id="particleSizeValue" class="font-bold text-cyan-400"></span></label>
+                                <input id="particleSize" type="range" min="0.5" max="5" step="0.1" value="1.2" class="input-range mt-1" />
+                            </div>
+                            <div>
+                                <label for="particleGap" class="flex justify-between text-xs">فاصله<span id="particleGapValue" class="font-bold text-cyan-400"></span></label>
+                                <input id="particleGap" type="range" min="1" max="10" step="1" value="2" class="input-range mt-1" />
+                            </div>
+                            <div>
+                                <label for="particleDensity" class="flex justify-between text-xs">تراکم<span id="particleDensityValue" class="font-bold text-cyan-400"></span></label>
+                                <input id="particleDensity" type="range" min="1" max="50" step="1" value="25" class="input-range mt-1" />
+                            </div>
                         </div>
-                        <div class="radio-group flex flex-col gap-3">
-                            <span class="font-semibold text-gray-400 text-sm">حالت رنگ:</span>
-                            <label><input type="radio" name="colorMode" value="original" checked> <span class="ml-2">اصلی</span></label>
-                            <label><input type="radio" name="colorMode" value="dynamicRgb"> <span class="ml-2">RGB متحرک</span></label>
-                            <label><input type="radio" name="colorMode" value="monochromatic"> <span class="ml-2">تک‌رنگ</span></label>
-                            <input type="color" id="monoColor" value="#00FFFF" class="color-picker">
-                            <label><input type="radio" name="colorMode" value="gradient"> <span class="ml-2">گرادیانت</span></label>
-                            <div class="flex gap-2">
-                                <input type="color" id="gradientColor1" value="#FF00FF" class="color-picker">
-                                <input type="color" id="gradientColor2" value="#00FFFF" class="color-picker">
+                        <div class="flex flex-col space-y-3">
+                            <h3 class="text-base font-semibold border-b border-white/10 pb-2">فیزیک و حرکت</h3>
+                            <div>
+                                <label for="returnSpeed" class="flex justify-between text-xs">سرعت بازگشت<span id="returnSpeedValue" class="font-bold text-cyan-400"></span></label>
+                                <input id="returnSpeed" type="range" min="5" max="50" step="1" value="15" class="input-range mt-1" />
+                            </div>
+                            <div>
+                                <label for="friction" class="flex justify-between text-xs">اصطکاک<span id="frictionValue" class="font-bold text-cyan-400"></span></label>
+                                <input id="friction" type="range" min="0.85" max="0.99" step="0.01" value="0.92" class="input-range mt-1" />
+                            </div>
+                            <div>
+                                <label for="forceIntensity" class="flex justify-between text-xs">شدت نیرو<span id="forceIntensityValue" class="font-bold text-cyan-400"></span></label>
+                                <input id="forceIntensity" type="range" min="0.1" max="3" step="0.1" value="1.7" class="input-range mt-1" />
+                            </div>
+                             <div>
+                                <label for="interactionRadius" class="flex justify-between text-xs">شعاع تأثیر<span id="interactionRadiusValue" class="font-bold text-cyan-400"></span></label>
+                                <input id="interactionRadius" type="range" min="50" max="500" step="10" value="400" class="input-range mt-1" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col space-y-3">
+                            <h3 class="text-base font-semibold border-b border-white/10 pb-2">رنگ و افکت</h3>
+                            <div class="space-y-2 text-sm">
+                                <label class="flex items-center space-x-2 rtl:space-x-reverse"><input type="radio" name="colorMode" value="original" checked /> اصلی</label>
+                                <label class="flex items-center space-x-2 rtl:space-x-reverse"><input type="radio" name="colorMode" value="dynamicRgb" /> RGB متحرک</label>
+                                <label class="flex items-center space-x-2 rtl:space-x-reverse"><input type="radio" name="colorMode" value="monochromatic" /> تک‌رنگ</label>
+                                <input id="monoColor" type="color" value="#00ffff" class="w-full h-8 rounded-md" disabled />
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-sm pt-2">
+                                <label><input id="gravityEffect" type="checkbox" checked /> گرانش</label>
+                                <label><input id="explosionEffect" type="checkbox" /> انفجار</label>
+                                <label><input id="waveEffect" type="checkbox" /> موج</label>
+                                <label><input id="swirlEffect" type="checkbox" /> چرخش</label>
+                            </div>
+                        </div>
+                        <!-- Column 4 for actions -->
+                        <div class="flex flex-col space-y-3 justify-between">
+                             <h3 class="text-base font-semibold border-b border-white/10 pb-2">خروجی</h3>
+                             <div class="flex-grow"></div>
+                             <div class="grid grid-cols-2 gap-2">
+                                <button id="resetApp" class="w-full bg-red-800 hover:bg-red-700 py-2 rounded-lg font-bold transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" disabled>ریست</button>
+                                <button id="downloadHtml" class="w-full bg-cyan-600 hover:bg-cyan-500 py-2 rounded-lg font-bold transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" disabled>دانلود HTML</button>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ASCII Settings Panel -->
+                <div id="asciiSettings" class="settings-panel absolute inset-0 overflow-y-auto pr-1 scroll-container hidden">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-3 px-2">
+                        <!-- ASCII Columns... -->
+                        <div class="flex flex-col space-y-3">
+                            <h3 class="text-base font-semibold border-b border-white/10 pb-2">تنظیمات اصلی ASCII</h3>
+                            <div>
+                                <label for="asciiScale" class="flex justify-between text-xs">وضوح<span id="asciiScaleValue" class="font-bold text-cyan-400"></span></label>
+                                <input id="asciiScale" type="range" min="1" max="20" step="1" value="8" class="input-range mt-1" />
+                            </div>
+                            <div>
+                                <label for="asciiCharset" class="text-xs">مجموعه کاراکترها</label>
+                                <select id="asciiCharset" class="w-full bg-gray-800 rounded-md p-1 text-xs mt-1 border border-gray-600 focus:ring-cyan-500 focus:border-cyan-500">
+                                    <option value="█▓▒░ ">Blocks</option>
+                                    <option value="$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,\"^`'. ">Ultra Detailed</option>
+                                    <option value="@%#*+=-:. ">Standard</option>
+                                    <option value=" .:-=+*#%@">Simple (Inverted)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="flex flex-col space-y-3">
+                            <h3 class="text-base font-semibold border-b border-white/10 pb-2">تنظیمات تصویر</h3>
+                            <div>
+                                <label for="asciiBrightness" class="flex justify-between text-xs">روشنایی<span id="asciiBrightnessValue" class="font-bold text-cyan-400"></span></label>
+                                <input id="asciiBrightness" type="range" min="-100" max="100" step="1" value="0" class="input-range mt-1" />
+                            </div>
+                            <div>
+                                <label for="asciiContrast" class="flex justify-between text-xs">کنتراست<span id="asciiContrastValue" class="font-bold text-cyan-400"></span></label>
+                                <input id="asciiContrast" type="range" min="-100" max="100" step="1" value="0" class="input-range mt-1" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col space-y-3">
+                            <h3 class="text-base font-semibold border-b border-white/10 pb-2">استایل متن</h3>
+                            <div>
+                                <label for="asciiLineHeight" class="flex justify-between text-xs">ارتفاع خط<span id="asciiLineHeightValue" class="font-bold text-cyan-400"></span></label>
+                                <input id="asciiLineHeight" type="range" min="0.5" max="1.5" step="0.05" value="0.8" class="input-range mt-1" />
+                            </div>
+                            <div>
+                                <label for="asciiLetterSpacing" class="flex justify-between text-xs">فاصله حروف<span id="asciiLetterSpacingValue" class="font-bold text-cyan-400"></span></label>
+                                <input id="asciiLetterSpacing" type="range" min="-2" max="5" step="0.5" value="0" class="input-range mt-1" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col space-y-3 justify-between">
+                            <h3 class="text-base font-semibold border-b border-white/10 pb-2">افکت و خروجی</h3>
+                            <div class="grid grid-cols-2 gap-3 text-sm pt-2">
+                                <label class="flex items-center"><input id="asciiDither" type="checkbox" class="form-checkbox" /> <span class="mr-2">Dithering</span></label>
+                                <label class="flex items-center"><input id="asciiInvert" type="checkbox" class="form-checkbox" /> <span class="mr-2">معکوس</span></label>
+                                <label class="flex items-center"><input id="asciiColor" type="checkbox" class="form-checkbox" checked /> <span class="mr-2">رنگی</span></label>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button id="generateAscii" class="w-full bg-cyan-600 hover:bg-cyan-500 py-2 rounded-lg font-bold transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" disabled>تولید مجدد</button>
+                                <button id="copyAscii" class="w-full bg-gray-700 hover:bg-gray-600 py-2 rounded-lg font-bold transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" disabled>کپی متن</button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Effects & Download -->
-                <div class="flex flex-col gap-3">
-                    <h3 class="text-lg font-semibold text-gray-100 border-b border-white/10 pb-2">افکت‌ها و خروجی</h3>
-                    <div class="checkbox-group grid grid-cols-2 gap-3 mt-2">
-                        <label><input type="checkbox" id="gravityEffect" checked> <span class="ml-2">گرانش</span></label>
-                        <label><input type="checkbox" id="explosionEffect"> <span class="ml-2">انفجار</span></label>
-                        <label><input type="checkbox" id="waveEffect"> <span class="ml-2">موج</span></label>
-                        <label><input type="checkbox" id="swirlEffect"> <span class="ml-2">چرخش</span></label>
-                    </div>
-                    <div class="mt-auto flex flex-col gap-4">
-                         <button id="downloadHtml" class="main-button" disabled>
-                            دانلود فایل HTML
-                        </button>
-                        <p class="hint-text text-center text-xs opacity-75 self-center">> Exclusive by ☬SHΞN™ </p>
-                    </div>
-                </div>
+            </div>
+            <!-- Persistent Footer -->
+            <div class="text-center text-xs opacity-70 pt-2 flex-shrink-0">
+                <p>> Exclusive by ☬SHΞN™</p>
             </div>
         </div>
     </div>
 
     <script>
-    /*
-        Particle Image Creator - Pro Final Design
-        Developed by ☬SHΞN™
-    */
+        // --- DOM Elements ---
+        const byId = (id) => document.getElementById(id);
+        const canvas = byId("particleCanvas"), ctx = canvas.getContext("2d");
+        const asciiOutput = byId("asciiOutput");
+        const uploadPrompt = byId("uploadPrompt"), imageInput = byId("imageUpload");
+        const loader = byId("loader"), toast = byId("toast"), modeToggle = byId("modeToggle");
+        const downloadHtmlBtn = byId("downloadHtml"), resetAppBtn = byId("resetApp");
+        const generateAsciiBtn = byId("generateAscii"), copyAsciiBtn = byId("copyAscii");
+        const particleSettingsPanel = byId("particleSettings"), asciiSettingsPanel = byId("asciiSettings");
 
-    // --- DOM Elements ---
-    const canvas = document.getElementById('particleCanvas');
-    const ctx = canvas.getContext('2d');
-    const imageUpload = document.getElementById('imageUpload');
-    const uploadPrompt = document.getElementById('uploadPrompt');
-    const downloadHtmlBtn = document.getElementById('downloadHtml');
-    const loader = document.getElementById('loader');
-    const allInputs = document.querySelectorAll('input');
+        // --- Global State & Config ---
+        let mode = "particle";
+        let masterImage = null; // Holds the loaded image object
+        let currentImgBase64 = ""; // Still needed for download
+        let particles = [], animationId, hue = 0;
+        let mouse = { x: -9999, y: -9999 }, pointerDown = false;
 
-    // --- Global State ---
-    let particles = [];
-    let baseImageParticles = [];
-    let currentImageBase64 = '';
-    let animationFrameId;
-    let hue = 0;
-    let mouse = { x: undefined, y: undefined };
-    let isPointerDown = false;
-    let lastClickTime = 0;
-
-    // --- Configuration Settings ---
-    let settings = {};
-
-    function updateSettings() {
-        settings = {
-            particleSize: parseFloat(document.getElementById('particleSize').value),
-            particleGap: parseInt(document.getElementById('particleGap').value),
-            particleDensity: parseInt(document.getElementById('particleDensity').value),
-            returnSpeed: parseInt(document.getElementById('returnSpeed').value),
-            displayMode: document.querySelector('input[name="displayMode"]:checked').value,
-            colorMode: document.querySelector('input[name="colorMode"]:checked').value,
-            monoColor: document.getElementById('monoColor').value,
-            gradientColor1: document.getElementById('gradientColor1').value,
-            gradientColor2: document.getElementById('gradientColor2').value,
-            interactionRadius: parseInt(document.getElementById('interactionRadius').value),
-            forceIntensity: parseFloat(document.getElementById('forceIntensity').value),
-            gravityEffect: document.getElementById('gravityEffect').checked,
-            explosionEffect: document.getElementById('explosionEffect').checked,
-            waveEffect: document.getElementById('waveEffect').checked,
-            swirlEffect: document.getElementById('swirlEffect').checked,
-            imageScale: 0.80,
-            maxParticles: 10000 
+        const settings = {
+            particleSize: 1.2, particleGap: 2, particleDensity: 25, returnSpeed: 15,
+            friction: 0.92, forceIntensity: 1.7, interactionRadius: 400,
+            colorMode: "original", monoColor: "#00ffff",
+            gravityEffect: true, explosionEffect: false, waveEffect: false, swirlEffect: false,
+            imageScale: 0.8, maxParticles: 15000,
+            asciiScale: 8, asciiCharset: "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,\"^`'. ",
+            asciiBrightness: 0, asciiContrast: 0, asciiInvert: false, asciiColor: true,
+            asciiDither: false, asciiLineHeight: 0.8, asciiLetterSpacing: 0
         };
-    }
 
-    // --- Particle Class Definition ---
-    class Particle {
-        constructor(x, y, color) {
-            this.x = x;
-            this.y = y;
-            this.baseX = x;
-            this.baseY = y;
-            this.originalColor = color;
-            this.density = (Math.random() * (settings.particleDensity / 2)) + (settings.particleDensity / 2);
-            this.isInteracting = false;
-            this.vx = 0;
-            this.vy = 0;
-        }
+        // --- Mode Switching ---
+        modeToggle.addEventListener("click", (e) => {
+            const newMode = e.target.dataset.mode;
+            if (!newMode || newMode === mode) return;
+            mode = newMode;
+            updateUIVisibility();
+        });
 
-        draw() {
-            let displayColor = this.originalColor;
+        function updateUIVisibility() {
+            modeToggle.dataset.mode = mode;
+            modeToggle.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+            modeToggle.querySelector(`[data-mode="${mode}"]`).classList.add('active');
             
-            if (settings.colorMode === 'dynamicRgb') {
-                if (this.isInteracting) {
-                    const particleHue = (hue + (this.x - this.y) * 0.3) % 360;
-                    displayColor = `hsl(${particleHue}, 100%, 65%)`;
-                }
-            } else if (settings.colorMode === 'monochromatic') {
-                displayColor = settings.monoColor;
-            } else if (settings.colorMode === 'gradient') {
-                const color1 = hexToRgb(settings.gradientColor1);
-                const color2 = hexToRgb(settings.gradientColor2);
-                const ratio = Math.min(this.y / canvas.height, 1);
-                const r = Math.floor(color1.r + (color2.r - color1.r) * ratio);
-                const g = Math.floor(color1.g + (color2.g - color1.g) * ratio);
-                const b = Math.floor(color1.b + (color2.b - color1.b) * ratio);
-                displayColor = `rgb(${r},${g},${b})`;
+            const isParticleMode = mode === "particle";
+            
+            particleSettingsPanel.classList.toggle("hidden", !isParticleMode);
+            asciiSettingsPanel.classList.toggle("hidden", isParticleMode);
+
+            if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
+            
+            if (masterImage) {
+                if (isParticleMode) initParticle(); else generateAscii();
+            } else {
+                canvas.classList.toggle('hidden', !isParticleMode);
+                asciiOutput.classList.toggle('hidden', isParticleMode);
             }
-
-            ctx.fillStyle = displayColor;
-            ctx.fillRect(this.x, this.y, settings.particleSize, settings.particleSize);
         }
 
-        update() {
-            const dx = mouse.x - this.x;
-            const dy = mouse.y - this.y;
-            const distance = Math.sqrt(dx * dx + dy * dy) || 1;
-
-            this.isInteracting = (isPointerDown && distance < settings.interactionRadius);
-
-            if (this.isInteracting) {
-                const force = (settings.interactionRadius - distance) / settings.interactionRadius;
-                this.vx -= (dx / distance) * force * this.density * settings.forceIntensity * 0.1;
-                this.vy -= (dy / distance) * force * this.density * settings.forceIntensity * 0.1;
-            }
-            
-            // Apply spring force to return to base position
-            const returnForceX = (this.baseX - this.x) / (settings.returnSpeed * 2);
-            const returnForceY = (this.baseY - this.y) / (settings.returnSpeed * 2);
-            this.vx += returnForceX;
-            this.vy += returnForceY;
-
-            // Apply continuous effects
-            if (settings.gravityEffect) this.vy += 0.05;
-            if (settings.waveEffect) this.vx += Math.sin(this.y * 0.05 + hue * 0.05) * 0.1;
-            if (settings.swirlEffect) {
-                const angle = Math.atan2(this.y - canvas.height / 2, this.x - canvas.width / 2);
-                const swirlForce = Math.min(distance / 10000, 0.1);
-                this.vx += -Math.sin(angle) * swirlForce;
-                this.vy += Math.cos(angle) * swirlForce;
-            }
-
-            this.x += this.vx;
-            this.y += this.vy;
-            this.vx *= 0.90; // Damping
-            this.vy *= 0.90;
-        }
-    }
-
-    // --- Core Functions ---
-    function init() {
-        if (animationFrameId) {
-            cancelAnimationFrame(animationFrameId);
-            animationFrameId = null;
-        }
-        
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        if (!currentImageBase64) {
-            uploadPrompt.style.display = 'flex';
-            return;
-        }
-        uploadPrompt.style.display = 'none';
-        loader.style.display = 'block';
-
-        const mainImage = new Image();
-        mainImage.crossOrigin = "Anonymous";
-        mainImage.src = currentImageBase64;
-
-        mainImage.onload = () => {
-            const tempCanvas = document.createElement('canvas');
-            const tempCtx = tempCanvas.getContext('2d');
-            
-            const effectiveHeight = canvas.height * 0.7; 
-            const maxCanvasDim = Math.min(canvas.width, effectiveHeight) * settings.imageScale;
-            const scale = Math.min(maxCanvasDim / mainImage.width, maxCanvasDim / mainImage.height);
-            const scaledWidth = Math.floor(mainImage.width * scale);
-            const scaledHeight = Math.floor(mainImage.height * scale);
-            
-            tempCanvas.width = canvas.width;
-            tempCanvas.height = canvas.height;
-
-            const xOffset = Math.floor((canvas.width - scaledWidth) / 2);
-            const yOffset = Math.floor((effectiveHeight - scaledHeight) / 2);
-
-            tempCtx.drawImage(mainImage, xOffset, yOffset, scaledWidth, scaledHeight);
-            const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
-
-            baseImageParticles = [];
-            for (let y = 0; y < imageData.height; y += settings.particleGap) {
-                for (let x = 0; x < imageData.width; x += settings.particleGap) {
-                    const alpha = imageData.data[(y * imageData.width + x) * 4 + 3];
-                    if (alpha > 128) {
-                        const r = imageData.data[(y * imageData.width + x) * 4];
-                        const g = imageData.data[(y * imageData.width + x) * 4 + 1];
-                        const b = imageData.data[(y * imageData.width + x) * 4 + 2];
-                        baseImageParticles.push({ x, y, color: `rgb(${r},${g},${b})` });
+        // --- Settings & Input Handling ---
+        document.querySelectorAll("input, select").forEach((el) => {
+            el.addEventListener("input", () => {
+                const { id, type, checked, value } = el;
+                
+                // *** BUG FIX: Correctly handle string from select and numbers from others ***
+                if (id in settings) {
+                    if (type === 'checkbox') {
+                        settings[id] = checked;
+                    } else if (id === 'asciiCharset') {
+                        settings[id] = value; // Assign string directly
+                    } else {
+                        settings[id] = parseFloat(value); // Parse numbers for ranges/colors
                     }
                 }
-            }
-            
-            const shuffled = baseImageParticles.sort(() => 0.5 - Math.random());
-            particles = shuffled.slice(0, settings.maxParticles).map(pData => new Particle(pData.x, pData.y, pData.color));
-            
-            loader.style.display = 'none';
-            if (!animationFrameId) animate();
-        };
-        mainImage.onerror = () => {
-            loader.style.display = 'none';
-            showPlaceholderMessage('خطا در بارگذاری تصویر');
-        };
-    }
 
-    function updateParticlePositions() {
-        if (!particles.length || !baseImageParticles.length) return;
-
-        if (settings.displayMode === 'image') {
-            particles.forEach((p, i) => {
-                if (baseImageParticles[i]) {
-                    p.baseX = baseImageParticles[i].x;
-                    p.baseY = baseImageParticles[i].y;
-                }
+                if (name === "colorMode") settings.colorMode = value;
+                const valSpan = byId(id + "Value");
+                if (valSpan) valSpan.textContent = value;
+                if (id === 'asciiLineHeight') asciiOutput.style.lineHeight = value;
+                if (id === 'asciiLetterSpacing') asciiOutput.style.letterSpacing = `${value}px`;
+                
+                clearTimeout(el.debounce);
+                el.debounce = setTimeout(() => {
+                    if (masterImage) {
+                        if (mode === "particle" && (id === "particleGap" || id === "particleDensity")) initParticle();
+                        if (mode === "ascii") generateAscii();
+                    }
+                }, 150);
             });
-            return;
-        }
-        
-        let targetParticles = [];
-        const particleCount = particles.length;
-
-        if (settings.displayMode === 'circle') {
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const radius = Math.min(canvas.width, canvas.height) * 0.35;
-            targetParticles = Array.from({ length: particleCount }, (_, i) => ({
-                x: centerX + Math.cos((i / particleCount) * Math.PI * 2) * radius,
-                y: centerY + Math.sin((i / particleCount) * Math.PI * 2) * radius
-            }));
-        } else if (settings.displayMode === 'scatter') {
-            targetParticles = Array.from({ length: particleCount }, () => ({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height
-            }));
-        } else if (settings.displayMode === 'grid') {
-            const gridSpacing = 20;
-            const cols = Math.floor(Math.sqrt(particleCount) * (canvas.width / canvas.height));
-            const startX = (canvas.width - (cols * gridSpacing)) / 2;
-            const startY = (canvas.height - (Math.ceil(particleCount / cols) * gridSpacing)) / 2;
-            targetParticles = Array.from({ length: particleCount }, (_, i) => ({
-                x: startX + (i % cols) * gridSpacing,
-                y: startY + Math.floor(i / cols) * gridSpacing
-            }));
-        }
-        
-        particles.forEach((p, i) => {
-            if (targetParticles[i]) {
-                p.baseX = targetParticles[i].x;
-                p.baseY = targetParticles[i].y;
-            }
         });
-    }
 
-    function animate() {
-        hue++;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < particles.length; i++) {
-            particles[i].update();
-            particles[i].draw();
-        }
-        animationFrameId = requestAnimationFrame(animate);
-    }
-
-    // --- Helper Functions ---
-    function showPlaceholderMessage(message) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.font = '24px Vazirmatn';
-        ctx.textAlign = 'center';
-        ctx.fillText(message, canvas.width / 2, canvas.height / 2);
-    }
-    function hexToRgb(hex) {
-        let r = 0, g = 0, b = 0;
-        if (hex.length == 4) { r = parseInt(hex[1] + hex[1], 16); g = parseInt(hex[2] + hex[2], 16); b = parseInt(hex[3] + hex[3], 16); }
-        else if (hex.length == 7) { r = parseInt(hex.substring(1, 3), 16); g = parseInt(hex.substring(3, 5), 16); b = parseInt(hex.substring(5, 7), 16); }
-        return { r, g, b };
-    }
-    function debounce(func, delay) {
-        let timeout;
-        return function(...args) { clearTimeout(timeout); timeout = setTimeout(() => func.apply(this, args), delay); };
-    }
-    function applyExplosionEffect() {
-        if (!settings.explosionEffect) return;
-        particles.forEach(p => {
-            const dx = p.x - mouse.x;
-            const dy = p.y - mouse.y;
-            const distance = Math.sqrt(dx * dx + dy * dy) + 1;
-            if (distance < settings.interactionRadius) {
-                const angle = Math.atan2(dy, dx);
-                const force = (settings.interactionRadius - distance) / distance;
-                p.vx += Math.cos(angle) * force * 20;
-                p.vy += Math.sin(angle) * force * 20;
-            }
-        });
-    }
-
-    // --- Event Handlers ---
-    function handleSettingsChange(e) {
-        updateSettings();
-        
-        const { id, name } = e.target;
-
-        const valueSpan = document.getElementById(id + 'Value');
-        if (valueSpan) {
-            valueSpan.textContent = e.target.value;
-        }
-
-        document.getElementById('monoColor').disabled = (settings.colorMode !== 'monochromatic');
-        document.getElementById('gradientColor1').disabled = (settings.colorMode !== 'gradient');
-        document.getElementById('gradientColor2').disabled = (settings.colorMode !== 'gradient');
-
-        if (id === 'particleGap' && currentImageBase64) {
-            init();
-        } else if (name === 'displayMode' && currentImageBase64) {
-            updateParticlePositions();
-        }
-    }
-    
-    function handleFileUpload(file) {
-        if (file && (file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/webp')) {
+        // --- Image Upload & Reset ---
+        imageInput.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
             const reader = new FileReader();
-            reader.onload = (event) => {
-                currentImageBase64 = event.target.result;
-                downloadHtmlBtn.disabled = false;
-                init();
+            reader.onload = (ev) => {
+                currentImgBase64 = ev.target.result;
+                masterImage = new Image();
+                masterImage.onload = () => {
+                    uploadPrompt.classList.add("hidden");
+                    [downloadHtmlBtn, resetAppBtn, generateAsciiBtn].forEach(b => b.disabled = false);
+                    updateUIVisibility();
+                };
+                masterImage.src = currentImgBase64;
             };
             reader.readAsDataURL(file);
-        } else {
-            alert('لطفا یک فایل تصویر معتبر (PNG, JPEG, WEBP) انتخاب کنید.');
-        }
-    }
-
-    // --- Interaction Event Listeners ---
-    function setPointerPosition(e) {
-        const rect = canvas.getBoundingClientRect();
-        const event = e.touches ? e.touches[0] : e;
-        mouse.x = event.clientX - rect.left;
-        mouse.y = event.clientY - rect.top;
-    }
-
-    function onPointerDown(e) {
-        isPointerDown = true;
-        setPointerPosition(e);
-        if (Date.now() - lastClickTime < 300) {
-            applyExplosionEffect();
-        }
-        lastClickTime = Date.now();
-    }
-
-    function onPointerMove(e) {
-        if (isPointerDown) {
-            setPointerPosition(e);
-        }
-    }
-
-    function onPointerUp() {
-        isPointerDown = false;
-    }
-
-    canvas.addEventListener('mousedown', onPointerDown);
-    canvas.addEventListener('mousemove', onPointerMove);
-    window.addEventListener('mouseup', onPointerUp);
-    canvas.addEventListener('mouseleave', onPointerUp);
-
-    canvas.addEventListener('touchstart', onPointerDown, { passive: true });
-    canvas.addEventListener('touchmove', onPointerMove, { passive: true });
-    window.addEventListener('touchend', onPointerUp);
-    window.addEventListener('touchcancel', onPointerUp);
-
-    // --- Other Listeners ---
-    allInputs.forEach(input => {
-        input.addEventListener('input', handleSettingsChange);
-    });
-    imageUpload.addEventListener('change', (e) => handleFileUpload(e.target.files[0]));
-
-    // --- Download Functionality (FIXED) ---
-    downloadHtmlBtn.addEventListener('click', () => {
-        if (!currentImageBase64) {
-            alert('لطفا ابتدا یک تصویر آپلود کنید.');
-            return;
-        }
-        
-        const settingsToEmbed = { ...settings };
-        
-        const standaloneScript = `
-        (function() {
-            const canvas = document.getElementById('particleCanvas');
-            const ctx = canvas.getContext('2d');
-            const settings = ${JSON.stringify(settingsToEmbed)};
-            const IMAGE_BASE64 = \`${currentImageBase64}\`;
-            let particles = [];
-            let animationFrameId;
-            let hue = 0;
-            let mouse = { x: undefined, y: undefined };
-            let isPointerDown = false;
-
-            class Particle {
-                constructor(x, y, color) {
-                    this.x = x; this.y = y; this.baseX = x; this.baseY = y;
-                    this.originalColor = color;
-                    this.density = (Math.random() * (settings.particleDensity / 2)) + (settings.particleDensity / 2);
-                    this.isInteracting = false;
-                    this.vx = 0; this.vy = 0;
-                }
-                draw() {
-                    let displayColor = this.originalColor;
-                    if (settings.colorMode === 'dynamicRgb' && this.isInteracting) {
-                        const particleHue = (hue + (this.x - this.y) * 0.3) % 360;
-                        displayColor = \`hsl(\${particleHue}, 100%, 65%)\`;
-                    } else if (settings.colorMode === 'monochromatic') {
-                        displayColor = settings.monoColor;
-                    } else if (settings.colorMode === 'gradient') {
-                        const color1 = hexToRgb(settings.gradientColor1);
-                        const color2 = hexToRgb(settings.gradientColor2);
-                        const ratio = Math.min(this.y / canvas.height, 1);
-                        const r = Math.floor(color1.r + (color2.r - color1.r) * ratio);
-                        const g = Math.floor(color1.g + (color2.g - color1.g) * ratio);
-                        const b = Math.floor(color1.b + (color2.b - color1.b) * ratio);
-                        displayColor = \`rgb(\${r},\${g},\${b})\`;
-                    }
-                    ctx.fillStyle = displayColor;
-                    ctx.fillRect(this.x, this.y, settings.particleSize, settings.particleSize);
-                }
-                update() {
-                    const dx = mouse.x - this.x; const dy = mouse.y - this.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy) || 1;
-                    this.isInteracting = (isPointerDown && distance < settings.interactionRadius);
-                    if (this.isInteracting) {
-                        const force = (settings.interactionRadius - distance) / settings.interactionRadius;
-                        this.vx -= (dx / distance) * force * this.density * settings.forceIntensity * 0.1;
-                        this.vy -= (dy / distance) * force * this.density * settings.forceIntensity * 0.1;
-                    }
-                    this.vx += (this.baseX - this.x) / (settings.returnSpeed * 2);
-                    this.vy += (this.baseY - this.y) / (settings.returnSpeed * 2);
-                    if (settings.gravityEffect) this.vy += 0.05;
-                    if (settings.waveEffect) this.vx += Math.sin(this.y * 0.05 + hue * 0.05) * 0.1;
-                    if (settings.swirlEffect) {
-                        const angle = Math.atan2(this.y - canvas.height / 2, this.x - canvas.width / 2);
-                        const swirlForce = Math.min(distance / 10000, 0.1);
-                        this.vx += -Math.sin(angle) * swirlForce;
-                        this.vy += Math.cos(angle) * swirlForce;
-                    }
-                    this.x += this.vx; this.y += this.vy;
-                    this.vx *= 0.90; this.vy *= 0.90;
-                }
-            }
-
-            function init() {
-                if (animationFrameId) cancelAnimationFrame(animationFrameId);
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                const mainImage = new Image();
-                mainImage.crossOrigin = "Anonymous";
-                mainImage.src = IMAGE_BASE64;
-                mainImage.onload = () => {
-                    const tempCanvas = document.createElement('canvas');
-                    const tempCtx = tempCanvas.getContext('2d');
-                    const maxCanvasDim = Math.min(canvas.width, canvas.height) * settings.imageScale;
-                    const scale = Math.min(maxCanvasDim / mainImage.width, maxCanvasDim / mainImage.height);
-                    const scaledWidth = Math.floor(mainImage.width * scale);
-                    const scaledHeight = Math.floor(mainImage.height * scale);
-                    tempCanvas.width = canvas.width; tempCanvas.height = canvas.height;
-                    const xOffset = Math.floor((canvas.width - scaledWidth) / 2);
-                    const yOffset = Math.floor((canvas.height * 0.7 - scaledHeight) / 2);
-                    tempCtx.drawImage(mainImage, xOffset, yOffset, scaledWidth, scaledHeight);
-                    const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
-                    let baseImageParticles = [];
-                    for (let y = 0; y < imageData.height; y += settings.particleGap) {
-                        for (let x = 0; x < imageData.width; x += settings.particleGap) {
-                            if (imageData.data[(y * imageData.width + x) * 4 + 3] > 128) {
-                                const r = imageData.data[(y * imageData.width + x) * 4];
-                                const g = imageData.data[(y * imageData.width + x) * 4 + 1];
-                                const b = imageData.data[(y * imageData.width + x) * 4 + 2];
-                                baseImageParticles.push({ x, y, color: \`rgb(\${r},\${g},\${b})\` });
-                            }
-                        }
-                    }
-                    const shuffled = baseImageParticles.sort(() => 0.5 - Math.random());
-                    particles = shuffled.slice(0, settings.maxParticles).map(pData => new Particle(pData.x, pData.y, pData.color));
-                    animate();
-                };
-            }
-
-            function animate() {
-                hue++;
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                for (let i = 0; i < particles.length; i++) {
-                    particles[i].update();
-                    particles[i].draw();
-                }
-                animationFrameId = requestAnimationFrame(animate);
-            }
-            function hexToRgb(hex) {
-                let r = 0, g = 0, b = 0;
-                if (hex.length == 4) { r = parseInt(hex[1] + hex[1], 16); g = parseInt(hex[2] + hex[2], 16); b = parseInt(hex[3] + hex[3], 16); }
-                else if (hex.length == 7) { r = parseInt(hex.substring(1, 3), 16); g = parseInt(hex.substring(3, 5), 16); b = parseInt(hex.substring(5, 7), 16); }
-                return { r, g, b };
-            }
-
-            function setPointerPosition(e) {
-                const rect = canvas.getBoundingClientRect();
-                const event = e.touches ? e.touches[0] : e;
-                mouse.x = event.clientX - rect.left;
-                mouse.y = event.clientY - rect.top;
-            }
-            canvas.addEventListener('mousedown', (e) => { isPointerDown = true; setPointerPosition(e); });
-            canvas.addEventListener('mousemove', (e) => { if (isPointerDown) setPointerPosition(e); });
-            window.addEventListener('mouseup', () => { isPointerDown = false; });
-            canvas.addEventListener('touchstart', (e) => { isPointerDown = true; setPointerPosition(e); }, { passive: true });
-            canvas.addEventListener('touchmove', (e) => { if (isPointerDown) setPointerPosition(e); }, { passive: true });
-            window.addEventListener('touchend', () => { isPointerDown = false; });
-            
-            init();
-            window.addEventListener('resize', init);
-        })();
-    `;
-
-        const htmlContent = `
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Particle Image by ☬SHΞN™</title>
-    <style>
-        body { margin: 0; overflow: hidden; background-color: #0a0a0a; }
-        canvas { display: block; touch-action: none; }
-    </style>
-</head>
-<body>
-    <canvas id="particleCanvas"></canvas>
-    <script>
-        ${standaloneScript}
-    <\/script>
-</body>
-</html>`;
-        
-        const blob = new Blob([htmlContent.trim()], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'particle_image_by_shen.html';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    });
-
-    // --- Initial Load ---
-    window.addEventListener('load', () => {
-        updateSettings();
-        allInputs.forEach(input => {
-            const valueSpan = document.getElementById(input.id + 'Value');
-            if (valueSpan) {
-                valueSpan.textContent = input.value;
-            }
         });
-        document.getElementById('monoColor').disabled = true;
-        document.getElementById('gradientColor1').disabled = true;
-        document.getElementById('gradientColor2').disabled = true;
-        document.getElementById('gravityEffect').checked = true;
 
+        resetAppBtn.addEventListener("click", () => {
+            if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            asciiOutput.innerHTML = "";
+            particles = []; masterImage = null; currentImgBase64 = "";
+            uploadPrompt.classList.remove("hidden");
+            canvas.classList.remove('hidden');
+            asciiOutput.classList.add('hidden');
+            [downloadHtmlBtn, resetAppBtn, generateAsciiBtn, copyAsciiBtn].forEach(b => b.disabled = true);
+            imageInput.value = null;
+            showToast("برنامه ریست شد.");
+        });
 
-        init();
-    });
-    window.addEventListener('resize', debounce(init, 250));
+        // --- Particle Engine ---
+        function initParticle() {
+            if (!masterImage) return;
+            canvas.classList.remove('hidden'); asciiOutput.classList.add('hidden');
+            loader.style.display = "block";
+            if (animationId) cancelAnimationFrame(animationId);
+            
+            canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+            const tmp = document.createElement("canvas"), tctx = tmp.getContext("2d");
+            const effH = canvas.height * 0.8, maxDim = Math.min(canvas.width, effH) * settings.imageScale;
+            const scale = Math.min(maxDim / masterImage.width, maxDim / masterImage.height);
+            const w = masterImage.width * scale, h = masterImage.height * scale;
+            tmp.width = canvas.width; tmp.height = canvas.height;
+            const xOff = (canvas.width - w) / 2, yOff = (effH - h) / 2;
+            tctx.drawImage(masterImage, xOff, yOff, w, h);
+            const data = tctx.getImageData(0, 0, tmp.width, tmp.height).data;
+            const baseParticles = [];
+            for (let y = 0; y < tmp.height; y += settings.particleGap) {
+                for (let x = 0; x < tmp.width; x += settings.particleGap) {
+                    if (data[(y * tmp.width + x) * 4 + 3] > 128) {
+                        const r = data[(y * tmp.width + x) * 4], g = data[(y * tmp.width + x) * 4 + 1], b = data[(y * tmp.width + x) * 4 + 2];
+                        baseParticles.push({ x, y, color: `rgb(${r},${g},${b})`});
+                    }
+                }
+            }
+            particles = baseParticles.sort(() => Math.random() - 0.5).slice(0, settings.maxParticles).map((p) => new Particle(p.x, p.y, p.color));
+            loader.style.display = "none";
+            animate();
+        }
+        class Particle {
+             constructor(x, y, color) { this.x = x; this.y = y; this.baseX = x; this.baseY = y; this.color = color; this.density = Math.random() * (settings.particleDensity / 2) + settings.particleDensity / 2; this.vx = 0; this.vy = 0; this.interacting = false; }
+            draw() {
+                if (settings.colorMode === "dynamicRgb" && this.interacting) {
+                    const h = (hue + (this.x - this.y) * 0.3) % 360;
+                    ctx.fillStyle = `hsl(${h},100%,65%)`;
+                } else if (settings.colorMode === "monochromatic") {
+                    ctx.fillStyle = settings.monoColor;
+                } else {
+                    ctx.fillStyle = this.color;
+                }
+                ctx.fillRect(this.x, this.y, settings.particleSize, settings.particleSize);
+            }
+            update() {
+                const dx = mouse.x - this.x, dy = mouse.y - this.y, dist = Math.hypot(dx, dy) || 1;
+                this.interacting = pointerDown && dist < settings.interactionRadius;
+                if (this.interacting) { const force = (settings.interactionRadius - dist) / settings.interactionRadius; this.vx -= (dx / dist) * force * this.density * settings.forceIntensity * 0.1; this.vy -= (dy / dist) * force * this.density * settings.forceIntensity * 0.1; }
+                this.vx += (this.baseX - this.x) / (settings.returnSpeed * 2); this.vy += (this.baseY - this.y) / (settings.returnSpeed * 2);
+                if (settings.gravityEffect) this.vy += 0.05;
+                if (settings.waveEffect) this.vx += Math.sin(this.y * 0.05 + hue * 0.05) * 0.1;
+                if (settings.swirlEffect) { const ang = Math.atan2(this.y - canvas.height / 2, this.x - canvas.width / 2), sf = Math.min(dist / 10000, 0.1); this.vx += -Math.sin(ang) * sf; this.vy += Math.cos(ang) * sf; }
+                this.x += this.vx; this.y += this.vy; this.vx *= settings.friction; this.vy *= settings.friction;
+            }
+        }
+        function animate() {
+            hue++; ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p) => { p.update(); p.draw(); });
+            animationId = requestAnimationFrame(animate);
+        }
 
+        // --- Enhanced & Stable ASCII Generator ---
+        function generateAscii() {
+            if (!masterImage) return;
+            canvas.classList.add('hidden'); asciiOutput.classList.remove('hidden');
+            loader.style.display = "block";
+
+            setTimeout(() => {
+                const { asciiScale, asciiCharset, asciiBrightness, asciiContrast, asciiInvert, asciiColor, asciiDither } = settings;
+                const tmp = document.createElement("canvas"), tctx = tmp.getContext("2d", { willReadFrequently: true });
+                const w = Math.floor(masterImage.width / asciiScale), h = Math.floor(masterImage.height / (asciiScale * 2));
+                tmp.width = w; tmp.height = h;
+                tctx.drawImage(masterImage, 0, 0, w, h);
+                const imageData = tctx.getImageData(0, 0, w, h);
+                const data = imageData.data;
+                const contrastFactor = (259 * (asciiContrast + 255)) / (255 * (259 - asciiContrast));
+                const grayData = new Float32Array(w * h);
+                for (let i = 0; i < data.length; i += 4) {
+                    let r = data[i], g = data[i+1], b = data[i+2];
+                    r = contrastFactor * (r - 128) + 128 + asciiBrightness;
+                    g = contrastFactor * (g - 128) + 128 + asciiBrightness;
+                    b = contrastFactor * (b - 128) + 128 + asciiBrightness;
+                    grayData[i / 4] = 0.299 * r + 0.587 * g + 0.114 * b;
+                }
+                let asciiContent = "";
+                for (let y = 0; y < h; y++) {
+                    for (let x = 0; x < w; x++) {
+                        const idx = y * w + x;
+                        let gray = grayData[idx];
+                        if (asciiDither) {
+                            const oldPixel = gray;
+                            const newPixel = Math.round(oldPixel / 255) * 255;
+                            grayData[idx] = newPixel;
+                            const quantError = oldPixel - newPixel;
+                            if (x + 1 < w) grayData[idx + 1] += quantError * 7 / 16;
+                            if (x - 1 > 0 && y + 1 < h) grayData[idx - 1 + w] += quantError * 3 / 16;
+                            if (y + 1 < h) grayData[idx + w] += quantError * 5 / 16;
+                            if (x + 1 < w && y + 1 < h) grayData[idx + 1 + w] += quantError * 1 / 16;
+                            gray = newPixel;
+                        }
+                        const bright = Math.max(0, Math.min(255, gray)) / 255;
+                        let charIdx = Math.floor(bright * (asciiCharset.length - 1));
+                        if (asciiInvert) charIdx = asciiCharset.length - 1 - charIdx;
+                        const char = asciiCharset[charIdx] || ' ';
+                        if (asciiColor) {
+                            const dataIdx = idx * 4;
+                            let r = data[dataIdx], g = data[dataIdx+1], b = data[dataIdx+2];
+                            r = contrastFactor * (r - 128) + 128 + asciiBrightness;
+                            g = contrastFactor * (g - 128) + 128 + asciiBrightness;
+                            b = contrastFactor * (b - 128) + 128 + asciiBrightness;
+                            const finalColor = `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`;
+                            asciiContent += `<span style="color:${finalColor}">${char}</span>`;
+                        } else { asciiContent += char; }
+                    }
+                    asciiContent += "\n";
+                }
+                if (asciiColor) asciiOutput.innerHTML = asciiContent; else asciiOutput.textContent = asciiContent;
+                loader.style.display = "none"; copyAsciiBtn.disabled = false;
+            }, 10);
+        }
+
+        // --- Event Listeners & Helpers ---
+        function setPointerPos(e) { const rect = canvas.getBoundingClientRect(), evt = e.touches ? e.touches[0] : e; mouse.x = evt.clientX - rect.left; mouse.y = evt.clientY - rect.top; }
+        ["mousedown", "touchstart"].forEach((ev) => canvas.addEventListener(ev, (e) => { pointerDown = true; setPointerPos(e); }, { passive: true }));
+        ["mousemove", "touchmove"].forEach((ev) => canvas.addEventListener(ev, (e) => { if (pointerDown) setPointerPos(e); }, { passive: true }));
+        ["mouseup", "mouseleave", "touchend", "touchcancel"].forEach((ev) => window.addEventListener(ev, () => (pointerDown = false)));
+        generateAsciiBtn.addEventListener("click", generateAscii);
+        copyAsciiBtn.addEventListener("click", () => { if (!asciiOutput.textContent) return; navigator.clipboard.writeText(asciiOutput.textContent).then(() => showToast("متن ASCII با موفقیت کپی شد!")); });
+        
+        downloadHtmlBtn.addEventListener("click", () => {
+            if (!currentImgBase64) return;
+            const settingsToEmbed = { ...settings };
+            const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Particle by ☬SHΞN™</title><style>body,html{margin:0;width:100%;height:100%;overflow:hidden;background:#000}canvas{width:100%;height:100%;display:block}</style></head><body><canvas id="c"></canvas><script>
+            (function(){const c=document.getElementById('c');const x=c.getContext('2d');const s=${JSON.stringify(settingsToEmbed)};const iB64='${currentImgBase64}';let p=[],a,h=0,m={x:-9999,y:-9999},d=!1;class P{constructor(X,Y,C){this.x=X;this.y=Y;this.bX=X;this.bY=Y;this.c=C;this.vx=0;this.vy=0;this.d=Math.random()*s.particleDensity/2+s.particleDensity/2;this.in=!1}dr(){x.fillStyle=this.dc();x.fillRect(this.x,this.y,s.particleSize,s.particleSize)}dc(){if("dynamicRgb"===s.colorMode&&this.in){const e=(h+(this.x-this.y)*.3)%360;return\`hsl(\${e},100%,65%)\`}if("monochromatic"===s.colorMode)return s.monoColor;return this.c}up(){const e=m.x-this.x,t=m.y-this.y,o=Math.hypot(e,t)||1;if(this.in=d&&o<s.interactionRadius){const i=(s.interactionRadius-o)/s.interactionRadius;this.vx-=e/o*i*this.d*s.forceIntensity*.1,this.vy-=t/o*i*this.d*s.forceIntensity*.1}this.vx+=(this.bX-this.x)/(s.returnSpeed*2),this.vy+=(this.bY-this.y)/(s.returnSpeed*2),s.gravityEffect&&(this.vy+=.05),s.waveEffect&&(this.vx+=.1*Math.sin(this.y*.05+h*.05)),s.swirlEffect&&(()=>{const e=Math.atan2(this.y-c.height/2,this.x-c.width/2),t=Math.min(o/1e4,.1);this.vx+=-Math.sin(e)*t,this.vy+=Math.cos(e)*t})(),this.x+=this.vx,this.y+=this.vy,this.vx*=s.friction,this.vy*=s.friction}}function N(){cancelAnimationFrame(a),c.width=innerWidth,c.height=innerHeight;const e=new Image;e.src=iB64,e.onload=()=>{const t=document.createElement("canvas"),o=t.getContext("2d"),i=c.height*.8,n=Math.min(c.width,i)*s.imageScale,l=Math.min(n/e.width,n/e.height),r=e.width*l,g=e.height*l;t.width=c.width,t.height=c.height;const B=(c.width-r)/2,Y=(i-g)/2;o.drawImage(e,B,Y,r,g);const u=o.getImageData(0,0,t.width,t.height).data;let M=[];for(let f=0;f<t.height;f+=s.particleGap)for(let H=0;H<t.width;H+=s.particleGap)u[(f*t.width+H)*4+3]>128&&M.push({x:H,y:f,c:\`rgb(\${u[(f*t.width+H)*4]},\${u[(f*t.width+H)*4+1]},\${u[(f*t.width+H)*4+2]})\`});p=M.sort(()=>Math.random()-.5).slice(0,s.maxParticles).map(f=>new P(f.x,f.y,f.c)),S()}}function S(){h++,x.clearRect(0,0,c.width,c.height),p.forEach(e=>{e.up(),e.dr()}),a=requestAnimationFrame(S)}function E(e){const t=c.getBoundingClientRect(),o=e.touches?e.touches[0]:e;m.x=o.clientX-t.left,m.y=o.clientY-t.top}["mousedown","touchstart"].forEach(e=>c.addEventListener(e,t=>{d=!0,E(t)},{passive:!0})),["mousemove","touchmove"].forEach(e=>c.addEventListener(e,t=>{d&&E(t)},{passive:!0})),["mouseup","mouseleave","touchend","touchcancel"].forEach(e=>window.addEventListener(e,()=>d=!1)),window.addEventListener("resize",N),N()})();
+            <\/script></body></html>`;
+            const blob = new Blob([htmlContent.trim()], { type: "text/html" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "particle_by_shen.html";
+            link.click();
+            URL.revokeObjectURL(link.href);
+        });
+
+        let toastTimeout;
+        function showToast(message) { toast.textContent = message; toast.classList.add("show"); clearTimeout(toastTimeout); toastTimeout = setTimeout(() => toast.classList.remove("show"), 3000); }
+        
+        function initApp() {
+            Object.keys(settings).forEach((id) => {
+                const el = byId(id);
+                if (el) {
+                    if (el.type === 'checkbox') el.checked = settings[id]; else el.value = settings[id];
+                    const valSpan = byId(id + "Value"); if (valSpan) valSpan.textContent = el.value;
+                }
+            });
+            updateUIVisibility();
+        }
+        
+        window.addEventListener("load", initApp);
+        window.addEventListener("resize", () => { if (mode === 'particle' && masterImage) initParticle(); });
     </script>
 </body>
 </html>
