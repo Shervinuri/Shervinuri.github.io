@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>☬SHΞN™ Art Creator | Final Stable Version</title>
+    <title>☬SHΞN™ Art Creator | media to dots </title>
 
     <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -121,9 +121,9 @@
         <pre id="asciiOutput" class="absolute inset-0 w-full h-full whitespace-pre font-mono text-white/90 hidden overflow-auto p-2 text-center bg-black"></pre>
         <div id="loader"></div>
         <label for="imageUpload" id="uploadPrompt" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center text-white/30 border-2 border-dashed border-white/20 rounded-2xl p-10 cursor-pointer transition hover:text-white/60 hover:border-white/40 hover:bg-white/5 z-20">
-            <span class="text-5xl">+</span>
+            <span class="text-5xl">➕</span>
             <h2 class="mt-3 text-xl font-semibold">بارگذاری تصویر</h2>
-            <p class="text-xs mt-2">PNG • JPEG • WEBP</p>
+            <p class="text-xs mt-2">PNG•JPEG•WEBP</p>
         </label>
         <input type="file" id="imageUpload" accept="image/png,image/jpeg,image/webp" class="hidden" />
     </div>
@@ -137,8 +137,8 @@
             <div id="modeToggle" class="mode-toggle flex-shrink-0" data-mode="particle">
                 <div class="toggle-bg"></div>
                 <div class="toggle-glow"></div>
-                <button class="toggle-btn" data-mode="ascii">ASCII Art</button>
-                <button class="toggle-btn active" data-mode="particle">Particle</button>
+                <button class="toggle-btn" data-mode="ascii">ASCIIart</button>
+                <button class="toggle-btn active" data-mode="particle">PARTICLE</button>
             </div>
 
             <div class="flex-grow overflow-hidden relative">
@@ -190,9 +190,9 @@
                             </div>
                             <div class="grid grid-cols-2 gap-2 text-sm pt-2">
                                 <label><input id="gravityEffect" type="checkbox" checked /> گرانش</label>
-                                <label><input id="explosionEffect" type="checkbox" /> انفجار</label>
+                                <label><input id="explosionEffect" type="checkbox" /> رانش</label>
                                 <label><input id="waveEffect" type="checkbox" /> موج</label>
-                                <label><input id="swirlEffect" type="checkbox" /> چرخش</label>
+                                <label><input id="swirlEffect" type="checkbox" /> جنبش</label>
                             </div>
                         </div>
                         <!-- Column 4 for actions -->
@@ -214,15 +214,15 @@
                         <div class="flex flex-col space-y-3">
                             <h3 class="text-base font-semibold border-b border-white/10 pb-2">تنظیمات اصلی ASCII</h3>
                             <div>
-                                <label for="asciiScale" class="flex justify-between text-xs">وضوح<span id="asciiScaleValue" class="font-bold text-cyan-400"></span></label>
+                                <label for="asciiScale" class="flex justify-between text-xs">وسعت<span id="asciiScaleValue" class="font-bold text-cyan-400"></span></label>
                                 <input id="asciiScale" type="range" min="1" max="20" step="1" value="8" class="input-range mt-1" />
                             </div>
                             <div>
-                                <label for="asciiCharset" class="text-xs">مجموعه کاراکترها</label>
+                                <label for="asciiCharset" class="text-xs"> کاراکترها</label>
                                 <select id="asciiCharset" class="w-full bg-gray-800 rounded-md p-1 text-xs mt-1 border border-gray-600 focus:ring-cyan-500 focus:border-cyan-500">
                                     <option value="█▓▒░ ">Blocks</option>
-                                    <option value="$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,\"^`'. ">Ultra Detailed</option>
-                                    <option value="@%#*+=-:. ">Standard</option>
+                                    <option value="$@B%8&WM#*oahkbdpqwmZO0QLCJU∆§×÷πYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,\"^`'. ">Ultra Detailed</option>
+                                    <option value="@%٪|•°#✓∆\[]™®©•`~×÷π`»*+=-:. ">Standard</option>
                                     <option value=" .:-=+*#%@">Simple (Inverted)</option>
                                 </select>
                             </div>
@@ -388,7 +388,7 @@
             asciiOutput.classList.add('hidden');
             [downloadHtmlBtn, resetAppBtn, generateAsciiBtn, copyAsciiBtn].forEach(b => b.disabled = true);
             imageInput.value = null;
-            showToast("برنامه ریست شد.");
+            showToast("همه‌ش به‌چوخ رفت  .");
         });
 
         // --- Particle Engine ---
