@@ -565,7 +565,6 @@ try {
     let appState = {
         isGenerating: false,
         selectedStyle: 'realistic', // Default style
-        modelConfirmed: false,
     };
 
     // --- Core Functions ---
@@ -576,6 +575,9 @@ try {
         } else {
             dom.styleModal.classList.add('hidden');
             dom.settingsModal.classList.add('hidden');
+            // Ensure age modal is also hidden when toggling others off
+            dom.ageModal.classList.add('hidden');
+            dom.ageModal.classList.remove('flex');
         }
     };
 
@@ -646,11 +648,7 @@ try {
             return;
         }
 
-        if (dom.modelSelect.value === 'turbo' && !appState.modelConfirmed) {
-            dom.ageModal.classList.remove('hidden');
-            dom.ageModal.classList.add('flex');
-            return;
-        }
+        // REMOVED: The age check logic was moved to its own event listener.
 
         appState.isGenerating = true;
         dom.generateBtn.disabled = true;
@@ -876,18 +874,6 @@ try {
         dom.micBtn.style.display = 'none';
     }
 
-    // --- Age Confirmation ---
-    dom.ageConfirm.addEventListener('click', () => {
-        appState.modelConfirmed = true;
-        toggleModal(null);
-        generateImage(); // Proceed to generate after confirmation
-    });
-
-    dom.ageCancel.addEventListener('click', () => {
-        dom.modelSelect.value = 'flux';
-        toggleModal(null);
-    });
-
     // --- Event Listeners ---
     dom.generateBtn.addEventListener('click', generateImage);
     dom.promptInput.addEventListener('keydown', (e) => {
@@ -919,9 +905,44 @@ try {
         dom.seedInput.disabled = e.target.checked;
     });
 
+    // --- NEW: Model Selection & Age Gate Logic ---
+    let previousModelValue = dom.modelSelect.value;
+
+    dom.modelSelect.addEventListener('change', (e) => {
+        const newModelValue = e.target.value;
+        if (newModelValue === 'turbo') {
+            // Show the age confirmation modal if switching to Pro
+            dom.ageModal.classList.remove('hidden');
+            dom.ageModal.classList.add('flex');
+        } else {
+            // If switching to a non-pro model, just update the previous value
+            previousModelValue = newModelValue;
+        }
+    });
+
+    dom.ageConfirm.addEventListener('click', () => {
+        // User confirmed, so the new selection ('turbo') is accepted.
+        // Update previousModelValue to reflect this acceptance.
+        previousModelValue = 'turbo';
+        // Hide the modal
+        dom.ageModal.classList.add('hidden');
+        dom.ageModal.classList.remove('flex');
+    });
+
+    dom.ageCancel.addEventListener('click', () => {
+        // User canceled, so revert the dropdown to its previous state
+        dom.modelSelect.value = previousModelValue;
+        // Hide the modal
+        dom.ageModal.classList.add('hidden');
+        dom.ageModal.classList.remove('flex');
+    });
+
+
     // --- App Initialization ---
     document.addEventListener('DOMContentLoaded', () => {
         loadSettings();
+        // Initialize previousModelValue after settings are loaded
+        previousModelValue = dom.modelSelect.value;
     });
 </script>
 
