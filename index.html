@@ -386,9 +386,8 @@ try {
                 finalPrompt += `, ${config.styleTemplates[appState.selectedStyle]}`;
             }
 
-            const apiKey = ""; 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
-
+            const url = `${baseUrl}/prompt/${encodedPrompt}?model=${model}&width=${width}&height=${height}&seed=${seed}&nologo=true&safe=false`;
+            const res = await fetch(url);
             const payload = {
                 instances: [{ prompt: finalPrompt }],
                 parameters: { "sampleCount": 1 }
