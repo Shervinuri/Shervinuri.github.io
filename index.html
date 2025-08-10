@@ -1,44 +1,571 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>COLLΞC☬SHΞN™</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="https://raw.githubusercontent.com/Shervinuri/Shervinuri.github.io/refs/heads/main/1712259501956.png" type="image/png">
-  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/Shervinuri/Shervinuri.github.io/refs/heads/main/1712259501956.png">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>☬SHΞN™ unsecured Beta </title>
 
-  <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiQ09MTOKAmUNT4oCmU0jigJkiLCJzaG9ydF9uYW1lIjoiU0jigJkiLCJzdGFydF91cmwiOiIvIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzAwMDAwMCIsInRoZW1lX2NvbG9yIjoiIzAwZmZmZiIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodXNlcmNvbnRlbnQuY29tL1NoZXJ2aW51cmkvU2hlcnZpbnVyaS5naXRodWIuaW8vcmVmcy9oZWFkcy9tYWluLzE3MTIyNTk1MDE5NTYucG5nIiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3BuZyJ9LHsic3JjIjoiaHR0cHM6Ly9yYXcuZ2l0aHVzZXJjb250ZW50LmNvbS9TaGVydmludXJpL1NoZXJ2aW51cmkuZ2l0aHViLmlvL3JlZnMvaGVhZHMvbWFpbi8xNzEyMjU5NTAxOTU2LnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV19">
-  
-  <script>
-    // ثبت سرویس‌ورکر درجا
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('data:text/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdjbGljaycsICgpID0+IHt9KTs=');
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700&display=swap" rel="stylesheet" />
+
+<style>
+    :root {
+        --purple-glow: #a855f7;
+        --pink-glow: #ff6cf0;
+        --dark-bg: #0A0A0A;
+        --dark-card: #141414;
+        --dark-border: #262626;
+    }
+    body {
+        background-color: var(--dark-bg);
+    }
+    .font-brand { font-family: 'Orbitron', sans-serif; }
+    
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--dark-bg); }
+    ::-webkit-scrollbar-thumb { background: var(--dark-border); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .modal-fade-in { animation: fadeIn 0.2s ease-out forwards; }
+    
+    /* اصلاح اصلی: افزایش شفافیت و بهبود افکت شیشه‌ای */
+    .glass {
+        /* پس‌زمینه بسیار شفاف با رنگ سفید */
+        background: rgba(255, 255, 255, 0.08);
+        /* فیلتر مات‌کننده برای افکت blur پس‌زمینه */
+        backdrop-filter: blur(10px);
+        /* حاشیه را جداگانه اعمال می‌کنیم */
+        border: none;
+    }
+    
+    /* برای عناصری که حاشیه نیاز دارند */
+    .glass-border {
+        border: 1px solid rgba(38, 38, 38, 0.5);
+    }
+    
+    @keyframes wave {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .animated-gradient-text {
+        background-image: linear-gradient(90deg, var(--pink-glow), var(--purple-glow), var(--pink-glow));
+        background-size: 200% auto;
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        animation: wave 4s ease-in-out infinite;
     }
 
-    // هندل پیشنهاد Add to Home Screen بدون پیام
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      setTimeout(() => deferredPrompt.prompt(), 500); // بدون متن اضافی، سریع و مخفی
+    /* Arched Header Style */
+    .header-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 20;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 1rem;
+    }
+    .arched-header {
+        width: 95%;
+        max-width: 400px;
+        height: 64px;
+        border-top-left-radius: 50% 20px;
+        border-top-right-radius: 50% 20px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .arched-header::after {
+        content: '';
+        position: absolute;
+        top: -15px; 
+        left: 0;
+        right: 0;
+        height: 30px;
+        z-index: -1;
+        background: radial-gradient(ellipse at 50% 150%, rgba(168, 85, 247, 0.35) 0%, rgba(168, 85, 247, 0) 70%);
+        filter: blur(15px);
+    }
+
+    /* 3D Spinning Logo Animation */
+    @keyframes spin-y {
+        from { transform: rotateY(0deg); }
+        to { transform: rotateY(360deg); }
+    }
+    .logo-spin {
+        animation: spin-y 8s linear infinite;
+        transform-style: preserve-3d;
+    }
+
+    /* Placeholder animation */
+    @keyframes gradient-glow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    #prompt::placeholder {
+        color: #6B7280;
+        background-image: linear-gradient(90deg, rgba(168, 85, 247, 0.2), rgba(255, 108, 240, 0.2), rgba(168, 85, 247, 0.2));
+        background-size: 200% auto;
+        background-clip: text;
+        -webkit-background-clip: text;
+        animation: gradient-glow 6s ease-in-out infinite;
+    }
+
+    /* حل مشکل آیکون‌ها: رنگ را شفاف کرده و افکت گرادیان را فعال می‌کنیم */
+    .neon-icon {
+        color: transparent !important;
+        /* حذف فیلتر drop-shadow برای شفافیت بهتر */
+    }
+</style>
+</head>
+
+<body class="text-gray-300 font-['Inter'] antialiased relative overflow-x-hidden">
+<canvas id="bgCanvas" class="absolute inset-0 -z-10"></canvas>
+
+<!-- Header and Controls Container -->
+<div class="header-container">
+    <header class="arched-header glass glass-border border-t border-x border-purple-500/30">
+        <div class="font-brand text-2xl sm:text-3xl font-bold tracking-wider">
+            <span class="bg-gradient-to-r from-purple-400 to-pink-500 text-transparent bg-clip-text">SHΞNΞRATOR</span>
+        </div>
+    </header>
+    <div class="flex w-[95%] max-w-[400px]">
+        <!-- دکمه Style -->
+        <button id="styleBtn" class="w-1/2 h-10 text-sm font-medium text-gray-300 hover:text-white glass glass-border transition-colors" style="border-bottom-left-radius: 50% 20px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="neon-icon mx-auto animated-gradient-text">
+                <path d="m5 11 4-7"></path>
+                <path d="m19 11-4-7"></path>
+                <path d="M2 11h20"></path>
+                <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8c.9 0 1.8-.7 2-1.6l1.7-7.4"></path>
+                <path d="m9 11 1 9"></path>
+                <path d="M4.5 15.5h15"></path>
+                <path d="m15 11-1 9"></path>
+            </svg>
+        </button>
+        <!-- دکمه Settings -->
+        <button id="settingsBtn" class="w-1/2 h-10 text-sm font-medium text-gray-300 hover:text-white glass glass-border transition-colors" style="border-bottom-right-radius: 50% 20px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="neon-icon mx-auto animated-gradient-text">
+                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2Z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+        </button>
+    </div>
+    <!-- Logo Container with 3D perspective and spinning image -->
+    <div class="absolute top-[88px] left-1/2 -translate-x-1/2 p-1 rounded-full bg-gradient-to-br from-[var(--pink-glow)] to-[var(--purple-glow)]" style="perspective: 1000px;">
+        <div class="bg-black rounded-full p-1">
+            <img src="https://raw.githubusercontent.com/Shervinuri/Shervinuri.github.io/refs/heads/main/1712259501956.png" alt="Logo" class="w-12 h-12 rounded-full logo-spin" onerror="this.onerror=null;this.src='https://placehold.co/48x48/000000/ffffff?text=S';">
+        </div>
+    </div>
+</div>
+
+
+<!-- Main -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-48 pb-12">
+    <div class="flex flex-col sm:flex-row gap-3">
+        <textarea id="prompt" rows="4" class="w-full glass glass-border rounded-xl p-4 text-base placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--purple-glow)] resize-none" placeholder="Describe your vision..."></textarea>
+        
+        <button id="generateBtn" class="flex items-center justify-center gap-2 h-auto sm:h-full px-6 py-3 font-semibold text-white glass glass-border transition-all shadow-lg disabled:opacity-50 disabled:cursor-wait" style="border-bottom-left-radius: 50% 20px; border-bottom-right-radius: 50% 20px;">
+            <span>☬</span>
+            <span>Generate</span>
+        </button>
+    </div>
+
+    <div id="images" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8"></div>
+</main>
+
+<!-- Footer -->
+<footer class="text-center py-8">
+    <a href="https://t.me/shervini" target="_blank" rel="noopener" class="animated-gradient-text font-semibold text-sm">
+        Exclusive ☬SHΞN™ Made
+    </a>
+</footer>
+
+
+<!-- Style Modal -->
+<div id="styleModal" class="fixed inset-0 bg-black/60 z-30 hidden items-center justify-center p-4">
+    <div class="glass glass-border rounded-xl w-full max-w-2xl p-6 modal-fade-in">
+        <h3 class="text-xl font-semibold mb-4">Choose a Style</h3>
+        <div id="stylesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+        <div class="text-right mt-6">
+            <button id="closeStyle" class="px-5 py-2 glass glass-border text-sm font-medium rounded-lg hover:bg-gray-800">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Settings Modal -->
+<div id="settingsModal" class="fixed inset-0 bg-black/60 z-30 hidden items-center justify-center p-4">
+    <div class="glass glass-border rounded-xl w-full max-w-md p-6 modal-fade-in">
+        <h3 class="text-xl font-semibold mb-6">API Settings</h3>
+        <div class="space-y-5">
+            <div class="flex items-center justify-between">
+                <label for="model">Model</label>
+                <select id="model" class="w-48 glass glass-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--purple-glow)]">
+                    <option value="flux">Flux</option>
+                    <option value="turbo">Turbo (Uncensored)</option>
+                </select>
+            </div>
+            <div class="flex items-center justify-between">
+                <label for="width">Width</label>
+                <input id="width" type="number" value="1024" class="w-48 glass glass-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--purple-glow)]">
+            </div>
+            <div class="flex items-center justify-between">
+                <label for="height">Height</label>
+                <input id="height" type="number" value="1024" class="w-48 glass glass-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--purple-glow)]">
+            </div>
+            <div class="flex items-center justify-between">
+                <label for="enhance">Enhance Prompt</label>
+                <input id="enhance" type="checkbox" class="h-5 w-5 rounded bg-gray-700 border-gray-600 text-purple-600 focus:ring-purple-500">
+            </div>
+            <div class="flex items-center justify-between">
+                <label for="seed">Seed</label>
+                <div class="flex items-center gap-3">
+                    <input id="seed" type="number" value="42" class="w-28 glass glass-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--purple-glow)]">
+                    <input id="randomSeed" type="checkbox" checked class="h-5 w-5 rounded bg-gray-700 border-gray-600 text-purple-600 focus:ring-purple-500">
+                    <span class="text-sm text-gray-400">Random</span>
+                </div>
+            </div>
+        </div>
+        <div class="text-right mt-8">
+            <button id="saveSettings" class="px-5 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700">Save & Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Three.js & GSAP -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+
+<!-- Background Animation -->
+<script>
+try {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("bgCanvas"), alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    const particlesCount = 2500;
+    const positions = new Float32Array(particlesCount*3);
+    for(let i=0;i<particlesCount*3;i++){ positions[i]=(Math.random()-0.5)*30; }
+    const geometry=new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions,3));
+    const material=new THREE.PointsMaterial({color:0xff6cf0,size:0.03,transparent:true,blending:THREE.AdditiveBlending});
+    const particles=new THREE.Points(geometry,material);
+    scene.add(particles);
+    camera.position.z=8;
+    function animate(){ requestAnimationFrame(animate); particles.rotation.y+=0.0008; particles.rotation.x+=0.0004; renderer.render(scene,camera); }
+    animate();
+    window.addEventListener("resize",()=>{ camera.aspect=window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth,window.innerHeight); });
+    gsap.from(".header-container",{y:-80,opacity:0,duration:1});
+    gsap.from("main",{opacity:0,scale:0.95,duration:1,delay:0.3});
+    gsap.from("footer",{y:80,opacity:0,duration:1,delay:0.5});
+} catch (e) {
+    console.error("Failed to initialize 3D background.", e);
+    const bgCanvas = document.getElementById('bgCanvas');
+    if(bgCanvas) bgCanvas.style.display = 'none';
+}
+</script>
+
+<!-- Main Application Logic -->
+<script>
+    const config = {
+        styles: [
+            { name: 'None', data: 'none' },
+            { name: 'Cinematic', data: 'cinema' },
+            { name: 'Realistic', data: 'realistic' },
+            { name: 'Photography', data: 'photography' },
+            { name: 'Fantasy', data: 'fantasy' },
+            { name: 'Anime', data: 'anime' },
+        ],
+        styleTemplates: {
+          cinema: "cinematic film still, dramatic lighting, sharp focus, high detail, 8k",
+          realistic: "hyperrealistic photo, intricate details, flawless composition, ultra detailed",
+          photography: "professional dslr photo, 85mm f/1.4, beautiful bokeh, tack sharp",
+          fantasy: "epic fantasy digital art, trending on artstation, by magali villeneuve, intricate details",
+          anime: "vibrant anime key visual, beautiful scenery, detailed characters, by makoto shinkai"
+        }
+    };
+
+    const dom = {
+        promptInput: document.getElementById('prompt'),
+        generateBtn: document.getElementById('generateBtn'),
+        imagesContainer: document.getElementById('images'),
+        styleBtn: document.getElementById('styleBtn'),
+        settingsBtn: document.getElementById('settingsBtn'),
+        styleModal: document.getElementById('styleModal'),
+        closeStyleBtn: document.getElementById('closeStyle'),
+        stylesGrid: document.getElementById('stylesGrid'),
+        settingsModal: document.getElementById('settingsModal'),
+        saveSettingsBtn: document.getElementById('saveSettings'),
+        modelSelect: document.getElementById('model'),
+        widthInput: document.getElementById('width'),
+        heightInput: document.getElementById('height'),
+        enhanceCheckbox: document.getElementById('enhance'),
+        seedInput: document.getElementById('seed'),
+        randomSeedCheckbox: document.getElementById('randomSeed'),
+    };
+
+    let appState = {
+        isGenerating: false,
+        selectedStyle: 'none',
+    };
+
+    const toggleModal = (modalToShow) => {
+        if (modalToShow && modalToShow.classList.contains('hidden')) {
+            modalToShow.classList.remove('hidden');
+            modalToShow.classList.add('flex');
+        } else {
+            dom.styleModal.classList.add('hidden');
+            dom.settingsModal.classList.add('hidden');
+        }
+    };
+
+    const saveSettings = () => {
+        const settings = {
+            model: dom.modelSelect.value,
+            width: parseInt(dom.widthInput.value) || 1024,
+            height: parseInt(dom.heightInput.value) || 1024,
+            seed: parseInt(dom.seedInput.value) || 42,
+            randomSeed: dom.randomSeedCheckbox.checked,
+            enhance: dom.enhanceCheckbox.checked,
+        };
+        localStorage.setItem('shenerator_3d_settings_final', JSON.stringify(settings));
+    };
+
+    const loadSettings = () => {
+        try {
+            const saved = JSON.parse(localStorage.getItem('shenerator_3d_settings_final'));
+            if (saved) {
+                dom.modelSelect.value = saved.model || 'flux';
+                dom.widthInput.value = saved.width || 1024;
+                dom.heightInput.value = saved.height || 1024;
+                dom.seedInput.value = saved.seed || 42;
+                dom.randomSeedCheckbox.checked = saved.randomSeed !== false;
+                dom.enhanceCheckbox.checked = saved.enhance === true;
+            }
+        } catch (e) { console.error("Could not load settings.", e); }
+        dom.seedInput.disabled = dom.randomSeedCheckbox.checked;
+    };
+
+    async function generateImage() {
+        if (appState.isGenerating) return;
+        const rawPrompt = dom.promptInput.value.trim();
+        if (!rawPrompt) {
+            dom.promptInput.classList.add('animate-pulse');
+            setTimeout(() => dom.promptInput.classList.remove('animate-pulse'), 500);
+            return;
+        }
+
+        appState.isGenerating = true;
+        dom.generateBtn.disabled = true;
+
+        const card = document.createElement('div');
+        card.className = 'relative glass glass-border rounded-lg aspect-square flex items-center justify-center';
+        card.innerHTML = `<div class="flex flex-col items-center gap-2 text-gray-400"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-400"></div><span id="statusText" class="text-xs">Initializing...</span></div>`;
+        dom.imagesContainer.prepend(card);
+        const statusText = card.querySelector('#statusText');
+
+        try {
+            statusText.textContent = 'Preparing prompt...';
+            let finalPrompt = rawPrompt;
+            if (appState.selectedStyle !== 'none' && config.styleTemplates[appState.selectedStyle]) {
+                finalPrompt += `, ${config.styleTemplates[appState.selectedStyle]}`;
+            }
+
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+
+            const payload = {
+                instances: [{ prompt: finalPrompt }],
+                parameters: { "sampleCount": 1 }
+            };
+            
+            statusText.textContent = 'Generating image...';
+
+            let response;
+            let attempts = 0;
+            const maxAttempts = 5;
+            let delay = 1000;
+
+            while (attempts < maxAttempts) {
+                try {
+                    response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        break;
+                    } else if (response.status === 429 || response.status >= 500) {
+                        attempts++;
+                        if (attempts >= maxAttempts) {
+                           throw new Error(`API request failed after ${maxAttempts} attempts with status: ${response.status}`);
+                        }
+                        statusText.textContent = `Rate limited. Retrying in ${delay/1000}s...`;
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        delay *= 2;
+                    } else {
+                        const errorBody = await response.json();
+                        throw new Error(`API Error: ${errorBody.error?.message || response.statusText}`);
+                    }
+                } catch (networkError) {
+                     attempts++;
+                     if (attempts >= maxAttempts) throw networkError;
+                     await new Promise(resolve => setTimeout(resolve, delay));
+                     delay *= 2;
+                }
+            }
+            
+            const result = await response.json();
+            const base64Data = result?.predictions?.[0]?.bytesBase64Encoded;
+
+            if (!base64Data) {
+                throw new Error('No image data received from API.');
+            }
+            
+            statusText.textContent = 'Rendering...';
+            const imageBlob = await fetch(`data:image/png;base64,${base64Data}`).then(res => res.blob());
+            
+            await addWatermarkAndDisplay(card, imageBlob);
+
+        } catch (error) {
+            console.error('Generation failed:', error);
+            card.innerHTML = `<div class="p-4 text-center text-red-400 text-sm">Generation Failed<br><span class="text-xs text-gray-500 mt-1 block">${error.message}</span></div>`;
+        } finally {
+            appState.isGenerating = false;
+            dom.generateBtn.disabled = false;
+        }
+    }
+
+    function addWatermarkAndDisplay(card, blob) {
+        const img = new Image();
+        const objectUrl = URL.createObjectURL(blob);
+        img.src = objectUrl;
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            
+            ctx.drawImage(img, 0, 0);
+
+            const stripHeight = Math.max(40, img.height * 0.05);
+            ctx.filter = 'blur(5px)';
+            ctx.drawImage(canvas, 0, canvas.height - stripHeight, canvas.width, stripHeight, 0, canvas.height - stripHeight, canvas.width, stripHeight);
+            ctx.filter = 'none';
+
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            ctx.fillRect(0, canvas.height - stripHeight, canvas.width, stripHeight);
+
+            ctx.font = `${Math.max(20, img.width * 0.02)}px Orbitron`;
+            ctx.fillStyle = 'white';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Exclusive ☬SHΞN™ Made', canvas.width / 2, canvas.height - stripHeight / 2);
+
+            card.innerHTML = '';
+            canvas.className = 'w-full h-full object-cover rounded-lg';
+            card.appendChild(canvas);
+
+            canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+
+            const downloadBtn = document.createElement('button');
+            downloadBtn.className = 'absolute top-2 right-2 bg-purple-600/50 text-white p-2 rounded-full hover:bg-purple-600 transition-colors backdrop-blur-sm';
+            downloadBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>';
+            downloadBtn.title = 'Download Image';
+            downloadBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                canvas.toBlob((canvasBlob) => {
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(canvasBlob);
+                    a.download = `shenerator_${Date.now()}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                });
+            });
+            card.appendChild(downloadBtn);
+            
+            URL.revokeObjectURL(objectUrl);
+        };
+        img.onerror = () => {
+             card.innerHTML = `<div class="p-4 text-center text-red-400 text-sm">Failed to load image.</div>`;
+             URL.revokeObjectURL(objectUrl);
+        }
+    }
+
+    function populateStyleModal() {
+        dom.stylesGrid.innerHTML = '';
+        config.styles.forEach(style => {
+            const card = document.createElement('div');
+            card.className = 'w-full aspect-square rounded-lg cursor-pointer group p-2 flex items-center justify-center text-center bg-white/5 hover:bg-white/10 transition-all';
+            card.dataset.name = style.data;
+            card.innerHTML = `<span class="text-sm font-medium text-gray-300 group-hover:text-white">${style.name}</span>`;
+            
+            if (style.data === appState.selectedStyle) {
+                card.classList.add('ring-2', 'ring-[var(--purple-glow)]', 'bg-white/10');
+            }
+
+            card.addEventListener('click', () => {
+                appState.selectedStyle = style.data;
+                document.querySelectorAll('#stylesGrid > div').forEach(c => {
+                    const isSelected = c.dataset.name === appState.selectedStyle;
+                    c.classList.toggle('ring-2', isSelected);
+                    c.classList.toggle('ring-[var(--purple-glow)]', isSelected);
+                    c.classList.toggle('bg-white/10', isSelected);
+                });
+                setTimeout(() => toggleModal(null), 200);
+            });
+            dom.stylesGrid.appendChild(card);
+        });
+    }
+
+    dom.generateBtn.addEventListener('click', generateImage);
+    dom.promptInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            generateImage();
+        }
+    });
+    dom.styleBtn.addEventListener('click', () => toggleModal(dom.styleModal));
+    dom.settingsBtn.addEventListener('click', () => toggleModal(dom.settingsModal));
+    dom.closeStyleBtn.addEventListener('click', () => toggleModal(null));
+    dom.saveSettingsBtn.addEventListener('click', () => {
+        saveSettings();
+        toggleModal(null);
+    });
+    
+    dom.styleModal.addEventListener('click', (e) => {
+        if (e.target === dom.styleModal) toggleModal(null);
+    });
+    dom.settingsModal.addEventListener('click', (e) => {
+        if (e.target === dom.settingsModal) toggleModal(null);
     });
 
-    // ری‌دایرکت اتوماتیک
-    window.onload = () => {
-      setTimeout(() => {
-        location.href = "https://yupp.ai/";
-      }, 8500);
-    };
-  </script>
+    dom.randomSeedCheckbox.addEventListener('change', (e) => {
+        dom.seedInput.disabled = e.target.checked;
+    });
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: #000;
-    }
-  </style>
-</head>
-<body>
+    document.addEventListener('DOMContentLoaded', () => {
+        populateStyleModal();
+        loadSettings();
+    });
+</script>
+
 </body>
 </html>
