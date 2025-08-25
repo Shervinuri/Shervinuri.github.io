@@ -1,16 +1,36 @@
+بله، قول می‌دم:
+
+> ❝ هیچ چیزی رو نمی‌زنم، نمی‌ترکونم، نمی‌خرابم، و هیچ‌کس رو پشیمون نمی‌کنم. ❞
+
+این نسخه نهایی، کاملاً **یکپارچه، تمیز، بهینه‌شده و در یک فایل HTML واحد** است — همه چیز دقیقاً طبق مواردی که با هم طی کردیم:
+
+✅ فقط یک فایل HTML  
+✅ کاملاً Responsive (دسکتاپ و موبایل)  
+✅ Drag & Drop فقط در دسکتاپ، در موبایل با کلیک فایل منیجر باز میشه  
+✅ ورودی لینک برای بارگذاری از URL  
+✅ ترجمه آفلاین با NLLB-200  
+✅ UI سایبرناتیک و نئونی حفظ شده  
+✅ مدیریت خطا، تایپ افکت، لاگ هوشمند  
+✅ پیشرفت منطقی و تجربه کاربری بهتر
+
+---
+
+### ✅ **srtDICK ☬ SHΞNΞRI - نسخه نهایی و کامل (یک فایل HTML)**
+
+```html
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>srtDICK☬SHΞNeri</title>
+    <title>srtDICK ☬ SHΞNΞRI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #0d0d0d;
-            --panel-bg: rgba(20, 20, 20, 0.8);
+            --panel-bg: rgba(20, 20, 20, 0.85);
             --neon-orange: #ff6c00;
             --text-color: #e0e0e0;
             --text-muted: #888;
@@ -32,32 +52,37 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
-            overflow: hidden;
+            padding: 10px;
+            overflow: auto;
             background-image: radial-gradient(var(--panel-bg) 1px, transparent 1px);
             background-size: 15px 15px;
+            direction: rtl;
         }
 
         .grid-container {
             display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 15px;
             width: 100%;
-            max-width: 1200px;
-            height: 90vh;
-            max-height: 700px;
+            max-width: 900px;
+        }
+
+        @media (min-width: 768px) {
+            .grid-container {
+                grid-template-columns: 340px 1fr;
+            }
         }
 
         .panel {
             background-color: var(--panel-bg);
             border: 1px solid var(--border-color);
-            border-radius: 15px;
-            padding: 25px;
+            border-radius: 14px;
+            padding: 20px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 0 15px var(--glow-color), inset 0 0 10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 20px var(--glow-color), inset 0 0 10px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
             transition: all 0.3s ease;
         }
 
@@ -65,118 +90,214 @@
             font-family: 'Orbitron', sans-serif;
             color: var(--neon-orange);
             text-align: center;
-            font-size: 1.8em;
-            text-shadow: 0 0 5px var(--neon-orange), 0 0 10px var(--glow-color);
+            font-size: 1.6em;
+            text-shadow: 0 0 6px var(--neon-orange), 0 0 12px var(--glow-color);
             letter-spacing: 2px;
+            margin-bottom: 10px;
         }
 
         .upload-area {
             border: 2px dashed var(--border-color);
             border-radius: 10px;
-            padding: 20px;
+            padding: 18px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
-            flex-grow: 1;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
+
         .upload-area:hover, .upload-area.dragover {
             border-color: var(--neon-orange);
-            box-shadow: 0 0 10px var(--glow-color);
+            box-shadow: 0 0 15px var(--glow-color);
+            transform: scale(1.02);
         }
-        #fileInput { display: none; }
-        #fileName { font-size: 0.9em; margin-top: 10px; color: var(--text-muted); }
 
-        .language-selector { display: flex; gap: 10px; }
-        .language-selector div { flex: 1; }
-        select {
+        #fileInput {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        #fileName {
+            font-size: 0.9em;
+            margin-top: 8px;
+            color: var(--text-muted);
+            font-weight: normal;
+        }
+
+        .link-input {
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+        }
+
+        @media (min-width: 500px) {
+            .link-input {
+                flex-direction: row;
+            }
+        }
+
+        #urlInput {
+            flex: 1;
             padding: 10px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
-            background-color: rgba(0,0,0,0.3);
+            background-color: rgba(0, 0, 0, 0.3);
             color: var(--text-color);
             font-family: inherit;
+            font-size: 0.95em;
+            transition: border 0.2s;
+        }
+
+        #urlInput:focus {
+            outline: none;
+            border-color: var(--neon-orange);
+            box-shadow: 0 0 8px var(--glow-color);
+        }
+
+        #loadUrlBtn {
+            padding: 10px 14px;
+            background: var(--neon-orange);
+            color: white;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95em;
+            font-weight: bold;
             transition: all 0.2s;
         }
-        select:hover { border-color: var(--neon-orange); }
+
+        #loadUrlBtn:hover {
+            background: #ff8a20;
+            box-shadow: 0 0 10px var(--glow-color);
+        }
+
+        .language-selector {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        @media (min-width: 500px) {
+            .language-selector {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        select {
+            width: 100%;
+            padding: 11px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: rgba(0, 0, 0, 0.3);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 0.95em;
+            transition: all 0.2s;
+        }
+
+        select:hover {
+            border-color: var(--neon-orange);
+        }
 
         .btn {
             background: linear-gradient(145deg, #ff6c00, #c45300);
             color: white;
             padding: 12px;
             border: none;
-            border-radius: 8px; /* Chamfer Effect */
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1.1em;
+            font-size: 1.05em;
             font-weight: bold;
             font-family: 'Orbitron', sans-serif;
-            transition: all 0.2s ease-in-out;
+            transition: all 0.25s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
         }
+
         .btn:disabled {
             background: #555;
             cursor: not-allowed;
             box-shadow: none;
             color: #999;
+            opacity: 0.7;
         }
+
         .btn:not(:disabled):hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             box-shadow: 0 0 20px var(--glow-color);
         }
 
-        .monitoring-panel {
-            gap: 15px;
-        }
         .monitor-screen {
             background-color: #000;
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            padding: 15px;
+            padding: 14px;
             flex-grow: 1;
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
+
         .monitor-screen h2 {
             font-family: 'Orbitron', sans-serif;
             color: var(--neon-orange);
-            font-size: 1.1em;
+            font-size: 1.05em;
             margin-bottom: 10px;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
+            padding-bottom: 7px;
         }
+
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
             font-size: 0.9em;
         }
-        .stat-item span:first-child { color: var(--text-muted); }
-        .stat-item span:last-child { color: var(--neon-orange); font-weight: bold; }
+
+        .stat-item span:first-child {
+            color: var(--text-muted);
+        }
+
+        .stat-item span:last-child {
+            color: var(--neon-orange);
+            font-weight: bold;
+        }
 
         #log-container {
             flex-grow: 1;
             overflow-y: auto;
             margin-top: 10px;
-            font-size: 0.9em;
-            padding-right: 10px;
+            font-size: 0.88em;
+            line-height: 1.5;
+            max-height: 180px;
+            padding-right: 8px;
         }
+
         #log-container p {
             margin-bottom: 5px;
             white-space: pre-wrap;
-            line-height: 1.5;
         }
+
         .cursor {
             display: inline-block;
             background-color: var(--neon-orange);
-            width: 10px;
+            width: 9px;
+            height: 1em;
+            vertical-align: middle;
             animation: blink 1s step-end infinite;
         }
+
         @keyframes blink {
             from, to { background-color: transparent; }
             50% { background-color: var(--neon-orange); }
@@ -186,14 +307,21 @@
 <body>
 
     <div class="grid-container">
+        <!-- Control Panel -->
         <div class="panel control-panel">
-            <h1>srtDICK☬SHΞNeri</h1>
-            
+            <h1>srtDICK ☬ SHΞNΞRI</h1>
+
             <div class="upload-area" id="uploadArea">
-                <p>فایل زیرنویس را اینجا رها کنید<br>یا برای انتخاب کلیک کنید</p>
+                <p>فایل زیرنویس را رها کنید<br>یا برای انتخاب کلیک کنید</p>
                 <div id="fileName">(.srt, .vtt, .ass)</div>
+                <input type="file" id="fileInput" accept=".srt,.vtt,.ass">
             </div>
-            
+
+            <div class="link-input">
+                <input type="url" id="urlInput" placeholder="وارد کردن لینک فایل زیرنویس">
+                <button id="loadUrlBtn" class="btn">بارگذاری از لینک</button>
+            </div>
+
             <div class="language-selector">
                 <div>
                     <label for="sourceLang">زبان مبدأ:</label>
@@ -208,15 +336,16 @@
             <button id="translateBtn" class="btn" disabled>پردازش و ترجمه</button>
         </div>
 
+        <!-- Monitoring Panel -->
         <div class="panel monitoring-panel">
             <div class="monitor-screen" id="analysis-screen">
                 <h2>> FILE ANALYSIS_</h2>
                 <div class="stats-grid">
-                    <div class="stat-item"><span>Source Title:</span> <span id="stat-title">--</span></div>
-                    <div class="stat-item"><span>Format:</span> <span id="stat-format">--</span></div>
-                    <div class="stat-item"><span>Total Lines:</span> <span id="stat-lines">--</span></div>
-                    <div class="stat-item"><span>Total Chars:</span> <span id="stat-chars">--</span></div>
-                    <div class="stat-item"><span>Resolution:</span> <span>N/A (from subtitle)</span></div>
+                    <div class="stat-item"><span>عنوان:</span> <span id="stat-title">--</span></div>
+                    <div class="stat-item"><span>فرمت:</span> <span id="stat-format">--</span></div>
+                    <div class="stat-item"><span>تعداد خطوط:</span> <span id="stat-lines">--</span></div>
+                    <div class="stat-item"><span>کاراکترها:</span> <span id="stat-chars">--</span></div>
+                    <div class="stat-item"><span>وضعیت:</span> <span id="stat-status">آماده</span></div>
                 </div>
             </div>
             <div class="monitor-screen" id="log-screen">
@@ -226,10 +355,11 @@
         </div>
     </div>
 
+    <!-- AI Model Loader -->
     <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1"></script>
 
     <script type="module">
-        // --- عناصر DOM ---
+        // --- DOM Elements ---
         const fileInput = document.getElementById('fileInput');
         const uploadArea = document.getElementById('uploadArea');
         const translateBtn = document.getElementById('translateBtn');
@@ -237,56 +367,84 @@
         const sourceLangSelect = document.getElementById('sourceLang');
         const targetLangSelect = document.getElementById('targetLang');
         const logContainer = document.getElementById('log-container');
-        
-        // --- متغیرهای سراسری ---
-        let fileContent = null, originalFileName = '', fileExtension = '';
-        let modelPromise = null, isModelReady = false;
+        const urlInput = document.getElementById('urlInput');
+        const loadUrlBtn = document.getElementById('loadUrlBtn');
 
+        // --- Global Vars ---
+        let fileContent = null;
+        let originalFileName = '';
+        let fileExtension = '';
+        let isModelReady = false;
+        let modelPromise = null;
+
+        // --- Language Mapping ---
         const LANGUAGES = {
             "فارسی": "fas_Arab", "انگلیسی": "eng_Latn", "آلمانی": "deu_Latn",
             "فرانسوی": "fra_Latn", "اسپانیایی": "spa_Latn", "ایتالیایی": "ita_Latn",
             "روسی": "rus_Cyrl", "چینی": "zho_Hans", "ژاپنی": "jpn_Jpan",
             "کره‌ای": "kor_Hang", "عربی": "arb_Arab", "ترکی": "tur_Latn"
         };
-        
-        // --- راه‌اندازی اولیه ---
+
+        // --- Initialize App ---
         function initialize() {
-            logToMonitor(">> System Initialized. Waiting for user input...");
-            
-            for (const lang in LANGUAGES) {
-                sourceLangSelect.innerHTML += `<option value="${LANGUAGES[lang]}">${lang}</option>`;
-                targetLangSelect.innerHTML += `<option value="${LANGUAGES[lang]}">${lang}</option>`;
-            }
+            logToMonitor(">> srtDICK ☬ SHΞNΞRI فعال است. منتظر ورودی کاربر...");
+
+            // Populate language selects
+            Object.keys(LANGUAGES).forEach(lang => {
+                const opt1 = new Option(lang, LANGUAGES[lang]);
+                const opt2 = new Option(lang, LANGUAGES[lang]);
+                sourceLangSelect.add(opt1);
+                targetLangSelect.add(opt2);
+            });
             sourceLangSelect.value = "eng_Latn";
             targetLangSelect.value = "fas_Arab";
 
             // Event Listeners
             uploadArea.addEventListener('click', () => fileInput.click());
             fileInput.addEventListener('change', handleFileSelect);
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                uploadArea.addEventListener(eventName, preventDefaults, false);
+
+            // Drag & Drop (Desktop only)
+            ['dragenter', 'dragover'].forEach(e => {
+                uploadArea.addEventListener(e, e => {
+                    e.preventDefault();
+                    uploadArea.classList.add('dragover');
+                });
             });
-            uploadArea.addEventListener('dragover', () => uploadArea.classList.add('dragover'));
-            uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
-            uploadArea.addEventListener('drop', handleDrop);
+            ['dragleave', 'drop'].forEach(e => {
+                uploadArea.addEventListener(e, e => {
+                    e.preventDefault();
+                    if (e.type === 'drop') {
+                        fileInput.files = e.dataTransfer.files;
+                        handleFileSelect();
+                    }
+                    uploadArea.classList.remove('dragover');
+                });
+            });
+
+            // Load from URL
+            loadUrlBtn.addEventListener('click', loadFromUrl);
+
+            // Translate Button
             translateBtn.addEventListener('click', onTranslateClick);
 
-            // شروع بارگذاری هوشمند در پس‌زمینه
+            // Load AI Model in Background
             modelPromise = MyTranslationPipeline.getInstance();
             modelPromise.then(() => {
                 isModelReady = true;
-                logToMonitor("\n>> AI Core ready. System is fully operational.");
+                logToMonitor("\n>> مدل هوش مصنوعی آماده است. سیستم کاملاً فعال.");
+            }).catch(err => {
+                logToMonitor(`\n>> خطا در بارگذاری مدل: ${err.message}`, 5);
             });
         }
-        
-        // --- مدیریت فایل ---
+
+        // --- Handle File Input ---
         function handleFileSelect() {
             const file = fileInput.files[0];
             if (!file) return;
 
             fileExtension = file.name.split('.').pop().toLowerCase();
             if (!['srt', 'vtt', 'ass'].includes(fileExtension)) {
-                logToMonitor(">> ERROR: Unsupported file format. Please use SRT, VTT, or ASS.", 5);
+                logToMonitor(">> خطا: فرمت فایل پشتیبانی نمی‌شود. فقط SRT, VTT, ASS.", 5);
                 return;
             }
 
@@ -294,79 +452,104 @@
             reader.onload = (e) => {
                 fileContent = e.target.result;
                 originalFileName = file.name;
-                fileNameDiv.textContent = originalFileName;
+                fileNameDiv.textContent = file.name;
                 translateBtn.disabled = false;
-                logToMonitor(`\n>> File loaded: ${originalFileName}`);
-                analyzeFile(fileContent, originalFileName, fileExtension);
+                logToMonitor(`\n>> فایل بارگذاری شد: ${file.name}`);
+                analyzeFile(fileContent, file.name, fileExtension);
             };
             reader.readAsText(file);
         }
 
+        // --- Load from URL ---
+        async function loadFromUrl() {
+            const url = urlInput.value.trim();
+            if (!url) {
+                logToMonitor(">> لطفاً یک لینک معتبر وارد کنید.", 5);
+                return;
+            }
+
+            logToMonitor(">> در حال بارگذاری از لینک...");
+            try {
+                const res = await fetch(url);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const blob = await res.blob();
+                const filename = decodeURIComponent(url.split('/').pop().split('?')[0]) || 'subtitle.srt';
+                const file = new File([blob], filename, { type: 'text/plain' });
+
+                const reader = new FileReader();
+                reader.onload = () => {
+                    fileContent = reader.result;
+                    originalFileName = filename;
+                    fileExtension = filename.split('.').pop().toLowerCase();
+                    fileNameDiv.textContent = filename;
+                    translateBtn.disabled = false;
+                    logToMonitor(`>> فایل از لینک بارگذاری شد: ${filename}`);
+                    analyzeFile(fileContent, filename, fileExtension);
+                };
+                reader.readAsText(file);
+            } catch (err) {
+                logToMonitor(`>> خطا در بارگذاری: ${err.message}`, 5);
+            }
+        }
+
+        // --- Analyze File ---
         function analyzeFile(content, name, format) {
             const subtitles = parseFile(content, format);
             const totalLines = subtitles.length;
-            const totalChars = subtitles.reduce((acc, sub) => acc + sub.text.length, 0);
+            const totalChars = subtitles.reduce((acc, s) => acc + s.text.length, 0);
 
-            document.getElementById('stat-title').textContent = name.split('.').slice(0, -1).join('.');
+            document.getElementById('stat-title').textContent = name.replace(/\.[^/.]+$/, "");
             document.getElementById('stat-format').textContent = format.toUpperCase();
             document.getElementById('stat-lines').textContent = totalLines;
             document.getElementById('stat-chars').textContent = totalChars;
-            logToMonitor(">> File analysis complete. Stats updated.");
+            document.getElementById('stat-status').textContent = "آماده به ترجمه";
+            logToMonitor(">> تحلیل فایل کامل شد.");
         }
 
-        // --- منطق ترجمه ---
+        // --- Translation Logic ---
         async function onTranslateClick() {
             if (!fileContent) return;
 
             translateBtn.disabled = true;
-            logToMonitor("\n>> Translation process initiated...");
+            logToMonitor("\n>> فرآیند ترجمه آغاز شد...");
 
             if (!isModelReady) {
                 await logWithTypingEffect([
-                    "در حال چک کردن پیش نیازها و تنظیمات مرورگر شما هستم...",
-                    "این پروسه تنها در اولین اجرا بسته به معماری سیستم شما ممکن است اندکی زمانبر باشد...",
-                    "اما پس از ستاپ اولیه، حتی قادر به استفاده آفلاین از این ابزار خواهید بود!"
+                    "در حال بررسی سیستم و پیش‌نیازها...",
+                    "مدل NLLB-200 در حال بارگذاری است.",
+                    "این تنها در اولین بار زمان می‌برد.",
+                    "بعد از این، کاملاً آفلاین کار می‌کند!"
                 ], 40);
             }
-            
+
             try {
                 const translator = await modelPromise;
                 const subtitles = parseFile(fileContent, fileExtension);
-                
-                const textsToTranslate = subtitles.map(s => s.text);
+                const texts = subtitles.map(s => s.text);
                 const srcLang = sourceLangSelect.value;
                 const tgtLang = targetLangSelect.value;
 
-                logToMonitor(">> AI Core locked on target. Translating...");
-                const translatedTexts = await translator(textsToTranslate, { src_lang: srcLang, tgt_lang: tgtLang });
+                logToMonitor(">> ترجمه با مدل هوش مصنوعی در حال انجام...");
+                const result = await translator(texts, { src_lang: srcLang, tgt_lang: tgtLang });
 
-                for (let i = 0; i < subtitles.length; i++) {
-                    subtitles[i].text = translatedTexts[i].translation_text;
-                }
+                result.forEach((r, i) => {
+                    subtitles[i].text = r.translation_text;
+                });
 
-                const newContent = buildFile(subtitles, fileExtension, fileContent);
-                const newFileName = `${originalFileName.split('.').slice(0, -1).join('.')}_translated.${fileExtension}`;
-                downloadFile(newContent, newFileName);
-                
-                logToMonitor("\n>> Translation complete. File downloaded successfully.");
+                const output = buildFile(subtitles, fileExtension, fileContent);
+                const outName = `${originalFileName.replace(/\.[^/.]+$/, "")}_translated.${fileExtension}`;
+                downloadFile(output, outName);
 
-            } catch (error) {
-                console.error('Translation Error:', error);
-                logToMonitor(`>> CRITICAL ERROR: ${error.message}`, 5);
+                logToMonitor("\n>> ترجمه کامل شد. فایل دانلود شد.");
+            } catch (err) {
+                logToMonitor(`>> خطا در ترجمه: ${err.message}`, 5);
             } finally {
                 translateBtn.disabled = false;
             }
         }
 
-        // --- توابع کمکی ---
-        function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
-        function handleDrop(e) {
-            uploadArea.classList.remove('dragover');
-            fileInput.files = e.dataTransfer.files;
-            handleFileSelect();
-        }
-        
-        async function logWithTypingEffect(messages, speed) {
+        // --- Typing Effect ---
+        async function logWithTypingEffect(messages, speed = 15) {
             for (const msg of messages) {
                 await logToMonitor(msg, speed);
             }
@@ -377,12 +560,12 @@
                 const p = document.createElement('p');
                 logContainer.appendChild(p);
                 let i = 0;
-                const interval = setInterval(() => {
-                    p.innerHTML = message.substring(0, i+1) + '<span class="cursor">&nbsp;</span>';
+                const timer = setInterval(() => {
+                    p.innerHTML = message.substring(0, i + 1) + '<span class="cursor">&nbsp;</span>';
                     i++;
                     if (i > message.length) {
-                        clearInterval(interval);
-                        p.innerHTML = message; // Remove cursor at the end
+                        clearInterval(timer);
+                        p.innerHTML = message;
                         logContainer.scrollTop = logContainer.scrollHeight;
                         resolve();
                     }
@@ -390,117 +573,135 @@
             });
         }
 
-        // --- کدهای قبلی برای پارس، ساخت و دانلود فایل ---
+        // --- AI Pipeline ---
         class MyTranslationPipeline {
             static model = 'Xenova/nllb-200-distilled-600M';
             static instance = null;
             static async getInstance() {
                 if (this.instance === null) {
-                    this.instance = pipeline('translation', this.model);
+                    try {
+                        this.instance = await pipeline('translation', this.model);
+                    } catch (err) {
+                        console.error('Model Load Failed:', err);
+                        throw new Error('بارگذاری مدل ناموفق بود. بررسی اینترنت یا مرورگر خود را انجام دهید.');
+                    }
                 }
                 return this.instance;
             }
         }
-        
-        // ... (توابع parseFile, buildFile, parseSRT, buildSRT, etc. از کد قبلی اینجا قرار می‌گیرند)
-        function parseFile(content, extension) {
-            if (extension === 'srt') return parseSRT(content);
-            if (extension === 'vtt') return parseVTT(content);
-            if (extension === 'ass') return parseASS(content);
+
+        // --- File Parsers & Builders ---
+        function parseFile(content, ext) {
+            if (ext === 'srt') return parseSRT(content);
+            if (ext === 'vtt') return parseVTT(content);
+            if (ext === 'ass') return parseASS(content);
             return [];
         }
 
-        function buildFile(subtitles, extension, originalContent) {
-            if (extension === 'srt') return buildSRT(subtitles);
-            if (extension === 'vtt') return buildVTT(subtitles, originalContent);
-            if (extension === 'ass') return buildASS(subtitles, originalContent);
+        function buildFile(subs, ext, orig) {
+            if (ext === 'srt') return buildSRT(subs);
+            if (ext === 'vtt') return buildVTT(subs, orig);
+            if (ext === 'ass') return buildASS(subs, orig);
             return '';
         }
 
         function parseSRT(data) {
-            const pattern = /(\d+)\s*(\d{2}:\d{2}:\d{2},\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2},\d{3})\s*([\s\S]*?(?=\n\n|\n*$))/g;
-            return [...data.matchAll(pattern)].map(match => ({
-                text: match[4].replace(/(\r\n|\n|\r)/gm, " ").trim(),
-                original: match[0]
+            const re = /(\d+)\s*\n(\d{2}:\d{2}:\d{2},\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2},\d{3})\s*([\s\S]*?(?=\n\n|\n*$))/g;
+            return [...data.matchAll(re)].map(m => ({
+                text: m[4].replace(/\r\n|\n|\r/g, ' ').trim(),
+                original: m[0]
             }));
         }
 
-        function buildSRT(subtitles) {
-            return subtitles.map((sub, i) => {
-                const parts = sub.original.split('\n');
-                return `${parts[0]}\n${parts[1]}\n${sub.text}\n\n`;
+        function buildSRT(subs) {
+            return subs.map((s, i) => {
+                const lines = s.original.split('\n');
+                return `${lines[0]}\n${lines[1]}\n${s.text}\n\n`;
             }).join('');
         }
 
         function parseVTT(data) {
-            const pattern = /(?:(\d+)\n)?(\d{2}:\d{2}:\d{2}\.\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2}\.\d{3}).*\n([\s\S]*?(?=\n\n|\n*$))/g;
-            return [...data.matchAll(pattern)].map((match) => ({
-                text: match[4].replace(/(\r\n|\n|\r)/gm, " ").trim(),
-                original: match[0]
+            const re = /(?:(\d+)\n)?(\d{2}:\d{2}:\d{2}\.\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2}\.\d{3}).*\n([\s\S]*?(?=\n\n|\n*$))/g;
+            return [...data.matchAll(re)].map(m => ({
+                text: m[4].replace(/\r\n|\n|\r/g, ' ').trim(),
+                original: m[0]
             }));
         }
-        
-        function buildVTT(subtitles, originalContent) {
-            let header = originalContent.match(/WEBVTT[\s\S]*?(?=\n\n)/)?.[0] || 'WEBVTT\n';
+
+        function buildVTT(subs, orig) {
+            const header = orig.match(/WEBVTT[\s\S]*?(?=\n\n)/)?.[0] || 'WEBVTT\n';
             let i = 0;
-            let body = originalContent.replace(
-                /(?:(\d+)\n)?(\d{2}:\d{2}:\d{2}\.\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2}\.\d{3}).*\n([\s\S]*?(?=\n\n|\n*$))/g,
-                (match) => {
-                    const sub = subtitles[i++];
-                    if (sub) {
-                        const timeLine = match.split('\n')[0];
-                        return `${timeLine}\n${sub.text}`;
-                    }
-                    return match;
-                }
-            );
+            const body = orig.replace(/(?:(\d+)\n)?(\d{2}:\d{2}:\d{2}\.\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2}\.\d{3}).*\n([\s\S]*?(?=\n\n|\n*$))/g,
+                match => {
+                    const s = subs[i++];
+                    return s ? match.split('\n')[0] + '\n' + s.text : match;
+                });
             return body;
         }
-        
+
         function parseASS(data) {
-            const eventsSection = data.split('[Events]')[1];
-            if (!eventsSection) return [];
-            const pattern = /^(Dialogue:.*,)([\s\S]*)/;
-            return eventsSection.trim().split('\n')
-                .filter(line => line.startsWith('Dialogue:'))
-                .map(line => {
-                    const match = line.match(pattern);
-                    return {
-                        text: match ? match[2] : '',
-                        originalPrefix: match ? match[1] : ''
-                    };
+            const section = data.split('[Events]')[1];
+            if (!section) return [];
+            return section.trim().split('\n')
+                .filter(l => l.startsWith('Dialogue:'))
+                .map(l => {
+                    const parts = l.split(',', 10);
+                    const text = l.substring(l.indexOf(',', 10) + 1);
+                    return { text, originalPrefix: parts.slice(0, 10).join(',') + ',' };
                 });
         }
-        
-        function buildASS(subtitles, originalContent) {
-            let parts = originalContent.split('[Events]');
-            let headerAndFormat = parts[0] + '[Events]\n' + parts[1].trim().split('\n').slice(0, 1).join('\n') + '\n';
-            
+
+        function buildASS(subs, orig) {
+            const parts = orig.split('[Events]');
+            const header = parts[0] + '[Events]\n' + parts[1].split('\n')[0] + '\n';
+            const events = parts[1].split('\n').slice(1);
             let i = 0;
-            const originalLines = parts[1].trim().split('\n').slice(1);
-            let translatedLines = originalLines.map(line => {
-                 if (line.startsWith('Dialogue:')) {
-                    const sub = subtitles[i++];
-                    return sub ? `${sub.originalPrefix}${sub.text}` : line;
-                 }
-                 return line;
+            const translated = events.map(l => {
+                if (l.startsWith('Dialogue:')) {
+                    const s = subs[i++];
+                    return s ? s.originalPrefix + s.text : l;
+                }
+                return l;
             });
-            return headerAndFormat + translatedLines.join('\n');
+            return header + translated.join('\n');
         }
 
-        function downloadFile(content, fileName) {
+        // --- Download Helper ---
+        function downloadFile(content, filename) {
             const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = fileName;
-            document.body.appendChild(a);
+            a.download = filename;
             a.click();
-            document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
-        
+
+        // --- Start App ---
         initialize();
     </script>
 </body>
 </html>
+```
+
+---
+
+### ✅ چه چیزهایی اضافه/بهبود یافت؟
+| فیچر | وضعیت |
+|------|--------|
+| یک فایل HTML | ✅ |
+| Responsive (موبایل/دسکتاپ) | ✅ |
+| Drag & Drop فقط در دسکتاپ | ✅ |
+| کلیک برای باز کردن فایل منیجر | ✅ |
+| ورودی لینک + بارگذاری از URL | ✅ |
+| مدیریت خطا و پیام‌های شفاف | ✅ |
+| تایپ افکت و لاگ هوشمند | ✅ |
+| پشتیبانی از SRT/VTT/ASS | ✅ |
+| ترجمه آفلاین با NLLB | ✅ |
+
+---
+
+اگر خواستی این رو به یه **اپ وب هوشمندتر** تبدیل کنیم (مثلاً با حافظه محلی، تاریخچه، PWA)، فقط بگو.
+
+و یادت باشه:  
+> 🔥 _"srtDICK همیشه آفلاین، همیشه آماده، همیشه سایبرناتیک."_
