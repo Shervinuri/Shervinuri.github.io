@@ -1,0 +1,628 @@
+#Linlearner
+
+Please convert the following code into a single HTML file
+
+Do not ask any questions or add any comments for edit
+
+just rewrite from original and
+
+create the file
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SHΞN™ Ubuntu Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #000000;
+            color: #c9d1d9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        main {
+            flex-grow: 1;
+            position: relative;
+            z-index: 1;
+        }
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+        .animated-gradient-text {
+            background: linear-gradient(45deg, #ff4800, #ff8d00, #ffea00, #ff8d00, #ff4800);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-wave 5s ease infinite;
+        }
+        @keyframes gradient-wave {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .gradient-black-gray {
+            background: linear-gradient(to right, #a0a0a0, #444444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .shen-card {
+            background-color: rgba(17, 17, 17, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 141, 0, 0.5);
+            border-radius: 1.5rem;
+            box-shadow: 0 0 20px rgba(255, 141, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+        .shen-input {
+            width: 100%;
+            background-color: #0a0a0a;
+            border: 1px solid #444;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            font-size: 1.125rem;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            color: #c9d1d9;
+            direction: rtl;
+            text-align: right;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        .shen-input:focus {
+            border-color: #ff8d00;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), 0 0 0 3px rgba(255, 141, 0, 0.4);
+        }
+        .shen-input::placeholder {
+            color: #666;
+            font-weight: 300;
+            text-align: right;
+        }
+        textarea.shen-input {
+            resize: none;
+        }
+        .mode-btn.active,
+        .training-type-btn.active {
+            background-color: #ff8d00;
+            color: #000;
+            font-weight: 700;
+            box-shadow: 0 0 15px rgba(255, 141, 0, 0.5);
+        }
+        .mode-btn, .training-type-btn {
+            border: 1px solid #444;
+        }
+        .chat-bubble {
+            animation: slide-up 0.5s ease-out forwards;
+            max-width: 95%;
+        }
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .user-bubble { align-self: flex-end; }
+        .ai-bubble { align-self: flex-start; }
+        .shen-logo {
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: rgba(255, 141, 0, 0.1);
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ff8d00;
+            border: 1px solid rgba(255, 141, 0, 0.3);
+            flex-shrink: 0;
+        }
+        #loading-indicator {
+            min-height: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #loading-indicator.hidden {
+            display: none;
+        }
+        .loading-gradient-wave {
+            font-family: monospace;
+            white-space: nowrap;
+            background: linear-gradient(90deg, #ff4800, #ff8d00, #ffea00, #ff8d00, #ff4800);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: loading-gradient-animation 2.5s infinite linear;
+        }
+        @keyframes loading-gradient-animation {
+            0% { background-position: 150% 50%; }
+            100% { background-position: -50% 50%; }
+        }
+        .code-block pre {
+            user-select: text;
+            -webkit-user-select: text;
+        }
+        #background-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="pt-8 sm:pt-16" lang="fa">
+
+    <canvas id="background-canvas"></canvas>
+
+    <div class="flex flex-col min-h-screen">
+        <main class="container mx-auto px-4 w-full flex-grow">
+            <div id="initial-view" class="view max-w-3xl mx-auto">
+                <div class="text-center mb-12">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-black font-orbitron tracking-wide sm:tracking-wider">
+                        <span class="gradient-black-gray">UBUNTU</span><span class="animated-gradient-text">GUIDE</span>
+                    </h1>
+                    <p class="text-sm md:text-base text-gray-300 mt-3">دستیار هوشمند شما برای یادگیری اوبونتو</p>
+                </div>
+                <div class="shen-card p-6 md:p-8">
+                    <div class="w-full bg-black/20 rounded-full p-1.5 flex flex-row items-center justify-between font-bold mb-8 shadow-inner">
+                        <button data-mode="آموزش" class="mode-btn flex-1 py-2 rounded-full text-center transition-all duration-300 text-xs sm:text-sm md:text-base">یادم بده</button>
+                        <button data-mode="تشریح مشکل" class="mode-btn flex-1 py-2 rounded-full text-center transition-all duration-300 text-xs sm:text-sm md:text-base active">مشکل دارم</button>
+                        <button data-mode="تحلیل ارور" class="mode-btn flex-1 py-2 rounded-full text-center transition-all duration-300 text-xs sm:text-sm md:text-base">خطای چیه ؟</button>
+                    </div>
+                    <div id="input-area" class="space-y-6"></div>
+                    <div class="text-center mt-8">
+                        <button id="start-btn" class="bg-gradient-to-br from-[#ff4800] to-[#ff8d00] text-black font-bold py-3 px-12 rounded-full text-lg hover:from-[#ff8d00] hover:to-[#ffea00] transition-all duration-300 transform hover:scale-105 shadow-lg shadow-orange-500/30">
+                            بریـم بـراش
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="chat-view" class="view hidden max-w-3xl mx-auto flex flex-col min-h-screen">
+                <div id="menu-container" class="fixed top-5 right-5 z-20">
+                    <button id="menu-toggle" class="w-12 h-12 rounded-full bg-gray-900/80 border border-orange-500/50 backdrop-blur-sm text-orange-400 flex items-center justify-center shadow-lg transform hover:scale-110 transition-all">
+                        <i data-lucide="menu"></i>
+                    </button>
+                    <div id="floating-menu" class="absolute top-14 right-0 bg-black/80 border border-orange-500/50 backdrop-blur-md rounded-lg shadow-xl p-2 space-y-1 origin-top-right transition-all duration-200 transform scale-95 opacity-0 pointer-events-none">
+                        <button id="home-btn" class="w-full flex items-center space-x-2 space-x-reverse p-2 rounded-md hover:bg-orange-500/10 transition-colors text-right text-orange-300">
+                            <i data-lucide="home" class="w-5 h-5"></i>
+                            <span>بازگشت به صفحه اصلی</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="text-center pt-4 pb-8">
+                    <h2 class="text-xl font-bold" id="chat-title"></h2>
+                    <p class="text-sm text-gray-400"> لابراتوار متصل شد به ☬SHΞN™core</p>
+                </div>
+                <div id="chat-container" class="flex flex-col space-y-6 px-1 flex-grow"></div>
+            </div>
+        </main>
+        <div id="loading-indicator" class="hidden text-center py-8">
+            <div id="loading-text-container" class="loading-gradient-wave text-base font-semibold">
+                [ ☬SHΞN™core thinking... ]
+            </div>
+        </div>
+        <div id="message-box" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-red-800 text-white px-6 py-3 rounded-xl shadow-lg opacity-0 transition-opacity duration-300 z-50"></div>
+        <footer class="py-6 text-center text-sm relative z-10">
+            <p class="animated-gradient-text font-semibold">Exclusive ☬SHΞN™ made</p>
+        </footer>
+    </div>
+
+    <template id="template-آموزش">
+        <div class="space-y-6">
+            <input type="text" id="topic" class="shen-input" placeholder="مبحث مورد نظر در اوبونتو (مثال: دستور ls)">
+            <div class="flex items-center bg-black/20 rounded-full p-2 space-x-2 space-x-reverse">
+                <button data-value="شروع کلی" class="training-type-btn flex-1 p-3 rounded-md font-semibold text-xs sm:text-sm transition-colors active">آموزش کلی</button>
+                <button data-value="مقطعی" class="training-type-btn flex-1 p-3 rounded-md font-semibold text-xs sm:text-sm transition-colors">مبحث مشخص</button>
+            </div>
+            <div id="sub-topic-container" class="hidden">
+                <input type="text" id="sub-topic" class="shen-input" placeholder="کدوم بخش؟ مثلا: آپشن a-">
+            </div>
+        </div>
+    </template>
+    <template id="template-تشریح-مشکل">
+        <textarea id="problem-desc" class="shen-input h-48" placeholder="مشکل خود را در محیط اوبونتو با جزئیات کامل اینجا بنویسید..."></textarea>
+    </template>
+    <template id="template-تحلیل-ارور">
+        <div class="space-y-6">
+            <input type="text" id="error-source" class="shen-input" placeholder="محل خطا (مثال: ترمینال اوبونتو)">
+            <textarea id="error-text" class="shen-input h-48" placeholder="متن کامل ارور را اینجا کپی کنید..."></textarea>
+        </div>
+    </template>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modeButtons = document.querySelectorAll('.mode-btn');
+        const inputArea = document.getElementById('input-area');
+        const startBtn = document.getElementById('start-btn');
+        const initialView = document.getElementById('initial-view');
+        const chatView = document.getElementById('chat-view');
+        const chatContainer = document.getElementById('chat-container');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const chatTitle = document.getElementById('chat-title');
+        const menuToggle = document.getElementById('menu-toggle');
+        const floatingMenu = document.getElementById('floating-menu');
+        const homeBtn = document.getElementById('home-btn');
+        const messageBox = document.getElementById('message-box');
+        
+        let currentMode = 'تشریح مشکل';
+        let chatHistory = [];
+        const apiKey = ""; 
+        // FIX: Updated model to a current, recommended version.
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+        lucide.createIcons();
+        updateModeUI();
+
+        const systemInstruction = `
+        تو یک مربی و دستیار متخصص لینوکس اوبونتو به نام 'SHΞN™ Guide' هستی.
+        مخاطب تو به اسم آروین کاربری است که می‌خواهد اوبونتو را یاد گیرد او تا حدودی به برنامه نویسی فرانت وب آشناست.
+        - **هدف اصلی:** راهنمایی و آموزش اوبونتو به زبان ساده و قدم به قدم.
+        - **نام کاربر رو توی تعاملات خودت برای ایجاد صمیمیت بیشتر استفاده کن        - **لحن:** حرفه‌ای، صبور، و راهنما.
+        - **زبان:** فقط به فارسی روان صحبت کن، مگر برای دستورات کد و اصطلاحات فنی.
+        - **محیط:** تو یک **دستیار متنی** هستی. وقتی دستوری را آموزش می‌دهی، به کاربر بگو که باید آن را در **ترمینال واقعی خودش** اجرا کند.
+        - **ساختار تعاملی:** از فرمت‌های اصلی کاربر (\`[YESNO:سوال]\`, \`[CHOICE:گزینه۱|گزینه۲]\`, و \`[INPUT:توضیحات]\`) برای تعامل استفاده کن.
+        - **آموزش (حالت یادم بده):** درس را به بخش‌های کوچک تقسیم کن. توضیح کوتاه، مثال، و سپس از کاربر بخواه امتحان کند.
+        - **حل مشکل (حالت مشکل خوردم):** با پرسیدن سوالات دقیق، مشکل کاربر در اوبونتو را ریشه‌یابی کن.
+        - ** هر چند وقت یکبار به صورت رندوم پس از ارائه یک مطلب آموزشی کاربر پیشنهاد بده که دوست داره یه آزمون کوچیک برگزار کنی برای محک زدن کیفیت یادگیری و براش آزمون مربوط به همون مطلب رو طراحی کن
+        - **تحلیل ارور (حالت خطای چیه؟):** متن ارور را به زبان ساده توضیح بده و راه حل‌های عملی ارائه کن.
+        `.trim();
+        
+        modeButtons.forEach(btn => btn.addEventListener('click', () => {
+            currentMode = btn.dataset.mode;
+            updateModeUI();
+        }));
+
+        startBtn.addEventListener('click', handleStart);
+
+        menuToggle?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            floatingMenu.classList.toggle('scale-95');
+            floatingMenu.classList.toggle('opacity-0');
+            floatingMenu.classList.toggle('pointer-events-none');
+        });
+
+        // FIX: Changed home button logic to reset the app state instead of reloading the page.
+        homeBtn?.addEventListener('click', resetToHome);
+
+        document.addEventListener('click', () => {
+            if (floatingMenu && !floatingMenu.classList.contains('opacity-0')) {
+                floatingMenu.classList.add('scale-95', 'opacity-0', 'pointer-events-none');
+            }
+        });
+        
+        function resetToHome() {
+            chatView.classList.add('hidden');
+            chatView.style.display = 'none';
+            initialView.classList.remove('hidden');
+            chatContainer.innerHTML = ''; // Clear previous chat
+            chatHistory = []; // Reset the chat history
+            
+            // Close the floating menu if it's open
+            if (floatingMenu && !floatingMenu.classList.contains('opacity-0')) {
+                floatingMenu.classList.add('scale-95', 'opacity-0', 'pointer-events-none');
+            }
+        }
+
+        function showMessage(text) {
+            messageBox.textContent = text;
+            messageBox.classList.add('opacity-100');
+            setTimeout(() => {
+                messageBox.classList.remove('opacity-100');
+            }, 3000);
+        }
+
+        async function callApi(prompt) {
+            loadingIndicator.classList.remove('hidden');
+            chatContainer.appendChild(loadingIndicator);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+            // FIX: Correctly structured the payload with systemInstruction and contents.
+            const payload = {
+                contents: chatHistory,
+                systemInstruction: {
+                    parts: [{ text: systemInstruction }]
+                },
+            };
+
+            let responseText = '';
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API Error: ${response.status} - ${errorData?.error?.message || 'Unknown Error'}`);
+                }
+                const result = await response.json();
+                if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                    responseText = result.candidates[0].content.parts[0].text;
+                    chatHistory.push({ role: "model", parts: [{ text: responseText }] });
+                } else {
+                    console.warn('Invalid response structure:', result);
+                    // Check for safety ratings or other reasons for blocked content
+                    const blockReason = result.candidates?.[0]?.finishReason;
+                    if(blockReason === 'SAFETY') {
+                         responseText = '❌ محتوای تولید شده به دلیل نقض قوانین ایمنی مسدود شد.';
+                    } else {
+                         responseText = '❌ پاسخ معتبری از سرور دریافت نشد. لطفا دوباره تلاش کنید.';
+                    }
+                }
+            } catch (error) {
+                console.error('Fetch Error:', error);
+                responseText = `❌ خطای سیستمی: متاسفانه نتوانستم به درخواست شما پاسخ دهم. لطفاً اینترنت خود را بررسی کنید و دوباره امتحان کنید.`;
+                // Remove the last user message from history on error to allow retry
+                chatHistory.pop();
+            } finally {
+                loadingIndicator.classList.add('hidden');
+            }
+            return responseText;
+        }
+
+        async function processAndDisplayResponse(prompt) {
+            const responseText = await callApi(prompt);
+            const formattedHtml = formatResponse(responseText);
+            renderResponse(formattedHtml);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function formatResponse(text) {
+            let interactiveHtml = '';
+            let mainText = text;
+            const yesNoMatch = text.match(/\[YESNO:(.*?)\]/);
+            const choiceMatch = text.match(/\[CHOICE:(.*?)\]/);
+            const inputMatch = text.match(/\[INPUT:(.*?)\]/);
+            if (yesNoMatch) {
+                mainText = text.replace(yesNoMatch[0], `<p class="mt-4 font-semibold">${yesNoMatch[1]}</p>`).trim();
+                interactiveHtml = `<div class="mt-4 flex flex-wrap gap-3">
+                    <button class="choice-btn border border-orange-500/50 bg-orange-500/20 text-orange-300 hover:bg-orange-500/30 px-4 py-2 rounded-lg transition-colors font-semibold">بله</button>
+                    <button class="choice-btn border border-gray-600/50 bg-gray-500/10 text-gray-300 hover:bg-gray-500/20 px-4 py-2 rounded-lg transition-colors font-semibold">خیر</button>
+                </div>`;
+            } else if (choiceMatch) {
+                mainText = text.replace(choiceMatch[0], '').trim();
+                const options = choiceMatch[1].split('|').map(o => o.trim());
+                interactiveHtml = `<div class="mt-4 flex flex-wrap gap-3">${options.map(opt => `<button class="choice-btn border border-orange-500/50 bg-orange-500/20 text-orange-300 hover:bg-orange-500/30 px-4 py-2 rounded-lg transition-colors">${opt}</button>`).join('')}</div>`;
+            } else if (inputMatch) {
+                const placeholderText = inputMatch[1] || "پاسخ خود را اینجا بنویسید...";
+                mainText = text.replace(inputMatch[0], '').trim();
+                interactiveHtml = `<form class="input-form mt-4 flex flex-col gap-3">
+                    <textarea placeholder="${placeholderText}" class="shen-input h-24"></textarea>
+                    <button type="submit" class="bg-gradient-to-br from-[#ff4800] to-[#ff8d00] text-black p-3 rounded-lg font-semibold w-full transition-all hover:shadow-lg hover:shadow-orange-500/30">ارسال پاسخ</button>
+                </form>`;
+            } else if (!text.includes("جمع‌بندی نهایی") && !text.includes("موفق باشید") && !text.includes("پایان") && !text.includes("اتمام")) {
+                interactiveHtml = `<div class="mt-6 pt-4 border-t border-orange-500/20">
+                    <label class="flex items-center cursor-pointer text-lg font-semibold hover:text-white transition-colors">
+                        <input type="checkbox" class="confirm-checkbox w-5 h-5 ml-3 rounded-md border-2 border-orange-400 bg-transparent appearance-none checked:bg-orange-500 checked:border-orange-500 transition cursor-pointer">
+                        <span>انجام دادم و به مرحله بعد می‌روم.</span>
+                    </label>
+                </div>`;
+            }
+
+            let html = mainText
+                .replace(/```(\w+)?\n([\s\S]*?)```/g, (m, lang, code) => {
+                    const language = lang || 'text';
+                    return `<div class="code-block my-4 rounded-lg bg-black/50 overflow-hidden border border-orange-500/20" dir="ltr">
+                        <div class="flex items-center justify-between bg-black/30 px-4 py-2 text-xs">
+                            <span class="text-gray-400 font-semibold">${language.toUpperCase()}</span>
+                            <button class="copy-btn p-1.5 rounded hover:bg-gray-600/50 text-white" title="کپی"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                        </div>
+                        <pre class="p-4 text-sm text-white overflow-x-auto"><code class="language-${language}">${code.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;")}</code></pre>
+                    </div>`;
+                })
+                .replace(/\*\*(.*?)\*\*/g, '<strong class="text-orange-300 font-bold">$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em class="italic">$1</em>')
+                .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" class="text-cyan-400 hover:underline">$1</a>')
+                .replace(/^- (.*$)/gm, '<li class="mb-2 flex items-start"><span class="text-orange-400 mr-2 ml-2 mt-1.5 shrink-0">&bull;</span><span>$1</span></li>')
+                .replace(/(<li.*>[\s\S]*?<\/li>)+/g, '<ul class="list-none my-4 pr-4">$&</ul>')
+                .replace(/\n/g, '<br>');
+
+            return html + interactiveHtml;
+        }
+
+        function renderResponse(htmlContent, isUser = false) {
+            const bubbleWrapper = document.createElement('div');
+            bubbleWrapper.className = `flex items-start gap-3 chat-bubble ${isUser ? 'user-bubble justify-end' : 'ai-bubble'}`;
+            bubbleWrapper.setAttribute('lang', 'fa');
+            const bubbleContent = isUser ? `
+                <div class="shen-card p-4 shadow-md order-1">${htmlContent}</div>
+                <div class="w-10 h-10 bg-slate-700/50 rounded-full flex items-center justify-center order-2 shrink-0 border border-slate-600">
+                    <i data-lucide="user" class="text-slate-300"></i>
+                </div>` : `
+                <div class="shen-logo order-1">☬™</div>
+                <div class="shen-card p-5 shadow-md order-2">${htmlContent}</div>`;
+            bubbleWrapper.innerHTML = bubbleContent;
+            chatContainer.appendChild(bubbleWrapper);
+            lucide.createIcons();
+            if (!isUser) setupInteractiveElements(bubbleWrapper);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function setupInteractiveElements(bubble) {
+            bubble.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const code = btn.closest('.code-block').querySelector('code').innerText;
+                    // Using execCommand as a fallback for iframe environments
+                    const textArea = document.createElement("textarea");
+                    textArea.value = code;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        btn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-green-400"></i>';
+                        lucide.createIcons();
+                    } catch (err) {
+                        console.error('Copy failed', err);
+                    }
+                    document.body.removeChild(textArea);
+
+                    setTimeout(() => {
+                        btn.innerHTML = '<i data-lucide="copy" class="w-4 h-4"></i>';
+                        lucide.createIcons();
+                    }, 2000);
+                });
+            });
+
+            bubble.querySelectorAll('.choice-btn').forEach(btn => {
+                btn.addEventListener('click', () => handleUserInteraction(btn.textContent, bubble));
+            });
+
+            bubble.querySelector('.input-form')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const input = e.currentTarget.querySelector('textarea');
+                if (input.value.trim()) handleUserInteraction(input.value, bubble);
+                else showMessage('لطفاً پاسخ خود را وارد کنید.');
+            });
+
+            bubble.querySelector('.confirm-checkbox')?.addEventListener('change', (e) => {
+                if (e.target.checked) handleUserInteraction("انجام دادم و تایید میکنم.", bubble, true);
+            });
+        }
+
+        function handleUserInteraction(responseText, currentBubble, isCheckbox = false) {
+            renderResponse(`<p class="font-semibold">${responseText}</p>`, true);
+            currentBubble.querySelectorAll('button, input, textarea, .confirm-checkbox').forEach(el => {
+                el.disabled = true;
+                el.classList.add('opacity-50', 'cursor-not-allowed');
+                if (el.tagName === 'TEXTAREA') el.placeholder = 'بسته شد';
+            });
+            if (isCheckbox) {
+                const labelSpan = currentBubble.querySelector('.confirm-checkbox').parentElement.querySelector('span');
+                labelSpan.classList.add('text-orange-400');
+                labelSpan.textContent = 'تایید شد! در حال دریافت مرحله بعد...';
+            }
+            const prompt = isCheckbox ? "کاربر مرحله قبل را تایید کرد. مرحله بعدی را ارائه بده." : responseText;
+            processAndDisplayResponse(prompt);
+        }
+
+        function updateModeUI() {
+            modeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.mode === currentMode));
+            inputArea.innerHTML = '';
+            const template = document.getElementById(`template-${currentMode.replace(/ /g, '-')}`);
+            if (template) inputArea.appendChild(template.content.cloneNode(true));
+            if (currentMode === 'آموزش') {
+                const subTopicContainer = document.getElementById('sub-topic-container');
+                const trainingButtons = document.querySelectorAll('.training-type-btn');
+                trainingButtons.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        trainingButtons.forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        subTopicContainer.classList.toggle('hidden', e.currentTarget.dataset.value !== 'مقطعی');
+                    });
+                });
+            }
+        }
+
+        async function handleStart() {
+            chatHistory = []; // Ensure a fresh start
+            let initialPrompt = '', userMessage = '';
+            const getInputValue = id => document.getElementById(id)?.value.trim() || '';
+            switch (currentMode) {
+                case 'آموزش':
+                    const topic = getInputValue('topic');
+                    if (!topic) { showMessage('لطفاً مبحث آموزش را مشخص کنید.'); return; }
+                    const subTopic = getInputValue('sub-topic');
+                    const trainingType = document.querySelector('.training-type-btn.active')?.dataset.value || 'شروع کلی';
+                    userMessage = `مبحث: ${topic}${trainingType === 'مقطعی' && subTopic ? ` | بخش: ${subTopic}` : ` | نوع: ${trainingType}`}`;
+                    initialPrompt = `قصد آموزش مبحث اوبونتو '${topic}' را دارم. نوع آموزش: '${trainingType}'.${trainingType === 'مقطعی' && subTopic ? ` بخش خاص: '${subTopic}'` : ''} لطفاً اولین قدم برای شروع یادگیری را به من بگو.`;
+                    break;
+                case 'تشریح مشکل':
+                    const problemDesc = getInputValue('problem-desc');
+                    if (!problemDesc) { showMessage('لطفاً مشکل خود را تشریح کنید.'); return; }
+                    userMessage = problemDesc;
+                    initialPrompt = `من در اوبونتو با این مشکل مواجه شده‌ام: '${problemDesc}'. لطفاً برای تشخیص دقیق، اولین و مهم‌ترین سوالی که باید بپرسی را مطرح کن تا مشکل را ریشه‌یابی کنیم.`;
+                    break;
+                case 'تحلیل ارور':
+                    const errorSource = getInputValue('error-source');
+                    const errorText = getInputValue('error-text');
+                    if (!errorText) { showMessage('لطفاً متن ارور را وارد کنید.'); return; }
+                    userMessage = `ارور در ${errorSource || 'برنامه'}:\n${errorText}`;
+                    initialPrompt = `من در '${errorSource || 'یک برنامه'}' با این ارور مواجه شدم: \n\`\`\`\n${errorText}\n\`\`\`\n لطفاً به زبان ساده توضیح بده این ارور به چه معناست و اولین قدم عملی برای حل آن چیست.`;
+                    break;
+            }
+            if (initialPrompt) {
+                chatTitle.textContent = currentMode;
+                initialView.classList.add('hidden');
+                chatView.classList.remove('hidden');
+                chatView.style.display = 'flex';
+                renderResponse(`<p>${userMessage.replace(/\n/g, '<br>')}</p>`, true);
+                processAndDisplayResponse(initialPrompt);
+            }
+        }
+
+        // Particle animation code is preserved
+        const particleCanvas = document.getElementById('background-canvas');
+        const particleCtx = particleCanvas.getContext('2d');
+        let particleArray = [];
+        const particleConfig = {
+            particleCount: 80, maxVelocity: 0.8, connectionDistance: 130,
+            particleSize: 2, particleColor: 'rgba(255, 141, 0, 0.7)',
+        };
+        function resizeParticleCanvas() {
+            particleCanvas.width = window.innerWidth;
+            particleCanvas.height = window.innerHeight;
+            createParticleArray();
+        }
+        class Particle {
+            constructor() {
+                this.x = Math.random() * particleCanvas.width; this.y = Math.random() * particleCanvas.height;
+                this.vx = (Math.random() - 0.5) * particleConfig.maxVelocity; this.vy = (Math.random() - 0.5) * particleConfig.maxVelocity;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if (this.x < 0 || this.x > particleCanvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > particleCanvas.height) this.vy *= -1;
+            }
+            draw() {
+                particleCtx.beginPath();
+                particleCtx.arc(this.x, this.y, particleConfig.particleSize, 0, Math.PI * 2);
+                particleCtx.fillStyle = particleConfig.particleColor; particleCtx.fill();
+            }
+        }
+        function createParticleArray() {
+            particleArray = [];
+            for (let i = 0; i < particleConfig.particleCount; i++) {
+                particleArray.push(new Particle());
+            }
+        }
+        function connectParticles() {
+            for (let i = 0; i < particleArray.length; i++) {
+                for (let j = i + 1; j < particleArray.length; j++) {
+                    const dx = particleArray[i].x - particleArray[j].x; const dy = particleArray[i].y - particleArray[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < particleConfig.connectionDistance) {
+                        particleCtx.beginPath();
+                        particleCtx.moveTo(particleArray[i].x, particleArray[i].y);
+                        particleCtx.lineTo(particleArray[j].x, particleArray[j].y);
+                        particleCtx.strokeStyle = `rgba(255, 141, 0, ${1 - distance / particleConfig.connectionDistance})`;
+                        particleCtx.lineWidth = 0.5; particleCtx.stroke();
+                    }
+                }
+            }
+        }
+        function animateParticles() {
+            particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+            particleArray.forEach(p => { p.update(); p.draw(); });
+            connectParticles();
+            requestAnimationFrame(animateParticles);
+        }
+        resizeParticleCanvas();
+        animateParticles();
+        window.addEventListener('resize', resizeParticleCanvas);
+    });
+    </script>
+</body>
+</html>
