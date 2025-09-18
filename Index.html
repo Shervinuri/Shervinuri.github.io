@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iranicard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden; 
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('https://raw.githubusercontent.com/Shervinuri/Dll/refs/heads/main/Picsart_25-09-18_10-10-26-235.jpg');
+            background-size: cover;
+            background-position: center top; 
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        
+        .wavy-gradient-text {
+            background-image: linear-gradient(45deg, #000000, #ffffff, #808080);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: wave 5s ease-in-out infinite alternate;
+            background-size: 200% 200%;
+        }
+
+        @keyframes wave {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        
+        .glass-card {
+            background: rgba(20, 20, 20, 0.45);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .shake {
+            animation: shake 0.3s ease-in-out;
+        }
+        /* For custom scrollbar styling if needed */
+        .content-wrapper::-webkit-scrollbar {
+            display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+        }
+        .content-wrapper {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <!-- Password Prompt Overlay -->
+    <div id="password-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-500 ease-in-out" style="background-color: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+        <div id="password-modal" class="w-full max-w-sm rounded-2xl p-6 text-center" style="background: rgba(30,30,30,0.85); border: 1px solid rgba(255, 255, 255, 0.1);">
+            <h2 class="text-lg font-semibold mb-2 text-gray-100">Verification Required</h2>
+            <p class="text-sm text-gray-400 mb-4">Enter password for Iranicard account.</p>
+            <p id="error-message" class="text-red-400 text-sm h-5 mb-2"></p>
+            <div class="relative">
+                <input type="password" id="password-input" class="w-full bg-gray-700 bg-opacity-50 text-white border border-gray-600 rounded-lg pl-4 pr-10 py-2 text-center focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all" placeholder="••••••••">
+                <span id="toggle-password" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
+                    <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    <svg id="eye-off-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 hidden"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" x2="22" y1="2" y2="22"></line></svg>
+                </span>
+            </div>
+            <button id="login-button" class="w-full bg-white bg-opacity-10 hover:bg-opacity-20 border border-white border-opacity-20 text-white font-bold py-2 px-4 rounded-lg mt-4 transition-all">
+                Access
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content (Initially Hidden) - NEW ROBUST LAYOUT -->
+    <div id="main-content" class="fixed inset-0 flex flex-col items-center justify-end p-4 hidden">
+        <div class="w-full max-w-sm max-h-[65vh] overflow-y-auto content-wrapper">
+             <div class="flex flex-col items-center">
+                <div id="datetime-container" class="text-center text-[11px] text-gray-300 mb-2 font-mono"></div>
+                <div class="w-full max-w-sm glass-card rounded-2xl p-6 text-left shadow-lg">
+                    <h1 class="text-xl sm:text-2xl font-bold text-center wavy-gradient-text mb-6 tracking-tight">
+                        SEYED HAMID AHMADI
+                    </h1>
+                    <div class="space-y-2 text-sm" dir="ltr">
+                        <p><span class="font-bold text-gray-400">Holder name:</span> Seyed hamid ahmadi</p>
+                        <p><span class="font-bold text-gray-400">Card Number:</span> 4403 9332 9697 1259</p>
+                        <p><span class="font-bold text-gray-400">Expiration Date:</span> 02/26</p>
+                        <p><span class="font-bold text-gray-400">Address:</span> 543 Birch St</p>
+                        <p><span class="font-bold text-gray-400">City:</span> San Francisco</p>
+                        <p><span class="font-bold text-gray-400">State:</span> California</p>
+                        <p><span class="font-bold text-gray-400">Zip Code:</span> 94102</p>
+                        <p><span class="font-bold text-gray-400">Country:</span> USA</p>
+                        <p><span class="font-bold text-gray-400">CVC:</span> 387</p>
+                    </div>
+                    
+                    <div class="mt-6 text-right" dir="ltr">
+                         <p class="text-lg font-semibold">
+                            <span class="wavy-gradient-text">Balance: </span>
+                            <span class="text-green-400">$32.08</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="w-full max-w-sm p-2 mt-2 text-center text-gray-300">
+                    <p class="text-[10px] leading-tight">
+                        The user's identity has been verified by the <a href="https://www.iranicard.ir/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">Iranicard</a> collection, and all rights to this Visa credit card account belong to the user with the above specifications.
+                    </p>
+                    <p class="text-[9px] mt-2 font-mono">ISO 9001:2015</p>
+                    <p class="text-[9px] text-gray-400">Copyright © 2012 - 2025 iranicard.ir All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const correctPassword = 'Ahmadi_H44';
+            const overlay = document.getElementById('password-overlay');
+            const mainContent = document.getElementById('main-content');
+            const passwordInput = document.getElementById('password-input');
+            const loginButton = document.getElementById('login-button');
+            const errorMessage = document.getElementById('error-message');
+            const passwordModal = document.getElementById('password-modal');
+            const togglePassword = document.getElementById('toggle-password');
+            const eyeIcon = document.getElementById('eye-icon');
+            const eyeOffIcon = document.getElementById('eye-off-icon');
+
+            passwordInput.focus();
+
+            function updateDateTime() {
+                const now = new Date();
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const dateString = now.toLocaleDateString('en-US', options);
+                const timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+                document.getElementById('datetime-container').textContent = `${dateString} | ${timeString}`;
+            }
+            
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+
+            function attemptLogin() {
+                if (passwordInput.value === correctPassword) {
+                    overlay.classList.add('opacity-0');
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        mainContent.classList.remove('hidden');
+                        mainContent.classList.add('flex');
+                    }, 500); 
+                } else {
+                    errorMessage.textContent = 'Incorrect Password';
+                    passwordModal.classList.add('shake');
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                    setTimeout(() => passwordModal.classList.remove('shake'), 300);
+                }
+            }
+            
+            loginButton.addEventListener('click', attemptLogin);
+            passwordInput.addEventListener('keydown', (e) => e.key === 'Enter' && attemptLogin());
+
+            togglePassword.addEventListener('click', () => {
+                const isPassword = passwordInput.type === 'password';
+                passwordInput.type = isPassword ? 'text' : 'password';
+                eyeIcon.classList.toggle('hidden', isPassword);
+                eyeOffIcon.classList.toggle('hidden', !isPassword);
+            });
+        });
+    </script>
+
+</body>
+</html>
