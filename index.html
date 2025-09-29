@@ -24,7 +24,7 @@
 
   body {
     background: linear-gradient(135deg, #05060a 0%, #0f0920 50%, #130723 100%);
-    background-attachment:fixed; 
+    background-attachment:fixed;  
     overflow-y:hidden;
   }
   .font-brand { font-family: 'Orbitron', sans-serif; }
@@ -46,7 +46,7 @@
     opacity: 0.95;
   }
   .glass-border {
-    border: 0px solid rgba(38, 38, 38, 0.5);
+    border: 1px solid rgba(38, 38, 38, 0.5);
   }
 
   @keyframes colorWave {
@@ -92,7 +92,7 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.03),
       inset 0 -1px 0 rgba(0, 0, 0, 0.12);
     transition: all 0.25s ease;
-    border: 0px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(8px);
   }
   .generate-btn .animated-text {
@@ -128,7 +128,7 @@
 
   .main-content {
     padding-top: 100px;
-    padding-bottom: 220px; 
+    padding-bottom: 220px;  
     min-height: 100vh;
     overflow-y: auto;
     height: 100vh;
@@ -150,7 +150,6 @@
   }
   .logo-spin { animation: spin-y 8s linear infinite; transform-style: preserve-3d; }
 
-  /* START: انیمیشن‌های جدید برای لودینگ کارت */
   @keyframes spin-y-fast {
     from { transform: rotateY(0deg); }
     to { transform: rotateY(360deg); }
@@ -163,7 +162,6 @@
     animation: spin-y-fast 1s linear infinite, flicker 1.5s ease-in-out infinite;
     transform-style: preserve-3d;
   }
-  /* END: انیمیشن‌های جدید */
 
   @keyframes gradient-glow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
   #prompt::placeholder {
@@ -233,7 +231,7 @@
     100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(227, 52, 47, 0); }
   }
 
-  .footer-gradient { 
+  .footer-gradient {  
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     color: transparent;
@@ -245,7 +243,7 @@
   .image-card { animation: slideInFromTop 0.5s ease-out forwards; opacity: 0; transform: translateY(-20px); cursor: pointer; max-height: 500px; overflow: hidden; }
   @keyframes slideInFromTop { to { opacity: 1; transform: translateY(0); } }
 
-  /* اسلایدشو */
+  /* Slideshow */
   .slideshow-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
   .slideshow-overlay.active { opacity: 1; visibility: visible; }
   .slideshow-container { position: relative; max-width: 90vw; max-height: 70vh; display: flex; align-items: center; justify-content: center; }
@@ -344,7 +342,7 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
       </svg>
     </button>
-    <button id="downloadBtnSlideshow" class="absolute top-4 right-4 z-10 bg-[rgba(0,191,255,0.12)] text-white p-3 rounded-full hover:bg-[rgba(0,191,255,0.14)] transition-colors backdrop-blur-sm">
+    <button id="downloadBtnSlideshow" class="absolute top-4 right-16 z-10 bg-[rgba(0,191,255,0.12)] text-white p-3 rounded-full hover:bg-[rgba(0,191,255,0.14)] transition-colors backdrop-blur-sm">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
         <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
         <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
@@ -501,34 +499,71 @@ document.addEventListener('DOMContentLoaded', () => {
         landscape: " ,landscape photography, golden hour lighting, dramatic sky, natural beauty, wide angle composition, breathtaking scenery"
     };
 
-    const SYSTEM_PROMPT = `
-    You are an AI prompt enhancer specialized in creating any type image prompts for transformer-based text-to-image models (CLIP + T5 architecture like Flux).
-    YOUR TASK: transform the user's short prompt into an expanded, technical prompt.
-    `;
+    const SYSTEM_PROMPT = `You are an AI prompt enhancer specialized in creating any type image prompts for transformer-based text-to-image models (CLIP + T5 architecture like Flux). YOUR TASK: transform the user's short prompt into an expanded, technical prompt.`;
 
+    /**
+     * NEW PROXY LOGIC:
+     * Attempts to fetch from a series of endpoints, starting with a direct connection,
+     * then falling back to proxies, and finally retrying the direct connection.
+     * @param {string} userPrompt - The initial prompt from the user.
+     * @returns {Promise<string>} The enhanced prompt or the original prompt if all attempts fail.
+     */
     async function enhancePromptWithAI(userPrompt) {
-        try {
-            const chatHistory = [
-                { role: 'system', content: SYSTEM_PROMPT },
-                { role: 'user', content: `Enhance this prompt: \"${userPrompt}\"` }
-            ];
-            const apiUrl = 'https://text.pollinations.ai/openai';
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    model: 'openai',
-                    messages: chatHistory
-                })
-            });
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            const data = await response.json();
-            const assistantResponse = data.choices[0].message.content;
-            return assistantResponse.trim();
-        } catch (error) {
-            console.error('Error enhancing prompt with AI:', error);
-            return userPrompt;
+        const directUrl = 'https://text.pollinations.ai/openai';
+        const proxies = [
+            'https://corsproxy.io/?',
+            'https://proxy.cors.sh/',
+            'https://api.allorigins.win/raw?url='
+        ];
+
+        // Create a list of URLs to try in order
+        const attemptUrls = [
+            directUrl, // Attempt 1: Direct
+            ...proxies.map(p => { // Attempts 2-N: Proxies
+                const needsEncoding = p.includes('allorigins');
+                const targetUrl = needsEncoding ? encodeURIComponent(directUrl) : directUrl;
+                return `${p}${targetUrl}`;
+            }),
+            directUrl // Final Attempt: Direct again
+        ];
+
+        const chatHistory = [
+            { role: 'system', content: SYSTEM_PROMPT },
+            { role: 'user', content: `Enhance this prompt: "${userPrompt}"` }
+        ];
+
+        for (const url of attemptUrls) {
+            try {
+                console.log(`Attempting to enhance prompt via: ${url.split('?')[0]}...`);
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-cors-api-key': 'temp_1234567890' // For proxy.cors.sh
+                    },
+                    body: JSON.stringify({
+                        model: 'openai',
+                        messages: chatHistory
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const assistantResponse = data.choices[0].message.content;
+                console.log("Successfully enhanced prompt.");
+                return assistantResponse.trim(); // Success! Exit the function.
+
+            } catch (error) {
+                console.warn(`Failed to fetch from ${url.split('?')[0]}:`, error.message);
+                // Continue to the next URL in the loop
+            }
         }
+
+        console.error("All prompt enhancement attempts failed. Returning original prompt.");
+        return userPrompt; // Return original prompt if all attempts fail
     }
 
     const dom = {
@@ -546,6 +581,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modelSelect: document.getElementById('model'),
         widthInput: document.getElementById('width'),
         heightInput: document.getElementById('height'),
+        presetSize: document.getElementById('presetSize'),
         enhanceCheckbox: document.getElementById('enhance'),
         seedInput: document.getElementById('seed'),
         randomSeedCheckbox: document.getElementById('randomSeed'),
@@ -596,12 +632,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const card = document.createElement('div');
         card.className = 'image-card relative glass glass-border rounded-lg aspect-square flex items-center justify-center';
-        // START: تغییر کد برای استفاده از انیمیشن جدید
         card.innerHTML = `<div class="flex flex-col items-center gap-4 text-gray-400">
-                          <img src="https://raw.githubusercontent.com/Shervinuri/Shervinuri.github.io/refs/heads/main/1712259501956.png" alt="Loading..." class="w-16 h-16 rounded-full card-loading-icon">
-                          <span class="text-sm font-semibold tracking-wider" id="loading-text-card">Initializing...</span>
+                            <img src="https://raw.githubusercontent.com/Shervinuri/Shervinuri.github.io/refs/heads/main/1712259501956.png" alt="Loading..." class="w-16 h-16 rounded-full card-loading-icon">
+                            <span class="text-sm font-semibold tracking-wider" id="loading-text-card">Initializing...</span>
                           </div>`;
-        // END: تغییر کد
         dom.imagesContainer.appendChild(card);
         card.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
@@ -708,72 +742,76 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addWatermarkAndDisplay(card, imgUrl) {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.src = imgUrl;
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
-            const stripHeight = Math.max(40, img.height * 0.05);
-            ctx.filter = 'blur(5px)';
-            ctx.drawImage(canvas, 0, canvas.height - stripHeight, canvas.width, stripHeight, 0, canvas.height - stripHeight, canvas.width, stripHeight);
-            ctx.filter = 'none';
-            ctx.fillStyle = 'rgba(0,0,0,0.45)';
-            ctx.fillRect(0, canvas.height - stripHeight, canvas.width, stripHeight);
-            ctx.font = `${Math.max(20, img.width * 0.02)}px Orbitron`;
-            ctx.fillStyle = 'white';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('Exclusive ☬SHΞN™ Made', canvas.width / 2, canvas.height - stripHeight / 2);
-            
-            card.innerHTML = '';
-            
-            const previewCanvas = document.createElement('canvas');
-            const previewCtx = previewCanvas.getContext('2d');
-            const maxPreviewSize = Math.min(window.innerWidth * 0.9, 512);
-            const aspectRatio = canvas.width / canvas.height;
-            
-            previewCanvas.width = aspectRatio > 1 ? maxPreviewSize : Math.round(maxPreviewSize * aspectRatio);
-            previewCanvas.height = aspectRatio > 1 ? Math.round(maxPreviewSize / aspectRatio) : maxPreviewSize;
-            
-            previewCtx.drawImage(canvas, 0, 0, previewCanvas.width, previewCanvas.height);
-            previewCanvas.className = 'w-full h-full object-cover rounded-lg cursor-pointer';
-            card.appendChild(previewCanvas);
-            
-            appState.generatedImages.unshift({
-                canvas: canvas,
-                preview: previewCanvas
-            });
-            
-            previewCanvas.addEventListener('click', () => {
-                openSlideshow(0);
-            });
-            
-            const downloadBtn = document.createElement('button');
-            downloadBtn.className = 'absolute top-2 right-2 bg-[rgba(0,191,255,0.12)] text-white p-2 rounded-full hover:bg-[rgba(0,191,255,0.14)] transition-colors backdrop-blur-sm';
-            downloadBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>';
-            downloadBtn.title = 'Download Image';
-            downloadBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                canvas.toBlob((canvasBlob) => {
-                    const a = document.createElement('a');
-                    a.href = URL.createObjectURL(canvasBlob);
-                    a.download = `shenerator_${Date.now()}.png`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.src = imgUrl;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                const stripHeight = Math.max(40, img.height * 0.05);
+                ctx.filter = 'blur(5px)';
+                ctx.drawImage(canvas, 0, canvas.height - stripHeight, canvas.width, stripHeight, 0, canvas.height - stripHeight, canvas.width, stripHeight);
+                ctx.filter = 'none';
+                ctx.fillStyle = 'rgba(0,0,0,0.45)';
+                ctx.fillRect(0, canvas.height - stripHeight, canvas.width, stripHeight);
+                ctx.font = `${Math.max(20, img.width * 0.02)}px Orbitron`;
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('Exclusive ☬SHΞN™ Made', canvas.width / 2, canvas.height - stripHeight / 2);
+                
+                card.innerHTML = '';
+                
+                const previewCanvas = document.createElement('canvas');
+                const previewCtx = previewCanvas.getContext('2d');
+                const maxPreviewSize = Math.min(window.innerWidth * 0.9, 512);
+                const aspectRatio = canvas.width / canvas.height;
+                
+                previewCanvas.width = aspectRatio > 1 ? maxPreviewSize : Math.round(maxPreviewSize * aspectRatio);
+                previewCanvas.height = aspectRatio > 1 ? Math.round(maxPreviewSize / aspectRatio) : maxPreviewSize;
+                
+                previewCtx.drawImage(canvas, 0, 0, previewCanvas.width, previewCanvas.height);
+                previewCanvas.className = 'w-full h-full object-cover rounded-lg cursor-pointer';
+                card.appendChild(previewCanvas);
+                
+                appState.generatedImages.unshift({
+                    canvas: canvas,
+                    preview: previewCanvas
                 });
-            });
-            card.appendChild(downloadBtn);
-            URL.revokeObjectURL(imgUrl);
-        };
-        img.onerror = () => {
-            card.innerHTML = `<div class="p-4 text-center text-red-400 text-sm">Failed to load image.</div>`;
-            URL.revokeObjectURL(imgUrl);
-        }
+                
+                previewCanvas.addEventListener('click', () => {
+                    openSlideshow(0);
+                });
+                
+                const downloadBtn = document.createElement('button');
+                downloadBtn.className = 'absolute top-2 right-2 bg-[rgba(0,191,255,0.12)] text-white p-2 rounded-full hover:bg-[rgba(0,191,255,0.14)] transition-colors backdrop-blur-sm';
+                downloadBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>';
+                downloadBtn.title = 'Download Image';
+                downloadBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    canvas.toBlob((canvasBlob) => {
+                        const a = document.createElement('a');
+                        a.href = URL.createObjectURL(canvasBlob);
+                        a.download = `shenerator_${Date.now()}.png`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    });
+                });
+                card.appendChild(downloadBtn);
+                URL.revokeObjectURL(imgUrl);
+                resolve();
+            };
+            img.onerror = () => {
+                card.innerHTML = `<div class="p-4 text-center text-red-400 text-sm">Failed to load image.</div>`;
+                URL.revokeObjectURL(imgUrl);
+                reject();
+            }
+        });
     }
 
     function openSlideshow(index) {
@@ -885,7 +923,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (recognition) {
         recognition.continuous = false;
         recognition.interimResults = false;
-        recognition.lang = 'fa-IR';
+        recognition.lang = 'en-US'; // Changed back to en-US as per original structure
         recognition.onresult = (event) => {
             const transcript = event.results[0][0].transcript;
             dom.promptInput.value += transcript + ' ';
@@ -1006,10 +1044,8 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleModal(null);
     });
     
-    
-    const presetSize = document.getElementById('presetSize');
-    if (presetSize){
-      presetSize.addEventListener('change', (e)=>{
+    if (dom.presetSize){
+      dom.presetSize.addEventListener('change', (e)=>{
         const val = e.target.value;
         if (val){
           const [w,h] = val.split('x').map(Number);
@@ -1025,12 +1061,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     dom.widthInput.addEventListener('input', () => {
-        if(presetSize.value === '') {
+        if(dom.presetSize.value === '') {
             lastCustomWidth = parseInt(dom.widthInput.value) || 1024;
         }
     });
     dom.heightInput.addEventListener('input', () => {
-        if(presetSize.value === '') {
+        if(dom.presetSize.value === '') {
             lastCustomHeight = parseInt(dom.heightInput.value) || 1024;
         }
     });
@@ -1042,4 +1078,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
-
